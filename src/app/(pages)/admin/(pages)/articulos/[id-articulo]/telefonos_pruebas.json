@@ -1,0 +1,877 @@
+[
+  {
+    "id": "8629e726-1ba7-416a-ad5a-ac57e2118f0b",
+    "name": "Huawei P-Series 15",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/p-series_15.jpg",
+    "price": 1469.18,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Huawei",
+    "model": "P-Series 15",
+    "options": {
+      "color": [
+        "White"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "1f6cfb17-2412-41a6-bbac-bfeb33e6044b",
+    "name": "Apple iPhone 15",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/iphone_15.jpg",
+    "price": 957.34,
+    "details": "128GB storage, 8GB RAM, 5000mAh battery, 5G support",
+    "brand": "Apple",
+    "model": "iPhone 15",
+    "options": {
+      "color": [
+        "Gold",
+        "Red",
+        "White"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "0cf5f78c-4c66-4ece-b630-01c40976865c",
+    "name": "OnePlus Nord 7",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/nord_7.jpg",
+    "price": 319.69,
+    "details": "256GB storage, 12GB RAM, 4500mAh battery, Dual SIM",
+    "brand": "OnePlus",
+    "model": "Nord 7",
+    "options": {
+      "color": [
+        "Black",
+        "White",
+        "Green",
+        "Purple"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "1991e35f-fdd7-481c-9b27-b3a46338c41e",
+    "name": "Huawei P-Series 10",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/p-series_10.jpg",
+    "price": 1418.04,
+    "details": "256GB storage, 12GB RAM, 4500mAh battery, Dual SIM",
+    "brand": "Huawei",
+    "model": "P-Series 10",
+    "options": {
+      "color": [
+        "Green",
+        "Purple"
+      ],
+      "size": "6.1 in"
+    }
+  },
+  {
+    "id": "bf00e4c2-427a-42ce-b2c5-4781399a8574",
+    "name": "Samsung Galaxy 21",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/galaxy_21.jpg",
+    "price": 1256.15,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Samsung",
+    "model": "Galaxy 21",
+    "options": {
+      "color": [
+        "Silver"
+      ],
+      "size": "6.8 in"
+    }
+  },
+  {
+    "id": "4ef3a311-fb22-4cfb-9abc-ba18449940b1",
+    "name": "Sony Xperia 23",
+    "description": "Powerful and elegant smartphone with advanced camera technology.",
+    "image": "https://example.com/images/xperia_23.jpg",
+    "price": 533.06,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Sony",
+    "model": "Xperia 23",
+    "options": {
+      "color": [
+        "Red",
+        "Gold",
+        "Blue",
+        "White"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "bd955b3a-667e-4a44-a9a9-60e84ac86453",
+    "name": "Huawei P-Series 5",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/p-series_5.jpg",
+    "price": 841.72,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Huawei",
+    "model": "P-Series 5",
+    "options": {
+      "color": [
+        "Gold",
+        "White",
+        "Green",
+        "Blue"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "9c0aa7f7-08b1-473a-9479-4ff3bd15bedd",
+    "name": "Apple iPhone 15",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/iphone_15.jpg",
+    "price": 723.08,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Apple",
+    "model": "iPhone 15",
+    "options": {
+      "color": [
+        "Red",
+        "Green",
+        "Silver"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "b5c2ce63-0f9a-4f81-8f37-411c075836d1",
+    "name": "Realme Narzo 9",
+    "description": "Powerful and elegant smartphone with advanced camera technology.",
+    "image": "https://example.com/images/narzo_9.jpg",
+    "price": 1167.93,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Realme",
+    "model": "Narzo 9",
+    "options": {
+      "color": [
+        "White",
+        "Gold"
+      ],
+      "size": "6.8 in"
+    }
+  },
+  {
+    "id": "8fbef87f-2217-4250-bc80-a228f0dc455c",
+    "name": "Xiaomi Redmi 9",
+    "description": "Affordable device with great battery life and smooth performance.",
+    "image": "https://example.com/images/redmi_9.jpg",
+    "price": 1449.54,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Xiaomi",
+    "model": "Redmi 9",
+    "options": {
+      "color": [
+        "Red"
+      ],
+      "size": "5.5 in"
+    }
+  },
+  {
+    "id": "aad3a921-ce9c-4fde-a453-b6e711e30207",
+    "name": "Sony Xperia 17",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/xperia_17.jpg",
+    "price": 669.84,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Sony",
+    "model": "Xperia 17",
+    "options": {
+      "color": [
+        "Green",
+        "Purple",
+        "Black",
+        "Silver"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "5099bf63-4ff3-44b0-b6a8-bd0800da3595",
+    "name": "Realme Narzo 7",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/narzo_7.jpg",
+    "price": 1440.44,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Realme",
+    "model": "Narzo 7",
+    "options": {
+      "color": [
+        "Green",
+        "Gold",
+        "Purple"
+      ],
+      "size": "6.1 in"
+    }
+  },
+  {
+    "id": "36d913a2-aa8d-4b4a-b572-54f802e19e47",
+    "name": "Realme Narzo 7",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/narzo_7.jpg",
+    "price": 1093.78,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Realme",
+    "model": "Narzo 7",
+    "options": {
+      "color": [
+        "Gold"
+      ],
+      "size": "5.5 in"
+    }
+  },
+  {
+    "id": "27c6c153-fadd-4ffc-85d8-54e3f7caedd5",
+    "name": "Motorola Moto 19",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/moto_19.jpg",
+    "price": 457.56,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Motorola",
+    "model": "Moto 19",
+    "options": {
+      "color": [
+        "Purple",
+        "Blue"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "ec7295b3-b8ad-4008-ba1c-8c9c6eb675f2",
+    "name": "Apple iPhone 14",
+    "description": "Affordable device with great battery life and smooth performance.",
+    "image": "https://example.com/images/iphone_14.jpg",
+    "price": 325.86,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Apple",
+    "model": "iPhone 14",
+    "options": {
+      "color": [
+        "Gold",
+        "Purple",
+        "Silver"
+      ],
+      "size": "6.8 in"
+    }
+  },
+  {
+    "id": "8a2f5b35-7c6c-4e93-ba81-f25ab74b4e1f",
+    "name": "Samsung Galaxy 16",
+    "description": "Affordable device with great battery life and smooth performance.",
+    "image": "https://example.com/images/galaxy_16.jpg",
+    "price": 967.73,
+    "details": "128GB storage, 8GB RAM, 5000mAh battery, 5G support",
+    "brand": "Samsung",
+    "model": "Galaxy 16",
+    "options": {
+      "color": [
+        "Gold"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "199d12d7-8de5-4de0-a601-3aa3098554ac",
+    "name": "Xiaomi Redmi 17",
+    "description": "Powerful and elegant smartphone with advanced camera technology.",
+    "image": "https://example.com/images/redmi_17.jpg",
+    "price": 639.86,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Xiaomi",
+    "model": "Redmi 17",
+    "options": {
+      "color": [
+        "Purple",
+        "Red",
+        "Blue"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "fa0e1363-9f86-465b-bfc2-0ddb6646788f",
+    "name": "Samsung Galaxy 16",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/galaxy_16.jpg",
+    "price": 367.36,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Samsung",
+    "model": "Galaxy 16",
+    "options": {
+      "color": [
+        "Blue",
+        "Green",
+        "Red",
+        "Purple"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "690c1fab-a3b7-4f2e-80b6-bcb589d60b15",
+    "name": "Google Pixel 14",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/pixel_14.jpg",
+    "price": 319.77,
+    "details": "128GB storage, 8GB RAM, 5000mAh battery, 5G support",
+    "brand": "Google",
+    "model": "Pixel 14",
+    "options": {
+      "color": [
+        "Gold",
+        "Green",
+        "White"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "943c73bb-97b7-4784-aec2-38f6ab611e63",
+    "name": "Samsung Galaxy 17",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/galaxy_17.jpg",
+    "price": 873.63,
+    "details": "256GB storage, 12GB RAM, 4500mAh battery, Dual SIM",
+    "brand": "Samsung",
+    "model": "Galaxy 17",
+    "options": {
+      "color": [
+        "Green"
+      ],
+      "size": "6.1 in"
+    }
+  },
+  {
+    "id": "4969b60f-6900-4857-b7eb-d18c6fc03149",
+    "name": "Google Pixel 10",
+    "description": "Affordable device with great battery life and smooth performance.",
+    "image": "https://example.com/images/pixel_10.jpg",
+    "price": 786.39,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Google",
+    "model": "Pixel 10",
+    "options": {
+      "color": [
+        "White"
+      ],
+      "size": "5.5 in"
+    }
+  },
+  {
+    "id": "e2794c94-b3e2-4b1c-b139-f302bd7bc2e9",
+    "name": "Motorola Moto 20",
+    "description": "Powerful and elegant smartphone with advanced camera technology.",
+    "image": "https://example.com/images/moto_20.jpg",
+    "price": 987.54,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Motorola",
+    "model": "Moto 20",
+    "options": {
+      "color": [
+        "Blue",
+        "Green",
+        "Red"
+      ],
+      "size": "6.8 in"
+    }
+  },
+  {
+    "id": "a9c7daa7-f49e-42b1-a751-d984f0080591",
+    "name": "Realme Narzo 18",
+    "description": "Powerful and elegant smartphone with advanced camera technology.",
+    "image": "https://example.com/images/narzo_18.jpg",
+    "price": 502.76,
+    "details": "256GB storage, 12GB RAM, 4500mAh battery, Dual SIM",
+    "brand": "Realme",
+    "model": "Narzo 18",
+    "options": {
+      "color": [
+        "Red",
+        "Black"
+      ],
+      "size": "5.5 in"
+    }
+  },
+  {
+    "id": "0f46b33e-fa26-461f-9494-3a0076643d35",
+    "name": "OnePlus Nord 20",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/nord_20.jpg",
+    "price": 1451.74,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "OnePlus",
+    "model": "Nord 20",
+    "options": {
+      "color": [
+        "Purple"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "777492bf-67f6-4ad0-872c-b67d26e94403",
+    "name": "Realme Narzo 20",
+    "description": "Affordable device with great battery life and smooth performance.",
+    "image": "https://example.com/images/narzo_20.jpg",
+    "price": 1060.74,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Realme",
+    "model": "Narzo 20",
+    "options": {
+      "color": [
+        "Gold",
+        "Red",
+        "Black"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "a56fcb27-f3d1-43e8-af6f-a8474610c6e4",
+    "name": "Apple iPhone 21",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/iphone_21.jpg",
+    "price": 1231.24,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Apple",
+    "model": "iPhone 21",
+    "options": {
+      "color": [
+        "White",
+        "Silver",
+        "Purple",
+        "Red"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "bda72b5d-92f0-42bb-998a-138f4624fbc3",
+    "name": "Huawei P-Series 7",
+    "description": "Powerful and elegant smartphone with advanced camera technology.",
+    "image": "https://example.com/images/p-series_7.jpg",
+    "price": 719.51,
+    "details": "256GB storage, 12GB RAM, 4500mAh battery, Dual SIM",
+    "brand": "Huawei",
+    "model": "P-Series 7",
+    "options": {
+      "color": [
+        "Silver",
+        "Red",
+        "Blue"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "9697215f-8889-4e2c-9e59-865af5d870ad",
+    "name": "Samsung Galaxy 6",
+    "description": "Affordable device with great battery life and smooth performance.",
+    "image": "https://example.com/images/galaxy_6.jpg",
+    "price": 310.42,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Samsung",
+    "model": "Galaxy 6",
+    "options": {
+      "color": [
+        "White"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "b888465e-89de-4cbd-997c-12a9d2c1d3c5",
+    "name": "Huawei P-Series 15",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/p-series_15.jpg",
+    "price": 597.06,
+    "details": "128GB storage, 8GB RAM, 5000mAh battery, 5G support",
+    "brand": "Huawei",
+    "model": "P-Series 15",
+    "options": {
+      "color": [
+        "Red"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "c2305be9-6de4-4522-9637-78a3234fe720",
+    "name": "Xiaomi Redmi 12",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/redmi_12.jpg",
+    "price": 1304.37,
+    "details": "128GB storage, 8GB RAM, 5000mAh battery, 5G support",
+    "brand": "Xiaomi",
+    "model": "Redmi 12",
+    "options": {
+      "color": [
+        "Green",
+        "Blue"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "161cf375-f115-4d9a-9c44-a78444d01a93",
+    "name": "Google Pixel 13",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/pixel_13.jpg",
+    "price": 837.57,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Google",
+    "model": "Pixel 13",
+    "options": {
+      "color": [
+        "White"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "f107a7a0-8546-4afa-b6cd-193b38b71779",
+    "name": "Nokia G-Series 24",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/g-series_24.jpg",
+    "price": 666.66,
+    "details": "256GB storage, 12GB RAM, 4500mAh battery, Dual SIM",
+    "brand": "Nokia",
+    "model": "G-Series 24",
+    "options": {
+      "color": [
+        "White",
+        "Black"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "3475803c-4227-4b38-a74f-96bfb71c799d",
+    "name": "Huawei P-Series 18",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/p-series_18.jpg",
+    "price": 463.17,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Huawei",
+    "model": "P-Series 18",
+    "options": {
+      "color": [
+        "Silver",
+        "Purple",
+        "Gold",
+        "Green"
+      ],
+      "size": "6.8 in"
+    }
+  },
+  {
+    "id": "ec5b2127-b966-4928-b2b5-d8d3848cc69d",
+    "name": "Motorola Moto 12",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/moto_12.jpg",
+    "price": 371.23,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Motorola",
+    "model": "Moto 12",
+    "options": {
+      "color": [
+        "Blue",
+        "Black"
+      ],
+      "size": "5.5 in"
+    }
+  },
+  {
+    "id": "44a65461-3f4a-435e-9d96-adeb1fdac518",
+    "name": "Nokia G-Series 17",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/g-series_17.jpg",
+    "price": 1428.58,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Nokia",
+    "model": "G-Series 17",
+    "options": {
+      "color": [
+        "Purple",
+        "Silver",
+        "Green"
+      ],
+      "size": "5.5 in"
+    }
+  },
+  {
+    "id": "36fc8cb1-0edb-4f57-9529-985ca3bbd435",
+    "name": "Huawei P-Series 14",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/p-series_14.jpg",
+    "price": 763.15,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Huawei",
+    "model": "P-Series 14",
+    "options": {
+      "color": [
+        "Green",
+        "White",
+        "Blue",
+        "Black"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "b6ea73ed-7e4d-4d07-b02c-738e7e278f70",
+    "name": "Sony Xperia 18",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/xperia_18.jpg",
+    "price": 335.28,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Sony",
+    "model": "Xperia 18",
+    "options": {
+      "color": [
+        "Black"
+      ],
+      "size": "5.5 in"
+    }
+  },
+  {
+    "id": "75bd6833-026a-405a-9b3e-a8f2352f5313",
+    "name": "OnePlus Nord 9",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/nord_9.jpg",
+    "price": 773.0,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "OnePlus",
+    "model": "Nord 9",
+    "options": {
+      "color": [
+        "Purple",
+        "Green",
+        "Blue",
+        "White"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "1780119d-67f6-46b9-b105-e171b302824b",
+    "name": "Samsung Galaxy 23",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/galaxy_23.jpg",
+    "price": 1434.49,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Samsung",
+    "model": "Galaxy 23",
+    "options": {
+      "color": [
+        "Red"
+      ],
+      "size": "6.1 in"
+    }
+  },
+  {
+    "id": "30a989ee-541a-425f-aa9f-f592781f00a0",
+    "name": "Samsung Galaxy 12",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/galaxy_12.jpg",
+    "price": 201.33,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Samsung",
+    "model": "Galaxy 12",
+    "options": {
+      "color": [
+        "Red",
+        "Black"
+      ],
+      "size": "6.8 in"
+    }
+  },
+  {
+    "id": "16d0111b-afb0-4f72-bbfd-2c775f964138",
+    "name": "Nokia G-Series 12",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/g-series_12.jpg",
+    "price": 302.95,
+    "details": "256GB storage, 12GB RAM, 4500mAh battery, Dual SIM",
+    "brand": "Nokia",
+    "model": "G-Series 12",
+    "options": {
+      "color": [
+        "Purple",
+        "Green",
+        "Gold"
+      ],
+      "size": "6.1 in"
+    }
+  },
+  {
+    "id": "5dce4d0b-006a-4752-b6c5-1c73b51fc48f",
+    "name": "Google Pixel 5",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/pixel_5.jpg",
+    "price": 275.4,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Google",
+    "model": "Pixel 5",
+    "options": {
+      "color": [
+        "White",
+        "Blue",
+        "Silver"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "d5e24042-c1e7-4045-906a-e219dd0c86d3",
+    "name": "Nokia G-Series 24",
+    "description": "Flagship phone with cutting-edge features and sleek design.",
+    "image": "https://example.com/images/g-series_24.jpg",
+    "price": 769.49,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "Nokia",
+    "model": "G-Series 24",
+    "options": {
+      "color": [
+        "Purple",
+        "White",
+        "Red",
+        "Green"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "c6658371-e021-4780-99f9-09456c8a8c6c",
+    "name": "Apple iPhone 24",
+    "description": "Mid-range phone with solid features at a competitive price.",
+    "image": "https://example.com/images/iphone_24.jpg",
+    "price": 940.26,
+    "details": "256GB storage, 12GB RAM, 4500mAh battery, Dual SIM",
+    "brand": "Apple",
+    "model": "iPhone 24",
+    "options": {
+      "color": [
+        "Silver"
+      ],
+      "size": "5.5 in"
+    }
+  },
+  {
+    "id": "0151a1ce-fc3b-4230-82ca-efc778e93ee7",
+    "name": "OnePlus Nord 22",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/nord_22.jpg",
+    "price": 643.45,
+    "details": "64GB storage, 6GB RAM, 4000mAh battery, IP68 waterproof",
+    "brand": "OnePlus",
+    "model": "Nord 22",
+    "options": {
+      "color": [
+        "Blue",
+        "Green",
+        "Silver",
+        "Gold"
+      ],
+      "size": "6.8 in"
+    }
+  },
+  {
+    "id": "ccd42ae0-a0b6-445c-bc6a-498aa4ca71b1",
+    "name": "Apple iPhone 14",
+    "description": "Powerful and elegant smartphone with advanced camera technology.",
+    "image": "https://example.com/images/iphone_14.jpg",
+    "price": 356.64,
+    "details": "128GB storage, 8GB RAM, 5000mAh battery, 5G support",
+    "brand": "Apple",
+    "model": "iPhone 14",
+    "options": {
+      "color": [
+        "Red",
+        "White",
+        "Green",
+        "Black"
+      ],
+      "size": "6.5 in"
+    }
+  },
+  {
+    "id": "b131a94a-23cb-4216-a7d3-79fb17bde808",
+    "name": "Xiaomi Redmi 13",
+    "description": "Compact phone designed for portability and durability.",
+    "image": "https://example.com/images/redmi_13.jpg",
+    "price": 516.32,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Xiaomi",
+    "model": "Redmi 13",
+    "options": {
+      "color": [
+        "Black",
+        "Gold",
+        "Purple"
+      ],
+      "size": "6.8 in"
+    }
+  },
+  {
+    "id": "25aa01c7-61bb-4b7a-af94-a46a15839279",
+    "name": "OnePlus Nord 12",
+    "description": "Affordable device with great battery life and smooth performance.",
+    "image": "https://example.com/images/nord_12.jpg",
+    "price": 661.56,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "OnePlus",
+    "model": "Nord 12",
+    "options": {
+      "color": [
+        "Purple",
+        "Green"
+      ],
+      "size": "6.7 in"
+    }
+  },
+  {
+    "id": "d2890836-a93d-4961-a0db-aadea6a3912c",
+    "name": "Motorola Moto 11",
+    "description": "Powerful and elegant smartphone with advanced camera technology.",
+    "image": "https://example.com/images/moto_11.jpg",
+    "price": 939.9,
+    "details": "512GB storage, 16GB RAM, 6000mAh battery, Wireless charging",
+    "brand": "Motorola",
+    "model": "Moto 11",
+    "options": {
+      "color": [
+        "Gold",
+        "Blue",
+        "Black",
+        "White"
+      ],
+      "size": "6.1 in"
+    }
+  },
+  {
+    "id": "e0bfc998-1900-43f8-bbf6-45bbb608eaf8",
+    "name": "Motorola Moto 23",
+    "description": "Affordable device with great battery life and smooth performance.",
+    "image": "https://example.com/images/moto_23.jpg",
+    "price": 1258.35,
+    "details": "32GB storage, 4GB RAM, 3000mAh battery, Face unlock",
+    "brand": "Motorola",
+    "model": "Moto 23",
+    "options": {
+      "color": [
+        "Red",
+        "White"
+      ],
+      "size": "6.8 in"
+    }
+  }
+]
