@@ -3,6 +3,10 @@ import { v4 as uuidv4 } from "uuid";
 
 // Requests
 import {
+    changeIdCurrencyUser,
+    changeIdPayMethodForCart,
+    changeIdShopForCart,
+    changeIdUserAdressForCart,
     changeUserCanBuy,
     changeUserEmailVerified,
     changeUserType,
@@ -11,6 +15,7 @@ import {
     createCodeVerificationEmail,
     getCodeValidation,
     getUserById,
+    getUserCurrencyOrMainCurrency,
     getUserInformation,
     getUsers,
     getUserShopData,
@@ -91,7 +96,7 @@ export const useCreateCodeVerificationEmail = async (email) => {
 };
 
 export const useRequestsUsers = () => {
-    const { setUserInfo } = zusUser();
+    const { setUserInfo, setCurrencySelected } = zusUser();
 
     const useGetUserInformation = async () => {
         const { status, data } = await getUserInformation();
@@ -114,7 +119,13 @@ export const useRequestsUsers = () => {
             });
     };
 
-    return { useGetUserInformation };
+    const useGetUserCurrencyOrMainCurrency = async () => {
+        const { status, data } = await getUserCurrencyOrMainCurrency();
+        console.log(data);
+        if (status == 200) setCurrencySelected(data);
+    };
+
+    return { useGetUserInformation, useGetUserCurrencyOrMainCurrency };
 };
 
 export const useRefreshToken = async () => {
@@ -206,4 +217,24 @@ export const useResquestsUsers = () => {
     };
 
     return { useGetUserShopData };
+};
+
+export const useChangeIdShopForCart = async (id_user, id_shop) => {
+    const { message, status } = await changeIdShopForCart(id_user, id_shop);
+    return status == 200 ? true : false;
+};
+
+export const useChangeIdPayMethodForCart = async (id_user, id_pay_method) => {
+    const { message, status } = await changeIdPayMethodForCart(id_user, id_pay_method);
+    return status == 200 ? true : false;
+};
+
+export const useChangeIdUserAdressForCart = async (id_user, id_address) => {
+    const { message, status } = await changeIdUserAdressForCart(id_user, id_address);
+    return status == 200 ? true : false;
+};
+
+export const useChangeIdCurrencyUser = async (idUser, idCurrency) => {
+    const { message, status } = await changeIdCurrencyUser(idUser, idCurrency);
+    return status == 200 ? true : false;
 };

@@ -59,6 +59,7 @@ const createArticleSchema = (isRequired) => {
             ]),
             id_model: z.string().min(1),
             view: z.number(),
+            id_currency: z.string().uuid(),
             price: z.number(),
             quantity: z.number().default(1),
             // general_categories: z.array(),

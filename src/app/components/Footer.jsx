@@ -7,9 +7,13 @@ import { usePathname, useRouter } from "next/navigation";
 // icons
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import { zusUser } from "../zustand/user/zusUser";
+import { useGetCartUserReadyToBuy } from "../hooks/request/carts/requestsCarts";
 
 const Footer = () => {
     const pathname = usePathname();
+
+    const { id: idUser } = zusUser();
 
     const router = useRouter();
 
@@ -28,6 +32,8 @@ const Footer = () => {
         else if (pathname.startsWith("/tiendas")) setPageActive("tiendas");
         else setPageActive("inicio");
     }, [pathname]);
+
+    const { data: dataCartUser, isLoading, refetch } = useGetCartUserReadyToBuy(idUser);
 
     if (
         pathname == "/search" ||
@@ -50,12 +56,26 @@ const Footer = () => {
             </Link>
 
             <Link
-                className={`flex-1 flex justify-center items-center flex-col ${pageActive === "carrito" && "text-red-700"}`}
+                className={`flex-1 flex justify-center items-center flex-col relative ${pageActive === "carrito" && "text-red-700"}`}
                 // onClick={() => router.push("/carrito")}
                 href="/carrito"
             >
                 <Icon icon="mdi-light:cart" width="24" height="24" />
                 <p>Carrito</p>
+                {dataCartUser && (
+                    <div
+                        className="absolute border border-red-700 rounded-full grid place-items-center"
+                        style={{ right: 28, top: -10, width: 18, height: 18 }}
+                    >
+                        <p className="tracking-normal leading-none_ text-sm font-bold" style={{ lineHeight: 0 }}>
+                            {dataCartUser.length}
+                        </p>
+                    </div>
+                )}
+
+                {/* <p className="absolute" style={{ right: 28, top: -10 }}>
+                    3
+                </p> */}
             </Link>
             {/* <div
                 className={`flex-1 flex justify-center items-center flex-col ${pageActive === "menu" && "text-red-700"}`}

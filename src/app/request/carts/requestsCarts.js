@@ -162,6 +162,8 @@ export const getOrdersFromShopAndOrder = async (idShop, idOrder) => {
 };
 
 export const updateCartBoughtItemStatus = async (id, cartBoughtStatus) => {
+    console.log(id, cartBoughtStatus);
+    alert(id, cartBoughtStatus);
     try {
         const res = await axios.put(`${url}/api/carts/boughts/set-item-status/${id}`, { status: cartBoughtStatus });
         // console.log(res);

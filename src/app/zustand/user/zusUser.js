@@ -1,3 +1,4 @@
+import { changeUserWantUseAddress } from "@/app/request/users/requestsUsers";
 import { create } from "zustand";
 
 // type 0: new user
@@ -24,11 +25,16 @@ export const zusUser = create((set) => ({
     password: "",
     direction: {},
     address: {},
-
+    hasData: false,
     // want_use_address: null,
     wantUseAddress: null,
+    picture: null,
+    idCurrency: null,
+    currencySelected: null,
+    setCurrencySelected: (currency) => set(() => ({ currencySelected: currency })),
     setUserInfo: (user) =>
         set({
+            hasData: true,
             id: user.id,
             firstName: user.first_name,
             lastName: user.last_name,
@@ -40,9 +46,11 @@ export const zusUser = create((set) => ({
             password: user.password,
             direction: user.address,
             address: user.address,
+            picture: user.picture,
+            idCurrency: user.id_currency,
             wantUseAddress: user.want_use_address == null ? null : user.want_use_address == 1 ? true : false,
         }),
-
+    changeUserWantUseAddress: (wantUseAddress) => set({ wantUseAddress }),
     id_shop: "",
     name_shop: "",
     setUserShop: (shop) => set({ id_shop: shop.id_shop, name_shop: shop.name_shop }),

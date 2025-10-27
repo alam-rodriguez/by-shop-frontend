@@ -86,6 +86,16 @@ export const getUserInformation = async () => {
     }
 };
 
+export const getUserCurrencyOrMainCurrency = async () => {
+    try {
+        const res = await api.get(`/api/users/get-user-currency-or-main-currency`);
+        return { status: res.status, data: res.data.data };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener las categorías.");
+    }
+};
+
 export const refreshToken = async () => {
     try {
         const res = await api.post(`/api/auth/refresh-token`);
@@ -202,6 +212,46 @@ export const getUserShopData = async (email_user) => {
     try {
         const res = await api.get(`/api/users/shop-data/${email_user}`);
         return { message: res.data.message, status: res.status, data: res.data.data };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error.");
+    }
+};
+
+export const changeIdShopForCart = async (id_user, id_shop) => {
+    try {
+        const res = await api.patch(`/api/users/change-id-shop-for-cart/${id_user}/${id_shop}`);
+        return { message: res.data.message, status: res.status };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error.");
+    }
+};
+
+export const changeIdPayMethodForCart = async (id_user, id_pay_method) => {
+    try {
+        const res = await api.patch(`/api/users/change-id-pay-method-for-cart/${id_user}/${id_pay_method}`);
+        return { message: res.data.message, status: res.status };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error.");
+    }
+};
+
+export const changeIdUserAdressForCart = async (id_user, id_address) => {
+    try {
+        const res = await api.patch(`/api/users/change-id-user-address-for-cart/${id_user}/${id_address}`);
+        return { message: res.data.message, status: res.status };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error.");
+    }
+};
+
+export const changeIdCurrencyUser = async (idUser, idCurrency) => {
+    try {
+        const res = await api.patch(`/api/users/change-id-currency-user/${idUser}`, { id_currency: idCurrency });
+        return { message: res.data.message, status: res.status };
     } catch (error) {
         console.log(error);
         throw new Error("Error.");

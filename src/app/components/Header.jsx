@@ -54,7 +54,7 @@ const Header = () => {
                 </div>
             )}
 
-            <div className="bg-white  rounded-full h-12 relative overflow-hidden flex-1" onFocus={() => router.push("/search")}>
+            <div className="bg-white  rounded-full h-12 relative overflow-hidden flex-1" onFocus={() => router.push("/buscador")}>
                 <Icon
                     icon="majesticons:search-line"
                     className="absolute left-5 top-1/2 -translate-x-1/2 -translate-y-1/2 size-8 text-gray-500 text-xl"

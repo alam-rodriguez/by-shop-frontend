@@ -1,10 +1,11 @@
 // Axios
 import api from "@/app/api/api";
 
-export const createOrderPaypal = async () => {
+export const createOrderPaypal = async (purchase_units) => {
     const res = await api.post(`api/payments/paypal/create-order`, {
         return_url: window.location.href,
         cancel_url: window.location.href,
+        purchase_units,
     });
 
     // const resg = await fetch("http://localhost:3001/api/payments/paypal/create-order", {

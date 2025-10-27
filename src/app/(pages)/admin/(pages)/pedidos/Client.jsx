@@ -79,7 +79,7 @@ const Client = () => {
                           let total = 0;
                           let articulos = 0;
                           order.articles.forEach((article) => {
-                              total += article.article_price * article.article_quantity;
+                              total += Number(article.total_price_with_discount) * Number(article.article_quantity);
                               articulos += article.article_quantity;
                           });
 
@@ -125,7 +125,7 @@ const Client = () => {
                           let total = 0;
                           let articulos = 0;
                           order.articles.forEach((article) => {
-                              total += article.article_price * article.article_quantity;
+                              total += Number(article.total_price_with_discount) * Number(article.article_quantity);
                               articulos += article.article_quantity;
                           });
 

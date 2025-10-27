@@ -55,7 +55,7 @@ const page = () => {
     //     </div>
     // );
 
-    const { type, firstName, lastName, id, email, firstNames, lastNames, setUserInfo, emailVerified, registrationDate } = zusUser();
+    const { type, firstName, lastName, id, email, firstNames, lastNames, setUserInfo, emailVerified, registrationDate, picture } = zusUser();
 
     // const [isOpen, setOpen] = useState(false);
 
@@ -119,7 +119,7 @@ const page = () => {
                 </div> */}
                 <ImageA
                     className="size-24 rounded-full object-cover absolute top-full left-1/2- -translate-y-1/2 -translate-x-1/2-"
-                    src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png"
+                    src={picture && picture != "" ? picture : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png"}
                 />
             </div>
             <div className="bg-gray-100 p-4">

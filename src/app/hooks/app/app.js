@@ -208,6 +208,53 @@ export const showPrice = (price) => {
         maximumFractionDigits: 2,
     }).format(price);
 };
+// export const showPriceWithCurrency = (currency, price) => {
+//     return calcPriceCurrency(
+//         currency,
+//         new Intl.NumberFormat("en-US", {
+//             style: "currency",
+//             currency: "USD",
+//             minimumFractionDigits: 2,
+//             maximumFractionDigits: 2,
+//         }).format(price)
+//     );
+// };
+
+export const showPriceWithCurrencyUser = (amount, fromCurrency, toCurrency, format = true) => {
+    const fromRate = parseFloat(fromCurrency.exchange_rate);
+    const toRate = parseFloat(toCurrency.exchange_rate);
+
+    if (isNaN(fromRate) || isNaN(toRate)) throw new Error("Exchange rate inválido para una de las monedas");
+
+    let newAmount;
+    if (fromCurrency.iso_code == toCurrency.iso_code) newAmount = amount;
+    else newAmount = amount * (toRate / fromRate);
+
+    // return showPriceWithCurrency(toCurrency, newAmount, false);
+    // const convertedPrice = makeCalc ? calcPriceCurrency(currency, price) : price; // debe devolver un número
+
+    if (!format) return newAmount;
+    else
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: toCurrency.iso_code,
+            currencyDisplay: "code", // "symbol" | "code" | "name"
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(newAmount);
+};
+
+export const showPriceWithCurrency = (currency, price, makeCalc = true) => {
+    const convertedPrice = makeCalc ? calcPriceCurrency(currency, price) : price; // debe devolver un número
+
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: currency.iso_code,
+        currencyDisplay: "code",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(convertedPrice);
+};
 
 export const calcPriceCurrency = (currency, price) => {
     if (currency.main_currency == 1) return price;

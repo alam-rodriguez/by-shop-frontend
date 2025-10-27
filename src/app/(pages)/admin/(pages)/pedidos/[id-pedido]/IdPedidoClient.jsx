@@ -35,6 +35,7 @@ import ButtonGray from "@/app/components/others/ButtonGray";
 
 // Alerts
 import useAlert from "@/app/alerts/react-confirm-alert/useAlert";
+import { getOrderById } from "@/app/request/carts/requestsCarts";
 
 const IdPedidoClient = () => {
     const { ["id-pedido"]: idOrder } = useParams();
@@ -87,8 +88,8 @@ const IdPedidoClient = () => {
         let total = 0;
         let articulos = 0;
         order.articles.forEach((article) => {
-            total += article.article_price * article.article_quantity;
-            articulos += article.article_quantity;
+            total += Number(article.total_price_with_discount) * Number(article.article_quantity);
+            articulos += Number(article.article_quantity);
         });
         setTotal(total);
         setArticulos(articulos);
@@ -107,8 +108,9 @@ const IdPedidoClient = () => {
         let total = 0;
         let articulos = 0;
         orderForShop.articles.forEach((article) => {
-            total += article.article_price * article.article_quantity;
-            articulos += article.article_quantity;
+            // total += article.article_price * article.article_quantity;
+            total += Number(article.total_price_with_discount) * Number(article.article_quantity);
+            articulos += Number(article.article_quantity);
         });
         setTotal(total);
         setArticulos(articulos);
@@ -165,6 +167,14 @@ const IdPedidoClient = () => {
         if (status == 4 && wantUseAddress) message = "Marcar el pedido como 'entregado'?";
         if (status == 4 && !wantUseAddress) message = "Marcar el pedido como 'retirado'?";
         if (status == 5) message = "Archivar pedido";
+
+        if (status == 2) {
+            const hasAlArticles = (await getOrderById(idOrder)).articles.every((article) => Number(article.status_cart_bought_item) === 2);
+            if (!hasAlArticles) {
+                toast.warning("Todos los deben de estar disponibles");
+                return;
+            }
+        }
 
         const want = await confirmAlertCustom({
             head: "Cambiar estado del pedido?",
@@ -242,7 +252,7 @@ const IdPedidoClient = () => {
                         <p>Total del pedido:</p>
                         <p>{total}</p>
                     </div>
-                    {order.require_image && (
+                    {order.require_image == 1 && (
                         <div className="flex justify-between">
                             <p>Estado de la imagen:</p>
                             <p>{!order.status_image ? "Pendiente" : order.status_image == 0 ? "Rechazada" : "Aceptada"}</p>
@@ -262,10 +272,10 @@ const IdPedidoClient = () => {
                 <p className="text-center mb-3 font-bold text-xl">Articulos</p>
                 <div className="flex flex-col gap-10">
                     {order.articles.map((article, i) => {
-                        let statusOrder = "";
-                        if (article.status_cart_bought_item == 1) statusOrder = "Pendiente";
-                        else if (article.status_cart_bought_item == 0) statusOrder = "No disponiblbe";
-                        else if (article.status_cart_bought_item == 2) statusOrder = "Disponible";
+                        let statusArticle = "";
+                        if (article.status_cart_bought_item == 1) statusArticle = "Pendiente";
+                        else if (article.status_cart_bought_item == 0) statusArticle = "No disponiblbe";
+                        else if (article.status_cart_bought_item == 2) statusArticle = "Disponible";
 
                         return (
                             <div key={i}>
@@ -294,11 +304,11 @@ const IdPedidoClient = () => {
                                     )}
                                     <div className="flex justify-between">
                                         <p>Total:</p>
-                                        <p>{article.article_price * article.article_quantity}</p>
+                                        <p>{Number(article.total_price_with_discount) * Number(article.article_quantity)}</p>
                                     </div>
                                     <div className="flex justify-between">
-                                        <p>Estado de orden:</p>
-                                        <p>{statusOrder}</p>
+                                        <p>Estado de articulo:</p>
+                                        <p>{statusArticle}</p>
                                     </div>
                                 </div>
                                 <Spacer space={5} />
@@ -443,10 +453,10 @@ const IdPedidoClient = () => {
                 <p className="text-center mb-3 font-bold text-xl">Articulos</p>
                 <div className="flex flex-col gap-10">
                     {orderForShop.articles.map((article, i) => {
-                        let statusOrder = "";
-                        if (article.status_cart_bought_item == 1) statusOrder = "Pendiente";
-                        else if (article.status_cart_bought_item == 0) statusOrder = "No disponiblbe";
-                        else if (article.status_cart_bought_item == 2) statusOrder = "Disponible";
+                        let statusArticle = "";
+                        if (article.status_cart_bought_item == 1) statusArticle = "Pendiente";
+                        else if (article.status_cart_bought_item == 0) statusArticle = "No disponiblbe";
+                        else if (article.status_cart_bought_item == 2) statusArticle = "Disponible";
 
                         return (
                             <div key={i}>
@@ -471,11 +481,11 @@ const IdPedidoClient = () => {
                                     )}
                                     <div className="flex justify-between">
                                         <p>Total:</p>
-                                        <p>{article.article_price * article.article_quantity}</p>
+                                        <p>{Number(article.total_price_with_discount) * Number(article.article_quantity)}</p>
                                     </div>
                                     <div className="flex justify-between">
                                         <p>Estado de orden:</p>
-                                        <p>{statusOrder}</p>
+                                        <p>{statusArticle}</p>
                                     </div>
                                 </div>
                                 <Spacer space={5} />

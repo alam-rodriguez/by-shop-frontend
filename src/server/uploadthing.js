@@ -7,6 +7,8 @@ export const f = createUploadthing({
     callbackUrl: process.env.UPLOADTHING_CALLBACK_URL,
 });
 
+// export const f = createUploadthing();
+
 // Fake auth function
 const auth = (req, res) => ({ id: "fakeId" });
 
@@ -41,7 +43,11 @@ export const ourFileRouter = {
             console.log("file url", file.url);
 
             // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-            return { uploadedBy: metadata.userId };
+            // return { uploadedBy: metadata.userId };
+            return {
+                uploadedBy: metadata.userId,
+                url: file.url,
+            };
         }),
     imagesUploader: f({
         image: {
@@ -71,6 +77,10 @@ export const ourFileRouter = {
             console.log("file url", file.url);
 
             // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-            return { uploadedBy: metadata.userId };
+            // return { uploadedBy: metadata.userId };
+            return {
+                uploadedBy: metadata.userId,
+                url: file.url,
+            };
         }),
 };

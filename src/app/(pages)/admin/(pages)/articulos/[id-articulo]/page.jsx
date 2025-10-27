@@ -58,6 +58,7 @@ import { useGetArticlesForBoxContent } from "@/app/hooks/request/articles/reques
 import ButtonGray from "@/app/components/others/ButtonGray";
 import useRequestsBrands from "@/app/hooks/request/brands/useRequestsBrands";
 import { zusAdminBrands } from "@/app/zustand/admin/brands/zusAdminbrands";
+import { useGetCurrencies } from "@/app/hooks/request/currencies/requestsCurrencies";
 // import { Input } from "postcss";
 
 const page = () => {
@@ -812,6 +813,8 @@ const page = () => {
         return articlesForSelect;
     };
 
+    const { data: currencies, isLoading: isLoadingCurrencies } = useGetCurrencies();
+
     useEffect(() => {
         console.log(options);
     }, [options]);
@@ -895,6 +898,17 @@ const page = () => {
                     errorClassName="text-red-700"
                     optionNameForShow="name"
                     label="Modelo"
+                />
+                <Select
+                    register={register}
+                    errors={errors}
+                    type="text"
+                    name="id_currency"
+                    items={currencies}
+                    selectClassName="border-2 border-gray-300 rounded-md p-2"
+                    errorClassName="text-red-700"
+                    optionNameForShow="name"
+                    label="Moneda del articulo"
                 />
                 <Input
                     register={register}

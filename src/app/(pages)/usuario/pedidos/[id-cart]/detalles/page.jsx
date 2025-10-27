@@ -63,7 +63,6 @@ const page = () => {
     return (
         <div className="m-4">
             {/* <BarcodeRedirect /> */}
-
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     {/* <Icon icon="solar:arrow-left-outline" width="24" height="24" /> */}
@@ -130,6 +129,27 @@ const page = () => {
             <div className="bg-white p-6 rounded-2xl flex flex-col gap-6">
                 <div className="flex justify-between">
                     <p className="text-gray-500 text-sm">Total</p>
+                    <p className="font-semibold">{showPrice(dataOrder.total)}</p>
+                </div>
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Descuento</p>
+                    <p className="font-bold">{showPrice(dataOrder.total_discount)}</p>
+                </div>
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Comision</p>
+                    <p className="font-bold">{showPrice(dataOrder.paypal_fee)}</p>
+                </div>
+                <Divider mt={0} mb={0} h={"0.5px"} />
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Total General</p>
+                    <p className="font-bold">
+                        {showPrice(Number(dataOrder.total) - Number(dataOrder.total_discount) + Number(dataOrder.paypal_fee))}
+                    </p>
+                </div>
+            </div>
+            {/* <div className="bg-white p-6 rounded-2xl flex flex-col gap-6">
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Total</p>
                     <p className="font-semibold">{showPrice(dataArticles.reduce((acc, cur) => acc + Number(cur.total_price), 0))}</p>
                 </div>
                 <div className="flex justify-between">
@@ -143,7 +163,7 @@ const page = () => {
                     <p className="text-gray-500 text-sm">Total General</p>
                     <p className="font-bold">{showPrice(dataArticles.reduce((acc, cur) => acc + Number(cur.total_price_with_discount), 0))}</p>
                 </div>
-            </div>
+            </div> */}
             <Spacer />
             <div className="bg-white p-6 rounded-2xl flex flex-col gap-6">
                 <div className="flex justify-between">
@@ -162,16 +182,43 @@ const page = () => {
                     <p className="text-gray-500 text-sm">Lugar de entrega</p>
                     <p className="font-semibold">{dataOrder.want_use_address == 1 ? "Direccion seleccionada" : "Tienda seleccionada"}</p>
                 </div>
+                {dataOrder.want_use_address == 1 && (
+                    <div className="flex justify-between">
+                        <p className="text-gray-500 text-sm">Direccion</p>
+                        <p className="font-semibold">
+                            {dataOrder.address_1} {dataOrder.address_2}
+                        </p>
+                    </div>
+                )}
+                {dataOrder.want_use_address == 0 && (
+                    <div className="flex justify-between">
+                        <p className="text-gray-500 text-sm">Tienda</p>
+                        <p className="font-semibold">{dataOrder.pickup_shop}</p>
+                    </div>
+                )}
+
                 <div className="flex justify-between">
                     <p className="text-gray-500 text-sm">Estado de order</p>
-                    <p className="font-bold">{showOrderStatusForClient(dataOrder.status_order)}</p>
+                    <p className="font-bold">{showOrderStatusForClient(dataOrder.status_order, dataOrder.want_use_address == 1)}</p>
                 </div>
                 <div className="flex justify-between">
                     <p className="text-gray-500 text-sm">Fecha de compra</p>
                     <p className="font-bold">{getDateInSpanish(dataOrder.created_at_order)}</p>
                 </div>
             </div>
-            <Spacer />
+
+            {dataOrder.require_image == 1 && (
+                <>
+                    <Spacer />
+                    <p className="text-2xl font-bold">Comprobante de tranferencia:</p>
+                    <Spacer />
+                    <div className="grid place-items-center">
+                        <ImageA src={dataOrder.image} />
+                    </div>
+                    <Spacer />
+                </>
+            )}
+
             <p className="text-2xl font-bold">Codigo Qr:</p>
             <Spacer />
             <div className="grid place-items-center">

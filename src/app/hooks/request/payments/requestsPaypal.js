@@ -1,8 +1,8 @@
 // Request
 import { createOrderPaypal } from "@/app/request/payments/requestsPaypal";
 
-export const useCreateOrderPaypal = async () => {
-    const { status, link, statusCode } = await createOrderPaypal();
+export const useCreateOrderPaypal = async (purchase_units) => {
+    const { status, link, statusCode } = await createOrderPaypal(purchase_units);
 
     return { status, link, statusCode };
     // if (status == "CREATED") {

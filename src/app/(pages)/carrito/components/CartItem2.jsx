@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
 // Hooks
-import { showText, showPrice } from "@/app/hooks/app/app";
+import { showText, showPrice, showPriceWithCurrencyUser } from "@/app/hooks/app/app";
 import { useGetCartUserReadyToBuy, useUpdateCartItemQuantity, useUpdateCartItemStatus } from "@/app/hooks/request/carts/requestsCarts";
 import { useGetArticleOffer } from "@/app/hooks/request/articles/requestsArticles";
 
@@ -16,8 +16,22 @@ import useAlert from "@/app/alerts/react-confirm-alert/useAlert";
 import ImageA from "@/app/components/others/ImageA";
 import { toast } from "sonner";
 import useArticleOffer from "@/app/hooks/articles/useArticleOffer";
+import { zusUser } from "@/app/zustand/user/zusUser";
 
-const CartItem2 = ({ idCart, idArticle, quantity, image, articleName, articleDescription, articlePrice, articleOptions, articleValues, refetch }) => {
+const CartItem2 = ({
+    idCart,
+    idArticle,
+    quantity,
+    image,
+    articleName,
+    articleDescription,
+    articlePrice,
+    articleOptions,
+    articleValues,
+    exchangeRate,
+    isoCode,
+    refetch,
+}) => {
     // const [hasOffer, setHasOffer] = useState(false);
     // const [finalPrice, setFinalPrice] = useState(articlePrice);
 
@@ -26,6 +40,8 @@ const CartItem2 = ({ idCart, idArticle, quantity, image, articleName, articleDes
     const { hasOffer, finalPrice, isLoading } = useArticleOffer({ id: idArticle, price: articlePrice, quantity });
 
     const { refetch: refetchCart } = useGetCartUserReadyToBuy(idCart);
+
+    const { currencySelected } = zusUser();
 
     useEffect(() => {
         console.log(offerArticle);
@@ -75,16 +91,21 @@ const CartItem2 = ({ idCart, idArticle, quantity, image, articleName, articleDes
                     <div className="w-11/12">
                         <p className="font-bold text-xl">{showText(articleName, 20)}</p>
                         <p className="font-bold text-xs text-gray-500">{showText(articleDescription, 73)}</p>
-                        <p className="text-xs text-gray-500">
-                            {articleOptions} : {articleValues}
-                        </p>
+                        {articleOptions != "" && articleValues != "" && (
+                            <p className="text-xs text-gray-500">
+                                {articleOptions} : {articleValues}
+                            </p>
+                        )}
                     </div>
                     <Icon icon="stash:trash-can" className="w-1/12 text-3xl" onClick={() => handleClickSetStatusStatus(0)} />
                 </div>
 
                 <div className="flex justify-between items-center_ items-end w-full">
                     <div className="flex_gap-1_items-center">
-                        <p className="font-bold text-red-500 text-2xl">{showPrice(finalPrice)}</p>
+                        {/* <p className="font-bold text-red-500 text-2xl">{showPrice(finalPrice)}</p> */}
+                        <p className="font-bold text-red-500 text-2xl">
+                            {showPriceWithCurrencyUser(finalPrice, { exchange_rate: exchangeRate, iso_code: isoCode }, currencySelected)}
+                        </p>
                         {hasOffer && <p className="font-bold text-gray-400 text-xl line-through">{showPrice(articlePrice * quantity)}</p>}
                     </div>
                     <div className="flex items-center gap-1">

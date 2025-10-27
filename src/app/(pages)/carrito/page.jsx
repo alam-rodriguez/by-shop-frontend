@@ -26,30 +26,31 @@ import { useRouter } from "next/navigation";
 import ImageA from "@/app/components/others/ImageA";
 import Spacer from "@/app/components/home/Spacer";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
-import { showText } from "@/app/hooks/app/app";
+import { showPrice, showText } from "@/app/hooks/app/app";
 import CartItem2 from "./components/CartItem2";
+import { useGetCurrencyById } from "@/app/hooks/request/currencies/requestsCurrencies";
 
 const page = () => {
     const router = useRouter();
 
-    const { showPrice } = useApp();
     const { appName } = appSettings();
-    const { id, type, firstName } = zusUser();
+    const { id, type, firstName, idCurrency, currencySelected } = zusUser();
     const { totalSelectedArticles, totalSelectedPrice, setTotalSelectedArticles } = zusCart();
 
     const { data, isLoading, refetch } = useGetCartUser(id);
 
     const { data: savedForLater, isLoading: isLoadingSavedForLater, refetch: refetchSavedForLater } = useGetCartUserSavedForLater(id);
 
-    useEffect(() => {
-        console.log(savedForLater);
-    }, [savedForLater]);
+    // const { data: currencySelectedByUser, isLoading: isLoadingCurrencySelectedByUser } = useGetCurrencyById(idCurrency);
+
+    // useEffect(() => {
+    //     console.error();
+    // }, [currencySelected]);
 
     useEffect(() => {
         if (isLoading) return;
         console.log(data);
-        console.log("--------------");
-
+        console.log(currencySelected);
         if (data) setTotalSelectedArticles(data);
     }, [data]);
 
@@ -76,9 +77,7 @@ const page = () => {
         refetch();
     };
 
-    // return <></>;
-
-    if (isLoading || !data) return <LoadingParagraph />;
+    if (isLoading || !data || !currencySelected) return <LoadingParagraph />;
 
     return (
         <div>
@@ -86,6 +85,11 @@ const page = () => {
                 <div className="flex gap-5 items-center">
                     <Icon className="size-6 text-red-700 text-xl" icon="mdi:cart" />
                     <p className="font-bold text-xl">{totalSelectedArticles} articulos en tu carrito</p>
+                </div>
+                <Spacer space={12} />
+                <div className="flex gap-5 items-center">
+                    <Icon className="size-6 text-red-700 text-xl" icon="mdi:money" />
+                    <p className="font-bold text-xl">Total: {showPrice(totalSelectedPrice)}</p>
                 </div>
                 <Spacer />
                 <div className="flex flex-col gap-6">
@@ -101,6 +105,8 @@ const page = () => {
                             articlePrice={articleCart.price + articleCart.price_options}
                             articleOptions={articleCart.options}
                             articleValues={articleCart.values}
+                            exchangeRate={articleCart.exchange_rate}
+                            isoCode={articleCart.iso_code}
                             refetch={refetch}
                         />
                         // <div key={articleCart.id} className="flex bg-white rounded-lg p-4 gap-4 shadow">

@@ -43,10 +43,11 @@ const geistMono = localFont({
 // }, []);
 
 export default function RootLayout({ children }) {
-    const { useGetUserInformation } = useRequestsUsers();
+    const { useGetUserInformation, useGetUserCurrencyOrMainCurrency } = useRequestsUsers();
 
     useLayoutEffect(() => {
         useGetUserInformation();
+        useGetUserCurrencyOrMainCurrency();
         // useRefreshToken();
     }, []);
 

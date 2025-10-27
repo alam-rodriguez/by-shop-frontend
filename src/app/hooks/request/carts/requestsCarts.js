@@ -145,16 +145,34 @@ export const useGetCartUserReadyToBuy = (id) =>
 //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 // );
 
-export const useCreateCartBuy = async (id_user, id_pay_method, image, id_currency, wantUseAddress, idAddress) => {
+export const useCreateCartBuy = async (
+    id_user,
+    id_pay_method,
+    total,
+    total_discount,
+    paypal_fee,
+    paypal_payment_id,
+    image,
+    id_currency,
+    wantUseAddress,
+    idAddressUser,
+    idShopForAddress
+) => {
     const cart = {
         id: uuidv4(),
         id_user: id_user,
         status: 1,
         id_pay_method: id_pay_method,
+        total: total ?? 0,
+        total_discount,
+        paypal_fee: paypal_fee ?? 0,
+        paypal_payment_id,
         image: image,
         id_currency: id_currency,
-        want_use_address: wantUseAddress,
-        id_address: idAddress ?? null,
+        want_use_address: wantUseAddress ?? 0,
+        // id_address: idAddress ?? null,
+        id_address_user: idAddressUser,
+        id_shop_for_address: idShopForAddress,
     };
 
     console.log(cart);
