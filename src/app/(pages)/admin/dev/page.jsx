@@ -86,10 +86,28 @@ const page = () => {
                     { url: "/admin/pedidos?estado=realizado", text: "PEDIDOS REALIZADOS" },
                     { url: "/admin/pedidos?estado=archivado", text: "PEDIDOS ARCHIVADOS" },
                     { url: "/admin/articulos/solicitudes-comentarios", text: "SOLICITUDES DE COMENTARIOS" },
+                    { url: "/admin/pedidos?estado=pendiente", text: "PEDIDOS BAJO RESPONSABILIDAD" },
                 ]}
             />
 
-            <BtnGroup txt="Usuarios" options={[{ url: "/admin/usuarios/usuarios", text: "ADMINISTRAR USUARIOS" }]} />
+            <BtnGroup
+                txt="Usuarios"
+                options={[
+                    { url: "/admin/usuarios/usuarios", text: "ADMINISTRAR USUARIOS" },
+                    { url: "/admin/usuarios/tipos", text: "TIPOS DE USUARIO" },
+                ]}
+            />
+
+            <BtnGroup
+                txt="Ubicaciones"
+                options={[
+                    { url: "/admin/ubicaciones/paises", text: "Paises" },
+                    { url: "/admin/ubicaciones/provincias", text: "Provincias" },
+                    { url: "/admin/ubicaciones/municipios", text: "Municipios" },
+                    { url: "/admin/ubicaciones/distritos", text: "Distritos" },
+                    { url: "/admin/ubicaciones/vecindarios", text: "Vecindarios" },
+                ]}
+            />
         </div>
     );
 };

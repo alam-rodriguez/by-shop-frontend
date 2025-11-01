@@ -12,6 +12,7 @@ import {
     getOrderById,
     getOrderByIdCart,
     getOrders,
+    getOrdersByResponsibleShop,
     getOrdersFromShop,
     getOrdersFromShopAndOrder,
     searchArticlesOrderedUserByWord,
@@ -152,6 +153,8 @@ export const useCreateCartBuy = async (
     total_discount,
     paypal_fee,
     paypal_payment_id,
+    delivery_cost,
+    delivery_distance,
     image,
     id_currency,
     wantUseAddress,
@@ -167,6 +170,8 @@ export const useCreateCartBuy = async (
         total_discount,
         paypal_fee: paypal_fee ?? 0,
         paypal_payment_id,
+        delivery_cost,
+        delivery_distance,
         image: image,
         id_currency: id_currency,
         want_use_address: wantUseAddress ?? 0,
@@ -247,7 +252,7 @@ export const useUpdateCartItemsStatus = async (cartItems, status) => {
 export const useGetCartUserBought = (id) =>
     useQuery({
         queryKey: [`cart-user-bought-${id}`],
-        staleTime: Infinity,
+        // staleTime: Infinity,
         queryFn: () => getCartUserBought(id),
     });
 
@@ -328,6 +333,13 @@ export const useGetOrders = (status) =>
         queryKey: [`orders`],
         // staleTime: Infinity,
         queryFn: () => getOrders(status),
+    });
+
+export const useGetOrdersByResponsibleShop = (idShop, status) =>
+    useQuery({
+        queryKey: [`orders-responsible-shop-${idShop}`],
+        // staleTime: Infinity,
+        queryFn: () => getOrdersByResponsibleShop(idShop, status),
     });
 
 export const useGetOrdersFromShop = (idShop, status) =>

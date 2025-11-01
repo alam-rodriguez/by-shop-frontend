@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 
 // Next
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 // Hooks
@@ -36,9 +36,15 @@ import ButtonGray from "@/app/components/others/ButtonGray";
 // Alerts
 import useAlert from "@/app/alerts/react-confirm-alert/useAlert";
 import { getOrderById } from "@/app/request/carts/requestsCarts";
+import { useCreateDeliveryOrder } from "@/app/hooks/request/deliveries/requestsDeliveries";
 
 const IdPedidoClient = () => {
     const { ["id-pedido"]: idOrder } = useParams();
+
+    const searchParams = useSearchParams();
+
+    const responsabilidad = searchParams.get("responsabilidad");
+    const isResponsible = responsabilidad == "true";
 
     const router = useRouter();
 
@@ -136,6 +142,13 @@ const IdPedidoClient = () => {
     };
 
     const changeImageCartBoughtStatus = async (status) => {
+        const canDoAction = type == 4 || type == 5;
+
+        if (!canDoAction) {
+            toast.info("No puedes cambiar el estado de confirmacion pedido, comunicate con alguien de soporte");
+            return;
+        }
+
         const want = await confirmAlertCustom({
             head: "Cambiar estado de imagen",
             content: status == 0 ? "¿Desea rechazar la imagen?" : "¿Desea aceptar la imagen?",
@@ -173,6 +186,13 @@ const IdPedidoClient = () => {
             if (!hasAlArticles) {
                 toast.warning("Todos los deben de estar disponibles");
                 return;
+            }
+            if (order.require_image == 1) {
+                const statusImage = (await getOrderById(idOrder)).status_image;
+                if (statusImage != 1) {
+                    toast.warning("Antes tienes que confirmar la foto del comprobante");
+                    return;
+                }
             }
         }
 
@@ -231,7 +251,13 @@ const IdPedidoClient = () => {
             });
     };
 
-    if (type == 4 || type == 5) {
+    const publishOrderForDelivery = async () => {
+        console.log(order.id);
+        const res = await useCreateDeliveryOrder(order.id, 100);
+        console.log(res);
+    };
+
+    if (type == 4 || type == 5 || isResponsible) {
         if (isLoadingOrder || !order) return <LoadingParagraph />;
         return (
             <div className="m-4">
@@ -269,7 +295,7 @@ const IdPedidoClient = () => {
                 </div>
                 <Spacer space={25} />
 
-                <p className="text-center mb-3 font-bold text-xl">Articulos</p>
+                <p className="text-center mb-3 font-bold text-xl">Todos los Articulos</p>
                 <div className="flex flex-col gap-10">
                     {order.articles.map((article, i) => {
                         let statusArticle = "";
@@ -372,12 +398,15 @@ const IdPedidoClient = () => {
                     // }, []); */}
 
                 <div className="flex flex-wrap justify-between gap-2">
-                    <ButtonGray
-                        fn={() => changeCartBoughtStatus(0)}
-                        disabled={order.status == 1 || order.status == 5 || (order.status == 0) | (order.status == 2) ? false : true}
-                    >
-                        Cancelar Pedido
-                    </ButtonGray>
+                    {(type == 4 || type == 5) && (
+                        <ButtonGray
+                            fn={() => changeCartBoughtStatus(0)}
+                            disabled={order.status == 1 || order.status == 5 || (order.status == 0) | (order.status == 2) ? false : true}
+                        >
+                            Cancelar Pedido
+                        </ButtonGray>
+                    )}
+
                     {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(0)} disabled>
                         Cancelar Pedido
                     </button> */}
@@ -385,7 +414,7 @@ const IdPedidoClient = () => {
                         fn={() => changeCartBoughtStatus(2)}
                         disabled={order.status == 1 || order.status == 3 || order.status == 0 || order.status == 2 ? false : true}
                     >
-                        Recivido
+                        Recibido
                     </ButtonGray>
 
                     {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(2)} disabled>
@@ -395,7 +424,7 @@ const IdPedidoClient = () => {
                         fn={() => changeCartBoughtStatus(3)}
                         disabled={order.status == 2 || order.status == 3 || order.status == 4 ? false : true}
                     >
-                        Enviar
+                        {order.want_use_address == 1 ? "Enviar" : "Listo para retirar"}
                     </ButtonGray>
                     {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(3)} disabled>
                         Enviar
@@ -406,9 +435,12 @@ const IdPedidoClient = () => {
                     {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(4)} disabled>
                         Pedido Entregado
                     </button> */}
-                    <ButtonGray fn={() => changeCartBoughtStatus(5)} disabled={order.status == 4 ? false : true}>
-                        Archivar pedido
-                    </ButtonGray>
+                    {(type == 4 || type == 5) && (
+                        <ButtonGray fn={() => changeCartBoughtStatus(5)} disabled={order.status == 4 ? false : true}>
+                            Archivar pedido
+                        </ButtonGray>
+                    )}
+
                     {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(5)} disabled>
                         Archivar pedido
                     </button> */}
@@ -416,6 +448,15 @@ const IdPedidoClient = () => {
                 {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => {}}>
                     Archivar pedido
                 </button> */}
+                {order.want_use_address == 1 && (
+                    <>
+                        <Spacer />
+                        <ButtonGray fn={publishOrderForDelivery} disabled={order.status == 2 ? false : true}>
+                            Publicar para delivery
+                        </ButtonGray>
+                        <p className="text-xs">Al publicar este pedido para un delivery cualquier delivery registrado en el sistema podra tomarlo</p>
+                    </>
+                )}
             </div>
         );
     } else {
@@ -450,7 +491,7 @@ const IdPedidoClient = () => {
                 </div>
                 <Spacer space={25} />
 
-                <p className="text-center mb-3 font-bold text-xl">Articulos</p>
+                <p className="text-center mb-3 font-bold text-xl">Articulos de mi tienda</p>
                 <div className="flex flex-col gap-10">
                     {orderForShop.articles.map((article, i) => {
                         let statusArticle = "";
@@ -489,20 +530,22 @@ const IdPedidoClient = () => {
                                     </div>
                                 </div>
                                 <Spacer space={5} />
-                                <div className="flex justify-between">
-                                    <button
-                                        className="px-4 py-2 rounded bg-gray-200 self-end"
-                                        onClick={() => handleChangeCartBoughtItemStatus(article.id_cart_bought_item, 0)}
-                                    >
-                                        No lo tengo
-                                    </button>
-                                    <button
-                                        className="px-4 py-2 rounded bg-gray-200 self-end"
-                                        onClick={() => handleChangeCartBoughtItemStatus(article.id_cart_bought_item, 2)}
-                                    >
-                                        Lo tengo
-                                    </button>
-                                </div>
+                                {order.status == 1 && (
+                                    <div className="flex justify-between">
+                                        <button
+                                            className="px-4 py-2 rounded bg-gray-200 self-end"
+                                            onClick={() => handleChangeCartBoughtItemStatus(article.id_cart_bought_item, 0)}
+                                        >
+                                            No lo tengo
+                                        </button>
+                                        <button
+                                            className="px-4 py-2 rounded bg-gray-200 self-end"
+                                            onClick={() => handleChangeCartBoughtItemStatus(article.id_cart_bought_item, 2)}
+                                        >
+                                            Lo tengo
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         );
                     })}
@@ -510,9 +553,11 @@ const IdPedidoClient = () => {
 
                 <Spacer space={25} />
 
-                <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={hasEverything}>
-                    Tengo todo listo
-                </button>
+                {order.status == 1 && (
+                    <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={hasEverything}>
+                        Tengo todo listo
+                    </button>
+                )}
 
                 {/* })} */}
                 {/* <button className="bg-green-700 text-white w-full rounded-3xl py-3" onClick={() => handleClickOffer()}>

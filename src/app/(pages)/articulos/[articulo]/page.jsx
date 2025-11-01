@@ -300,10 +300,6 @@ const page = ({ params }) => {
     //     console.log(imageInView);
     // }, [imageInView]);
 
-    if (isLoading) return <></>;
-
-    if ((idArticulo == null && articleSelected == null) || isLoadingArticlesCanBeInterested) return <div>Cargando...</div>;
-
     // CREATE TABLE carts(
     //     id char(36) NOT NULL PRIMARY KEY,
     //     id_article char(36) NOT NULL,
@@ -384,7 +380,7 @@ const page = ({ params }) => {
     //     };
     // }, []);
 
-    if (isLoading) return <LoadingParagraph />;
+    if (isLoading || (idArticulo == null && articleSelected == null) || isLoadingArticlesCanBeInterested) return <LoadingParagraph />;
 
     return (
         <div>

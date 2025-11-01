@@ -10,6 +10,7 @@ import {
     changeUserCanBuy,
     changeUserEmailVerified,
     changeUserType,
+    changeUserTypeId,
     changeUserWantUseAddress,
     createAddress,
     createCodeVerificationEmail,
@@ -237,4 +238,9 @@ export const useChangeIdUserAdressForCart = async (id_user, id_address) => {
 export const useChangeIdCurrencyUser = async (idUser, idCurrency) => {
     const { message, status } = await changeIdCurrencyUser(idUser, idCurrency);
     return status == 200 ? true : false;
+};
+
+export const useChangeUserTypeId = async (idUser, userTypeId) => {
+    const { message, status } = await changeUserTypeId(idUser, userTypeId);
+    return status == 200;
 };

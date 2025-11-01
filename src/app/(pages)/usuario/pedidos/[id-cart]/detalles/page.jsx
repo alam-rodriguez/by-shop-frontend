@@ -139,11 +139,20 @@ const page = () => {
                     <p className="text-gray-500 text-sm">Comision</p>
                     <p className="font-bold">{showPrice(dataOrder.paypal_fee)}</p>
                 </div>
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Costo de envio</p>
+                    <p className="font-bold">{showPrice(dataOrder.delivery_cost)}</p>
+                </div>
                 <Divider mt={0} mb={0} h={"0.5px"} />
                 <div className="flex justify-between">
                     <p className="text-gray-500 text-sm">Total General</p>
                     <p className="font-bold">
-                        {showPrice(Number(dataOrder.total) - Number(dataOrder.total_discount) + Number(dataOrder.paypal_fee))}
+                        {showPrice(
+                            Number(dataOrder.total) +
+                                Number(dataOrder.paypal_fee) +
+                                Number(dataOrder.delivery_cost) -
+                                Number(dataOrder.total_discount)
+                        )}
                     </p>
                 </div>
             </div>
@@ -174,20 +183,57 @@ const page = () => {
                     <p className="text-gray-500 text-sm">Metodo de pago</p>
                     <p className="font-semibold">{dataOrder.name_pay_method}</p>
                 </div>
+                {dataOrder.is_paypal_method == 1 && (
+                    <div className="flex justify-between">
+                        <p className="text-gray-500 text-sm">Numero de comprobante</p>
+                        <p className="font-semibold">{dataOrder.paypal_payment_id}</p>
+                    </div>
+                )}
+                {dataOrder.require_image == 1 && (
+                    <div className="flex justify-between">
+                        <p className="text-gray-500 text-sm">Estado de comprobante</p>
+                        <p
+                            className={`font-semibold ${
+                                dataOrder.status_image == null
+                                    ? "text-gray-500"
+                                    : dataOrder.status_image == 0
+                                    ? "text-red-500"
+                                    : dataOrder.status_image == 1
+                                    ? "text-green-500"
+                                    : ""
+                            }`}
+                        >
+                            {dataOrder.status_image == null
+                                ? "No verificado"
+                                : dataOrder.status_image == 0
+                                ? "Rechasado"
+                                : dataOrder.status_image == 1
+                                ? "Aceptado"
+                                : ""}
+                        </p>
+                    </div>
+                )}
                 <div className="flex justify-between">
                     <p className="text-gray-500 text-sm">Moneda</p>
                     <p className="font-semibold">{dataOrder.iso_code}</p>
                 </div>
                 <div className="flex justify-between">
-                    <p className="text-gray-500 text-sm">Lugar de entrega</p>
-                    <p className="font-semibold">{dataOrder.want_use_address == 1 ? "Direccion seleccionada" : "Tienda seleccionada"}</p>
+                    <p className="text-gray-500 text-sm">Preferencia de entrega</p>
+                    <p className="font-semibold">{dataOrder.want_use_address == 1 ? "Direccion" : "Tienda"}</p>
                 </div>
                 {dataOrder.want_use_address == 1 && (
                     <div className="flex justify-between">
                         <p className="text-gray-500 text-sm">Direccion</p>
                         <p className="font-semibold">
-                            {dataOrder.address_1} {dataOrder.address_2}
+                            {/* {dataOrder.address_1} {dataOrder.address_2} */}
+                            {showText(dataOrder.neighborhood + " - " + dataOrder.street, 25)}
                         </p>
+                    </div>
+                )}
+                {dataOrder.want_use_address == 1 && (
+                    <div className="flex justify-between">
+                        <p className="text-gray-500 text-sm">Distancia</p>
+                        <p className="font-semibold">{dataOrder.delivery_distance} km</p>
                     </div>
                 )}
                 {dataOrder.want_use_address == 0 && (
@@ -198,8 +244,14 @@ const page = () => {
                 )}
 
                 <div className="flex justify-between">
-                    <p className="text-gray-500 text-sm">Estado de order</p>
-                    <p className="font-bold">{showOrderStatusForClient(dataOrder.status_order, dataOrder.want_use_address == 1)}</p>
+                    <p className="text-gray-500 text-sm">Estado de pedido</p>
+                    <p
+                        className={`font-bold ${(dataOrder.status_order == 4 || dataOrder.status_order == 5) && "text-green-500"} ${
+                            dataOrder.status_order == 0 && "text-red-500"
+                        }`}
+                    >
+                        {showOrderStatusForClient(dataOrder.status_order, dataOrder.want_use_address == 1)}
+                    </p>
                 </div>
                 <div className="flex justify-between">
                     <p className="text-gray-500 text-sm">Fecha de compra</p>
@@ -211,16 +263,17 @@ const page = () => {
                 <>
                     <Spacer />
                     <p className="text-2xl font-bold">Comprobante de tranferencia:</p>
-                    <Spacer />
+                    <Spacer space={12} />
                     <div className="grid place-items-center">
                         <ImageA src={dataOrder.image} />
                     </div>
-                    <Spacer />
+                    {/* <Spacer /> */}
                 </>
             )}
 
-            <p className="text-2xl font-bold">Codigo Qr:</p>
             <Spacer />
+            <p className="text-2xl font-bold">Codigo Qr:</p>
+            <Spacer space={12} />
             <div className="grid place-items-center">
                 <QRGenerator value={window.location.href} className="w-auto h-auto" />
             </div>

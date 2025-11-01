@@ -77,6 +77,7 @@ const page = () => {
                     { url: "/admin/pedidos?estado=pendiente", text: "PEDIDOS PENDIENTES" },
                     { url: "/admin/pedidos?estado=realizado", text: "PEDIDOS REALIZADOS" },
                     { url: "/admin/pedidos?estado=archivado", text: "PEDIDOS ARCHIVADOS" },
+                    { url: "/admin/pedidos?estado=pendiente&responsabilidad=true", text: "PEDIDOS BAJO RESPONSABILIDAD" },
                     // { url: "/admin/articulos/solicitudes-comentarios", text: "SOLICITUDES DE COMENTARIOS" },
                 ]}
             />

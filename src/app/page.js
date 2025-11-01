@@ -54,7 +54,7 @@ const page = () => {
         console.log(articlesFromGeneralCategories);
     }, [articlesFromGeneralCategories]);
 
-    if (isLoadingDirects || isLoadingArticlesFromGeneralCategories || isLoadingDepartments) return <LoadingParagraph />;
+    if (isLoadingDirects || isLoadingArticlesFromGeneralCategories || isLoadingDepartments || isLoadingIndirects) return <LoadingParagraph />;
 
     return (
         <div className="font-sans">

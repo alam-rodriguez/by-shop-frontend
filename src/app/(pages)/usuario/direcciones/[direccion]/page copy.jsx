@@ -35,13 +35,6 @@ import Divider from "@/app/components/home/Divider";
 import Input from "@/app/components/inputs/Input";
 import Select from "@/app/components/inputs/Select";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
-import {
-    useGetLocationMunicipalitiesByprovince,
-    useGetLocationNeighborhoodsByMunicipality,
-    useGetLocationProvincesByCountry,
-    useGetLocationsCountries,
-} from "@/app/hooks/request/locations/requestsLocations";
-import { isUUID } from "@/app/hooks/app/app";
 
 const page = () => {
     const { direccion: idAddress } = useParams();
@@ -52,8 +45,6 @@ const page = () => {
     const { id } = zusUser();
 
     const { useGetUserInformation } = useRequestsUsers();
-
-    const { data: countries, isLoading: isLoadingCountries } = useGetLocationsCountries();
 
     const {
         register,
@@ -69,20 +60,9 @@ const page = () => {
         resolver: zodResolver(userAddressSchema),
     });
 
-    const { data: provincesByCountry } = useGetLocationProvincesByCountry(watch("country_id"));
-    const { data: municipalitiesByProvince } = useGetLocationMunicipalitiesByprovince(watch("province_id"));
-    const { data: neighborhoodsByMunicipality } = useGetLocationNeighborhoodsByMunicipality(watch("municipality_id"));
-
     useEffect(() => {
         if (id != "") setValue("id_user", id);
     }, [id]);
-
-    useEffect(() => {
-        if (!isUUID(watch("neighborhood_id")) || !neighborhoodsByMunicipality) return;
-        const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == watch("neighborhood_id"));
-        setValue("latitude", neighborhoodSelected.latitude);
-        setValue("longitude", neighborhoodSelected.longitude);
-    }, [watch("neighborhood_id")]);
 
     const { data: address, isLoading: isLoadingAddress } = useGetAddressById(idAddress);
 
@@ -122,12 +102,7 @@ const page = () => {
             });
     };
 
-    useEffect(() => {
-        console.log(errors);
-    }, [errors]);
-
     const onSubmit = async (data) => {
-        console.log(data);
         if (data.preferred_address) {
             const can = await useUserAddressCanBePreferred(id, idAddress);
             if (!can) {
@@ -147,45 +122,12 @@ const page = () => {
                 register={register}
                 errors={errors}
                 type="text"
-                name="country_id"
-                items={countries ?? []}
-                selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
+                name="country"
+                items={[{ id: "Republica Dominicana", name: "Republica Dominicana" }]}
+                selectClassName="border-2 border-gray-300 rounded-md p-2"
                 errorClassName="text-red-700"
                 optionNameForShow="name"
                 label="Pais"
-            />
-            <Select
-                register={register}
-                errors={errors}
-                type="text"
-                name="province_id"
-                items={provincesByCountry ?? []}
-                selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
-                errorClassName="text-red-700"
-                optionNameForShow="name"
-                label="Provincia"
-            />
-            <Select
-                register={register}
-                errors={errors}
-                type="text"
-                name="municipality_id"
-                items={municipalitiesByProvince ?? []}
-                selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
-                errorClassName="text-red-700"
-                optionNameForShow="name"
-                label="Municipio"
-            />
-            <Select
-                register={register}
-                errors={errors}
-                type="text"
-                name="neighborhood_id"
-                items={neighborhoodsByMunicipality ?? []}
-                selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
-                errorClassName="text-red-700"
-                optionNameForShow="name"
-                label="Vecindario"
             />
             <Input
                 register={register}
@@ -201,7 +143,7 @@ const page = () => {
                 register={register}
                 errors={errors}
                 type="text"
-                name="phone_number"
+                name="number"
                 inputClassName="border-2 border-gray-300 rounded-md p-2"
                 errorClassName="text-red-700"
                 placeholder=""
@@ -212,67 +154,54 @@ const page = () => {
                 register={register}
                 errors={errors}
                 type="text"
-                name="street"
+                name="address_1"
                 inputClassName="border-2 border-gray-300 rounded-md p-2"
                 errorClassName="text-red-700"
                 placeholder="Nombre de la calle"
-                label="Calle de direccion"
+                label="Linea de direccion 1"
             />
             <Input
                 register={register}
                 errors={errors}
-                type="textarea"
-                name="address_details"
+                type="text"
+                name="address_2"
                 inputClassName="border-2 border-gray-300 rounded-md p-2"
                 errorClassName="text-red-700"
-                placeholder="Nombre de la calle"
-                label="Detalles adionales de la ubicacion"
+                placeholder="Departamento, piso, unidad, edificio (opcional)"
+                label="Linea de direccion 2"
+            />
+            <Input
+                register={register}
+                errors={errors}
+                type="text"
+                name="neighborhood"
+                inputClassName="border-2 border-gray-300 rounded-md p-2"
+                errorClassName="text-red-700"
+                placeholder=""
+                label="Barrio"
             />
             <div className="flex gap-2">
-                <Input
+                <Select
                     register={register}
                     errors={errors}
                     type="text"
-                    name="house_number"
-                    inputClassName="border-2 border-gray-300 rounded-md p-2"
+                    name="province"
+                    items={[{ id: 1, name: "Republica Dominicana" }]}
+                    selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
                     errorClassName="text-red-700"
-                    placeholder="Nombre de la calle"
-                    label="Num. casa/apartamento"
+                    optionNameForShow="name"
+                    label="Provincia"
                     width="48%"
                 />
                 <Input
                     register={register}
                     errors={errors}
-                    type="number"
+                    type="text"
                     name="postal_code"
                     inputClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     placeholder=""
                     label="Codigo postal"
-                    width="48%"
-                />
-            </div>
-            <div className="flex gap-2">
-                <Input
-                    register={register}
-                    errors={errors}
-                    type="number"
-                    name="latitude"
-                    inputClassName="border-2 border-gray-300 rounded-md p-2"
-                    errorClassName="text-red-700"
-                    placeholder=""
-                    label="Latitud"
-                    width="48%"
-                />
-                <Input
-                    register={register}
-                    errors={errors}
-                    type="number"
-                    name="longitude"
-                    inputClassName="border-2 border-gray-300 rounded-md p-2"
-                    errorClassName="text-red-700"
-                    placeholder=""
-                    label="Longitud"
                     width="48%"
                 />
             </div>

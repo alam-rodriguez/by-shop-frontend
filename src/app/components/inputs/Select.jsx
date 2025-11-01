@@ -20,6 +20,8 @@ const Select = ({
     isMulti = false,
     itemSelected = undefined,
     width = "100%",
+    optionByDefaultText = "",
+    optionByDefaultValue = "",
 }) => {
     if (!isMulti)
         return (
@@ -33,7 +35,11 @@ const Select = ({
                     className={selectClassName}
                     id={name}
                     value={itemSelected}
+                    defaultValue={optionByDefaultValue}
                 >
+                    <option value={optionByDefaultValue} disabled>
+                        {optionByDefaultText || "Seleccione una opción"}
+                    </option>
                     {items.map((item) => (
                         <option value={item[optionKeyValue]} key={item[optionKeyValue]}>
                             {item[optionNameForShow]}

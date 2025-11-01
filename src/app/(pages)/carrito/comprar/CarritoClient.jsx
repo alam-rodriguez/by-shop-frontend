@@ -28,7 +28,15 @@ import AddDireccion from "../components/AddDireccion";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useGetPaymentMethodById, useGetPaymentMethods } from "@/app/hooks/request/payment-methods/requestsPaymentMethods";
 import { useGetCurrenciesForCustomers } from "@/app/hooks/request/currencies/requestsCurrencies";
-import { calcPriceCurrency, calcPriceInCurrency, isUUID, showPrice, showPriceWithCurrency, showPriceWithCurrencyUser } from "@/app/hooks/app/app";
+import {
+    calcPriceCurrency,
+    calcPriceInCurrency,
+    isUUID,
+    showPrice,
+    showPriceWithCurrency,
+    showPriceWithCurrencyUser,
+    showText,
+} from "@/app/hooks/app/app";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import { useChangeArticleQuantity } from "@/app/hooks/request/articles/requestsArticles";
 import { Icon } from "@iconify/react";
@@ -88,6 +96,7 @@ const CarritoClient = () => {
             const infoUser = await getUserById(id);
             console.log(infoUser);
             const userCurrency = await getCurrencyById(infoUser.id_currency);
+            console.log(userCurrency);
 
             const cartUser = await getCartUserReadyToBuy(id);
 
@@ -96,6 +105,15 @@ const CarritoClient = () => {
 
             console.log(userAddresses);
             console.log(shopsCart);
+
+            console.log(getDeliveryPrice(shopsCart[0], userAddresses[0]));
+
+            const deliveryCost =
+                infoUser.want_use_address == 1
+                    ? convertDOP(getDeliveryPrice(shopsCart[0], userAddresses[0]).price, userCurrency.iso_code, userCurrency.exchange_rate)
+                    : 0;
+            console.log(deliveryCost);
+            const deliveryDistance = infoUser.want_use_address == 1 ? getDeliveryPrice(shopsCart[0], userAddresses[0]).distance : 0;
 
             const userAddresSelectedForCart =
                 infoUser.id_address_for_cart != null ? infoUser.id_address_for_cart : userAddresses[0] ? userAddresses[0].id : null;
@@ -204,7 +222,7 @@ const CarritoClient = () => {
             // const total = subtotal - total_discount + paypalFee;
 
             // 💰 Calcula la comisión de PayPal sobre el subtotal original
-            const totalWithFee = calculateTotalWithPaypalFee(subtotal - totalDiscount, userCurrency.iso_code);
+            // const totalWithFee = calculateTotalWithPaypalFee(subtotal - totalDiscount, userCurrency.iso_code);
             // showPriceWithCurrency(
             //     currencySelected,
             //     calculateTotalWithPaypalFee(
@@ -213,7 +231,8 @@ const CarritoClient = () => {
             //     ) - Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0),
             //     false
             // );
-            const paypalFee = totalWithFee - (subtotal - totalDiscount);
+            // const paypalFee = totalWithFee - (subtotal - totalDiscount);
+            const paypalFee = getPaypalFee(total - totalDiscount + deliveryCost, userCurrency.iso_code);
 
             const { data: resData, status } = await useCreateCartBuy(
                 id,
@@ -222,6 +241,8 @@ const CarritoClient = () => {
                 totalDiscount,
                 paypalFee,
                 token,
+                deliveryCost,
+                deliveryDistance,
                 null,
                 infoUser.id_currency,
                 infoUser.want_use_address == null ? 0 : infoUser.want_use_address,
@@ -235,6 +256,9 @@ const CarritoClient = () => {
             const resCartItems = await useUpdateCartItemsStatus(cartUser, 5);
 
             const resArticlesChangeQuantity = await useChangeArticleQuantity(cartUser, "subtract");
+
+            refetch();
+            setPriceArticles({});
 
             if (status && resItem && resCartItems && resArticlesChangeQuantity) toast.success("Compra realizada", { id: loadingToast });
             else toast.error("Error al realizar la compra", { id: loadingToast });
@@ -311,9 +335,11 @@ const CarritoClient = () => {
 
     const [priceArticles, setPriceArticles] = useState({});
 
-    // useEffect(() => {
-    //     setPriceArticles({});
-    // }, []);
+    useEffect(() => {
+        return () => {
+            setPriceArticles({});
+        };
+    }, []);
 
     const { data, isLoading, refetch } = useGetCartUserReadyToBuy(id);
 
@@ -322,8 +348,8 @@ const CarritoClient = () => {
     const { data: dataUser, isLoading: dataUserIsLoadinf, refetch: dataUserRefetch } = useGetUserById(id);
 
     useEffect(() => {
-        console.log(priceArticles);
-    }, [priceArticles]);
+        // setPriceArticles({});
+    }, []);
 
     // useEffect(() => {
     //     if (isLoading) return;
@@ -339,7 +365,7 @@ const CarritoClient = () => {
     const { data: shopsForUserCart, isLoading: isLoadingShopsForUserCart } = useGetShopsForUserCart(id);
 
     useEffect(() => {
-        if ((isLoadingShopsForUserCart && !shopsForUserCart) || shopsForUserCart == undefined) return;
+        if ((isLoadingShopsForUserCart && !shopsForUserCart) || shopsForUserCart == undefined || !dataUser) return;
 
         if (isUUID(dataUser.id_shop_for_cart)) {
             const shopSelected = shopsForUserCart.find((shop) => shop.id == dataUser.id_shop_for_cart);
@@ -384,7 +410,6 @@ const CarritoClient = () => {
 
     useEffect(() => {
         if ((userAddresses && !userAddresses) || userAddresses == undefined) return;
-        console.error(userAddresses);
         setUserAddressSelected(userAddresses[0]);
     }, [userAddresses]);
 
@@ -452,71 +477,155 @@ const CarritoClient = () => {
     function calculateTotalWithPaypalFee(amount, currency) {
         const fee = paypalFees[currency];
         if (!fee) throw new Error("Moneda no soportada");
-        return (amount + fee.fixed) / (1 - fee.percent);
+        return (amount + fee.fixed) / (1 - fee.percent).toFixed(2);
+    }
+    function getPaypalFee(amount, currency) {
+        const fee = paypalFees[currency];
+        if (!fee) throw new Error("Moneda no soportada");
+
+        const paypalFee = amount * fee.percent + fee.fixed;
+        return paypalFee;
     }
 
-    // function calculateTotalWithPaypalFee(amount, percentFee, fixedFee) {
-    //     return (amount + fixedFee) / (1 - percentFee);
+    // 🔹 Si quieres obtener el total final para el cliente:
+    function getTotalWithPaypalFee(amount, currency) {
+        return parseFloat((amount + getPaypalFee(amount, currency)).toFixed(2));
+    }
+
+    function convertDOP(amount, currency, exchangeRate = null) {
+        let rate;
+        if (exchangeRate == null) {
+            const currencyForConvert = currencies.find((currencyItem) => currencyItem.iso_code == currency);
+            rate = currencyForConvert.exchange_rate;
+        } else rate = exchangeRate;
+        if (!rate) throw new Error(`Moneda ${currency} no soportada`);
+        return +(amount * rate).toFixed(2); // redondea a 2 decimales
+    }
+
+    // Calcula distancia entre dos ubicaciones (en kilómetros)
+    function calculateDistance(from, to) {
+        const R = 6371; // Radio de la Tierra en km
+        const toRad = (value) => (value * Math.PI) / 180;
+
+        // Convertir explícitamente a número
+        const lat1 = parseFloat(from.latitude);
+        const lon1 = parseFloat(from.longitude);
+        const lat2 = parseFloat(to.latitude);
+        const lon2 = parseFloat(to.longitude);
+
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c; // distancia en km
+    }
+    // function calculateDistance(from, to) {
+    //     const R = 6371; // Radio de la Tierra en km
+    //     const toRad = (value) => (value * Math.PI) / 180;
+
+    //     const dLat = toRad(to.latitude - from.latitude);
+    //     const dLon = toRad(to.longitude - from.longitude);
+
+    //     const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(from.latitude)) * Math.cos(toRad(to.latitude)) * Math.sin(dLon / 2) ** 2;
+
+    //     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    //     return R * c; // distancia en km
     // }
 
-    const crearePurchaseUnitsForPaypal = (articles) => {
-        const subtotal = articles.reduce((acc, article) => {
-            const price = Number(article.price) + Number(article.price_options);
-            return acc + price * article.quantity;
-        }, 0);
+    // Calcula precio del envío entre dos puntos
+    function getDeliveryPrice(from, to) {
+        console.log(from);
+        console.log(to);
+        // return;
+        if (!from?.latitude || !from?.longitude || !to?.latitude || !to?.longitude) {
+            return {
+                distance: 0, // km
+                price: 0, // precio final
+            };
+            // throw new Error("Both origin and destination must include latitude and longitude");
+        }
 
+        const distance = calculateDistance(from, to);
+        const basePrice = 50; // precio base (ajustable)
+        const pricePerKm = 15; // costo por km (ajustable)
+
+        const total = basePrice + distance * pricePerKm;
+
+        return {
+            distance: Number(distance.toFixed(2)), // km
+            // price: Math.round(total), // precio final
+            price: Number(total.toFixed(2)), // precio final
+        };
+    }
+
+    function calculateTotalWithPaypalFee(amount, percentFee, fixedFee) {
+        return (amount + fixedFee) / (1 - percentFee);
+    }
+
+    const crearePurchaseUnitsForPaypal = (articles, add) => {
         const currency_code = currencySelected.iso_code;
 
-        const totalWithFee = calculateTotalWithPaypalFee(subtotal, currency_code);
+        // const totalWithFee = (price - discount + paypalFee).toFixed(2);
 
-        const factor = totalWithFee / subtotal;
+        const subtotal = price - discount;
+        // const factor = paypalFee / subtotal;
 
-        // const originalTotal = 1747.26;
-        // const totalWithFee = calculateTotalWithPaypalFee(originalTotal, 0.045, 0.35);
-
-        // articles.forEach((cartItem) => {
-        //     const totalPriceArticle = Number(cartItem.price) + Number(cartItem.price_options) * Number(cartItem.quantity);
-        //     const currencyArticle = {
-        //         iso_code: cartItem.iso_code,
-        //         exchange_rate: cartItem.exchange_rate,
-        //     };
-        //     const totalArticleInCurrencyUser = showPriceWithCurrencyUser(totalPriceArticle, currencyArticle, userCurrency, false);
-        //     total += totalArticleInCurrencyUser;
-        // });
-        // let totalDiscount = 0;
-        // cartUser.forEach((cartItem) => {
-        //     const totalPriceArticle = Number(cartItem.price) + Number(cartItem.price_options) * Number(cartItem.quantity);
-        //     const percentDiscount = cartItem.offer ? cartItem.offer.percent_discount : 0;
-        //     const currencyArticle = {
-        //         iso_code: cartItem.iso_code,
-        //         exchange_rate: cartItem.exchange_rate,
-        //     };
-        //     const totalDiscountArticleInCurrencyUser =
-        //         showPriceWithCurrencyUser(totalPriceArticle, currencyArticle, userCurrency, false) * (percentDiscount / 100);
-        //     totalDiscount += totalDiscountArticleInCurrencyUser;
-        // });
+        const deliveryPricePaypal = deliveryPrice;
+        let totalPriceForClient = deliveryPrice;
+        let itemsTotal = 0;
 
         const items = articles.map((article) => {
-            let originalPrice = Number(article.price) + Number(article.price_options);
+            const currencyArticle = { iso_code: article.iso_code, exchange_rate: article.exchange_rate };
+            let originalPrice = parseFloat(article.price) + parseFloat(article.price_options);
             const percentDiscount = article.offer ? article.offer.percent_discount : 0;
             originalPrice = originalPrice * (1 - percentDiscount / 100);
-            const currencyArticle = { iso_code: article.iso_code, exchange_rate: article.exchange_rate };
+            originalPrice = showPriceWithCurrencyUser(originalPrice, currencyArticle, currencySelected, false).toFixed(2);
+
+            // const proportion = originalPrice / subtotal;
+            // const extra = proportion * paypalFee; // parte proporcional del fee
+            // const newPrice = originalPrice + extra;
+            console.log(originalPrice);
+            // console.log(extra);
+
+            // totalPriceForClient += newPrice * article.quantity;
+            itemsTotal += parseFloat(originalPrice) * Number(article.quantity);
+
             return {
                 name: article.article_name,
                 description: article.description,
                 quantity: article.quantity.toString(),
                 unit_amount: {
                     currency_code: currency_code,
-                    value: showPriceWithCurrencyUser(originalPrice * factor, currencyArticle, currencySelected, false).toFixed(2),
+                    // value: showPriceWithCurrencyUser(originalPrice * factor, currencyArticle, currencySelected, false).toFixed(2),
+                    value: originalPrice,
                 },
             };
         });
 
-        const total = items.reduce((acc, item) => acc + Number(item.unit_amount.value) * Number(item.quantity), 0).toFixed(2);
+        console.log(itemsTotal);
+        console.log(deliveryPricePaypal);
 
-        // const total = Object.values(priceArticles)
-        //     .reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0)
-        //     .toFixed(2);
+        let totalAmount = itemsTotal + deliveryPricePaypal;
+        // itemsTotal += deliveryPricePaypal;
+        console.log(totalAmount);
+
+        const paypalFee = getPaypalFee(totalAmount, currencySelected.iso_code);
+        totalAmount += paypalFee;
+        itemsTotal += paypalFee;
+
+        items.push({
+            name: "cobro paypal",
+            description: "cobro paypal",
+            quantity: "1",
+            unit_amount: {
+                currency_code: currency_code,
+                value: paypalFee.toFixed(2),
+            },
+        });
 
         return [
             {
@@ -524,39 +633,430 @@ const CarritoClient = () => {
                 items: items,
                 amount: {
                     currency_code: currency_code,
-                    value: total, // Total general de la orden
+                    value: totalAmount.toFixed(2), // Total general de la orden
                     breakdown: {
                         item_total: {
                             currency_code: currency_code,
-                            value: total, // Suma de los items
+                            // value: (totalWithFee - deliveryPrice - paypalFee).toFixed(2), // Suma de los items
+                            value: itemsTotal.toFixed(2), // Suma de los items
+                        },
+                        shipping: {
+                            currency_code: currency_code,
+                            value: deliveryPricePaypal.toFixed(2),
                         },
                     },
                 },
             },
         ];
     };
+    // const crearePurchaseUnitsForPaypal = (articles, add) => {
+    //     const currency_code = currencySelected.iso_code;
+
+    //     // const totalWithFee = (price - discount + paypalFee).toFixed(2);
+
+    //     const subtotal = price - discount;
+    //     // const factor = paypalFee / subtotal;
+
+    //     const deliveryPricePaypal = deliveryPrice;
+    //     let totalPriceForClient = deliveryPrice;
+    //     let itemsTotal = 0;
+
+    //     const items = articles.map((article) => {
+    //         const currencyArticle = { iso_code: article.iso_code, exchange_rate: article.exchange_rate };
+    //         let originalPrice = Number(article.price) + Number(article.price_options);
+    //         const percentDiscount = article.offer ? article.offer.percent_discount : 0;
+    //         originalPrice = originalPrice * (1 - percentDiscount / 100);
+    //         originalPrice = showPriceWithCurrencyUser(originalPrice, currencyArticle, currencySelected, false);
+
+    //         const proportion = originalPrice / subtotal;
+    //         const extra = proportion * paypalFee; // parte proporcional del fee
+    //         const newPrice = parseFloat((originalPrice + extra).toFixed());
+    //         // console.log(originalPrice);
+    //         // console.log(extra);
+
+    //         totalPriceForClient += newPrice * article.quantity;
+    //         itemsTotal += newPrice * article.quantity;
+
+    //         return {
+    //             name: article.article_name,
+    //             description: article.description,
+    //             quantity: article.quantity.toString(),
+    //             unit_amount: {
+    //                 currency_code: currency_code,
+    //                 // value: showPriceWithCurrencyUser(originalPrice * factor, currencyArticle, currencySelected, false).toFixed(2),
+    //                 value: newPrice.toFixed(2),
+    //             },
+    //         };
+    //     });
+
+    //     console.log(itemsTotal);
+    //     console.log(deliveryPricePaypal);
+
+    //     const totalAmount = itemsTotal + deliveryPricePaypal;
+    //     console.log(totalAmount);
+
+    //     return [
+    //         {
+    //             description: "Compra de productos electrónicos",
+    //             items: items,
+    //             amount: {
+    //                 currency_code: currency_code,
+    //                 value: totalAmount.toFixed(2), // Total general de la orden
+    //                 breakdown: {
+    //                     item_total: {
+    //                         currency_code: currency_code,
+    //                         // value: (totalWithFee - deliveryPrice - paypalFee).toFixed(2), // Suma de los items
+    //                         value: itemsTotal.toFixed(2), // Suma de los items
+    //                     },
+    //                     shipping: {
+    //                         currency_code: currency_code,
+    //                         value: deliveryPricePaypal.toFixed(2),
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     ];
+    // };
+    // const crearePurchaseUnitsForPaypal = (articles, add) => {
+    //     console.log(articles);
+    //     // const subtotal = articles.reduce((acc, article) => {
+    //     //     const price = Number(article.price) + Number(article.price_options);
+    //     //     return acc + price * article.quantity;
+    //     // }, 0);
+
+    //     const currency_code = currencySelected.iso_code;
+
+    //     // const paypalFee = getPaypalFee(subtotal + add, currency_code);
+    //     // console.log(paypalFee);
+
+    //     console.log(currencySelected);
+    //     // console.log(subtotal);
+    //     // const totalWithFee = calcPriceCurrency(currencySelected, subtotal + paypalFee);
+    //     // const totalWithFee = price - discount + paypalFee;
+    //     const totalWithFee = (price - discount + paypalFee).toFixed(2);
+
+    //     console.log(totalWithFee);
+    //     console.log(paypalFee);
+
+    //     // const totalWithFee = calculateTotalWithPaypalFee(subtotal, currency_code);
+
+    //     const subtotal = price - discount;
+    //     console.log(subtotal);
+    //     const factor = paypalFee / subtotal;
+    //     // const factor = paypalFee / price - discount;
+
+    //     console.log(factor);
+
+    //     const deliveryPricePaypal = parseFloat(deliveryPrice.toFixed(2));
+    //     let totalPriceForClient = parseFloat(deliveryPrice.toFixed(2));
+
+    //     const items = articles.map((article) => {
+    //         const currencyArticle = { iso_code: article.iso_code, exchange_rate: article.exchange_rate };
+    //         let originalPrice = Number(article.price) + Number(article.price_options);
+    //         const percentDiscount = article.offer ? article.offer.percent_discount : 0;
+    //         originalPrice = originalPrice * (1 - percentDiscount / 100);
+    //         originalPrice = showPriceWithCurrencyUser(originalPrice, currencyArticle, currencySelected, false);
+
+    //         const proportion = originalPrice / subtotal;
+    //         const extra = parseFloat((proportion * paypalFee).toFixed(2)); // parte proporcional del fee
+    //         const newPrice = originalPrice + extra;
+    //         console.log(originalPrice);
+    //         console.log(extra);
+    //         // return { ...item, newPrice: newPrice.toFixed(2) };
+
+    //         totalPriceForClient += newPrice * article.quantity;
+
+    //         return {
+    //             name: article.article_name,
+    //             description: article.description,
+    //             quantity: article.quantity.toString(),
+    //             unit_amount: {
+    //                 currency_code: currency_code,
+    //                 // value: showPriceWithCurrencyUser(originalPrice * factor, currencyArticle, currencySelected, false).toFixed(2),
+    //                 value: newPrice.toFixed(2),
+    //             },
+    //         };
+    //     });
+
+    //     // const deliveryPricePaypal = ;
+
+    //     // totalPriceForClient += deliveryPricePaypal;
+
+    //     return [
+    //         {
+    //             description: "Compra de productos electrónicos",
+    //             items: items,
+    //             amount: {
+    //                 currency_code: currency_code,
+    //                 value: totalPriceForClient.toFixed(2), // Total general de la orden
+    //                 breakdown: {
+    //                     item_total: {
+    //                         currency_code: currency_code,
+    //                         // value: (totalWithFee - deliveryPrice - paypalFee).toFixed(2), // Suma de los items
+    //                         value: (totalPriceForClient - deliveryPricePaypal).toFixed(2), // Suma de los items
+    //                     },
+    //                     shipping: {
+    //                         currency_code: currency_code,
+    //                         value: deliveryPricePaypal.toFixed(2),
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     ];
+    // };
+
+    // const crearePurchaseUnitsForPaypal = (articles, add) => {
+    //     console.log(articles);
+    //     // const subtotal = articles.reduce((acc, article) => {
+    //     //     const price = Number(article.price) + Number(article.price_options);
+    //     //     return acc + price * article.quantity;
+    //     // }, 0);
+
+    //     const currency_code = currencySelected.iso_code;
+
+    //     // const paypalFee = getPaypalFee(subtotal + add, currency_code);
+    //     // console.log(paypalFee);
+
+    //     console.log(currencySelected);
+    //     // console.log(subtotal);
+    //     // const totalWithFee = calcPriceCurrency(currencySelected, subtotal + paypalFee);
+    //     const totalWithFee = price - discount + paypalFee + deliveryPrice;
+
+    //     console.log(totalWithFee);
+    //     console.log(paypalFee);
+
+    //     // const totalWithFee = calculateTotalWithPaypalFee(subtotal, currency_code);
+
+    //     const subtotal = price - discount + deliveryPrice;
+    //     console.log(subtotal);
+    //     const factor = paypalFee / subtotal;
+
+    //     // const factor = paypalFee / price - discount;
+
+    //     console.log(factor);
+
+    //     // const originalTotal = 1747.26;
+    //     // const totalWithFee = calculateTotalWithPaypalFee(originalTotal, 0.045, 0.35);
+
+    //     // articles.forEach((cartItem) => {
+    //     //     const totalPriceArticle = Number(cartItem.price) + Number(cartItem.price_options) * Number(cartItem.quantity);
+    //     //     const currencyArticle = {
+    //     //         iso_code: cartItem.iso_code,
+    //     //         exchange_rate: cartItem.exchange_rate,
+    //     //     };
+    //     //     const totalArticleInCurrencyUser = showPriceWithCurrencyUser(totalPriceArticle, currencyArticle, userCurrency, false);
+    //     //     total += totalArticleInCurrencyUser;
+    //     // });
+    //     // let totalDiscount = 0;
+    //     // cartUser.forEach((cartItem) => {
+    //     //     const totalPriceArticle = Number(cartItem.price) + Number(cartItem.price_options) * Number(cartItem.quantity);
+    //     //     const percentDiscount = cartItem.offer ? cartItem.offer.percent_discount : 0;
+    //     //     const currencyArticle = {
+    //     //         iso_code: cartItem.iso_code,
+    //     //         exchange_rate: cartItem.exchange_rate,
+    //     //     };
+    //     //     const totalDiscountArticleInCurrencyUser =
+    //     //         showPriceWithCurrencyUser(totalPriceArticle, currencyArticle, userCurrency, false) * (percentDiscount / 100);
+    //     //     totalDiscount += totalDiscountArticleInCurrencyUser;
+    //     // });
+
+    //     const items = articles.map((article) => {
+    //         let originalPrice = Number(article.price) + Number(article.price_options);
+    //         const percentDiscount = article.offer ? article.offer.percent_discount : 0;
+    //         originalPrice = originalPrice * (1 - percentDiscount / 100);
+
+    //         const proportion = originalPrice / subtotal;
+    //         const extra = proportion * paypalFee; // parte proporcional del fee
+    //         const newPrice = originalPrice + extra;
+    //         // return { ...item, newPrice: newPrice.toFixed(2) };
+
+    //         const currencyArticle = { iso_code: article.iso_code, exchange_rate: article.exchange_rate };
+    //         return {
+    //             name: article.article_name,
+    //             description: article.description,
+    //             quantity: article.quantity.toString(),
+    //             unit_amount: {
+    //                 currency_code: currency_code,
+    //                 // value: showPriceWithCurrencyUser(originalPrice * factor, currencyArticle, currencySelected, false).toFixed(2),
+    //                 value: newPrice.toFixed(2),
+    //             },
+    //         };
+    //     });
+
+    //     // const total = items.reduce((acc, item) => acc + Number(item.unit_amount.value) * Number(item.quantity), 0).toFixed(2);
+
+    //     // const total = Object.values(priceArticles)
+    //     //     .reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0)
+    //     //     .toFixed(2);
+
+    //     return [
+    //         {
+    //             description: "Compra de productos electrónicos",
+    //             items: items,
+    //             amount: {
+    //                 currency_code: currency_code,
+    //                 value: totalWithFee.toFixed(2), // Total general de la orden
+    //                 breakdown: {
+    //                     item_total: {
+    //                         currency_code: currency_code,
+    //                         value: totalWithFee.toFixed(2), // Suma de los items
+    //                     },
+    //                     shipping: {
+    //                         currency_code: currency_code,
+    //                         value: add,
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     ];
+    // };
+
+    // const crearePurchaseUnitsForPaypal = (articles, add) => {
+    //     const subtotal = articles.reduce((acc, article) => {
+    //         const price = Number(article.price) + Number(article.price_options);
+    //         return acc + price * article.quantity;
+    //     }, 0);
+
+    //     const currency_code = currencySelected.iso_code;
+
+    //     const paypalFee = getPaypalFee(subtotal + add, currency_code);
+
+    //     console.log(currencySelected);
+    //     console.log(subtotal);
+    //     const totalWithFee = calcPriceCurrency(currencySelected, subtotal + paypalFee);
+    //     console.log(totalWithFee);
+
+    //     // const totalWithFee = calculateTotalWithPaypalFee(subtotal, currency_code);
+
+    //     const factor = totalWithFee / subtotal;
+
+    //     // const originalTotal = 1747.26;
+    //     // const totalWithFee = calculateTotalWithPaypalFee(originalTotal, 0.045, 0.35);
+
+    //     // articles.forEach((cartItem) => {
+    //     //     const totalPriceArticle = Number(cartItem.price) + Number(cartItem.price_options) * Number(cartItem.quantity);
+    //     //     const currencyArticle = {
+    //     //         iso_code: cartItem.iso_code,
+    //     //         exchange_rate: cartItem.exchange_rate,
+    //     //     };
+    //     //     const totalArticleInCurrencyUser = showPriceWithCurrencyUser(totalPriceArticle, currencyArticle, userCurrency, false);
+    //     //     total += totalArticleInCurrencyUser;
+    //     // });
+    //     // let totalDiscount = 0;
+    //     // cartUser.forEach((cartItem) => {
+    //     //     const totalPriceArticle = Number(cartItem.price) + Number(cartItem.price_options) * Number(cartItem.quantity);
+    //     //     const percentDiscount = cartItem.offer ? cartItem.offer.percent_discount : 0;
+    //     //     const currencyArticle = {
+    //     //         iso_code: cartItem.iso_code,
+    //     //         exchange_rate: cartItem.exchange_rate,
+    //     //     };
+    //     //     const totalDiscountArticleInCurrencyUser =
+    //     //         showPriceWithCurrencyUser(totalPriceArticle, currencyArticle, userCurrency, false) * (percentDiscount / 100);
+    //     //     totalDiscount += totalDiscountArticleInCurrencyUser;
+    //     // });
+
+    //     const items = articles.map((article) => {
+    //         let originalPrice = Number(article.price) + Number(article.price_options);
+    //         const percentDiscount = article.offer ? article.offer.percent_discount : 0;
+    //         originalPrice = originalPrice * (1 - percentDiscount / 100);
+    //         const currencyArticle = { iso_code: article.iso_code, exchange_rate: article.exchange_rate };
+    //         return {
+    //             name: article.article_name,
+    //             description: article.description,
+    //             quantity: article.quantity.toString(),
+    //             unit_amount: {
+    //                 currency_code: currency_code,
+    //                 value: showPriceWithCurrencyUser(originalPrice * factor, currencyArticle, currencySelected, false).toFixed(2),
+    //             },
+    //         };
+    //     });
+
+    //     const total = items.reduce((acc, item) => acc + Number(item.unit_amount.value) * Number(item.quantity), 0).toFixed(2);
+
+    //     // const total = Object.values(priceArticles)
+    //     //     .reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0)
+    //     //     .toFixed(2);
+
+    //     return [
+    //         {
+    //             description: "Compra de productos electrónicos",
+    //             items: items,
+    //             amount: {
+    //                 currency_code: currency_code,
+    //                 value: (Number(total) + Number(add)).toFixed(2), // Total general de la orden
+    //                 breakdown: {
+    //                     item_total: {
+    //                         currency_code: currency_code,
+    //                         value: total, // Suma de los items
+    //                     },
+    //                     shipping: {
+    //                         currency_code: currency_code,
+    //                         value: add,
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     ];
+    // };
 
     const handleClickPay = async (wasPayed = false) => {
+        // const res = showPriceWithCurrency(
+        //     currencySelected,
+        //     calculateTotalWithPaypalFee(
+        //         Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0) +
+        //             (deliveryPreferenceSelected.value == 1
+        //                 ? convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code)
+        //                 : 0),
+        //         currencySelected.iso_code
+        //     ),
+        //     false
+        // );
+
+        // console.log(res);
+
+        // console.log(
+        //     calculateTotalWithPaypalFee(
+        //         Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0),
+        //         currencySelected.iso_code
+        //     ).toFixed(2)
+        // );
+
+        // console.log(convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code));
+
+        // console.log(Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0));
+
+        // return;
+
+        const deliveryCost =
+            deliveryPreferenceSelected.value == 1
+                ? convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code)
+                : 0;
+        // console.log(deliveryCost);
+        const deliveryDistance = deliveryPreferenceSelected.value == 1 ? getDeliveryPrice(shopSelectedForAddress, userAddressSelected).distance : 0;
+        // console.log(deliveryDistance);
+
+        // console.log(getDeliveryPrice(shopSelectedForAddress, userAddressSelected));
+
         // console.log("Quiere usar address", wantUseAddress);
 
         // console.log("id tienda", shopSelectedForAddress.id);
         // console.log("id address", userAddressSelected.id);
 
         // console.log(wantUseAddress);
-        console.log(deliveryPreferenceSelected.value); // Quiero usar direccion
-        console.log(shopSelectedForAddress.id); // tienda selecionada
-        console.log(userAddressSelected?.id); // direccion seleccionada
+        // console.log(deliveryPreferenceSelected.value); // Quiero usar direccion
+        // console.log(shopSelectedForAddress.id); // tienda selecionada
+        // console.log(userAddressSelected?.id); // direccion seleccionada
 
         // return;
 
         const goToPayWithPaypal = payMethodSelected.type == 4 && payMethodSelected.is_paypal_method == 1;
         // const comeFromPaypal = token && payerId;
 
-        console.log(token);
-        console.log(payerId);
+        // console.log(token);
+        // console.log(payerId);
 
-        console.log(goToPayWithPaypal);
-        console.log(comeFromPaypal);
+        // console.log(goToPayWithPaypal);
+        // console.log(comeFromPaypal);
 
         // return;
 
@@ -600,12 +1100,13 @@ const CarritoClient = () => {
                 toast.error("Esta moneda no es soportada por paypal, eliga otra.");
                 return;
             }
-            console.error("Crear orden");
+            // console.error("Crear orden");
 
-            console.log(data);
+            // console.log(data);
 
-            const purchaseUnitsArray = crearePurchaseUnitsForPaypal(data);
+            const purchaseUnitsArray = crearePurchaseUnitsForPaypal(data, deliveryCost);
             console.log(purchaseUnitsArray);
+            // return;
 
             const { status, link, statusCode } = await useCreateOrderPaypal(purchaseUnitsArray);
             console.log(status, link, statusCode);
@@ -640,7 +1141,7 @@ const CarritoClient = () => {
             imageUrl,
             currencySelected,
             wantUseAddress,
-            userAddressSelected ? userAddressSelected : null,
+            userAddressSelected ? userAddressSelected.id : null,
             // userAddressSelected.id,
             shopSelectedForAddress.id
         );
@@ -655,10 +1156,12 @@ const CarritoClient = () => {
             Object.values(priceArticles).reduce((acc, curr) => acc + curr.totalDiscount, 0.0),
             null,
             null,
+            deliveryCost,
+            deliveryDistance,
             imageUrl,
             currencySelected.id,
             wantUseAddress,
-            userAddressSelected ? userAddressSelected : null,
+            userAddressSelected ? userAddressSelected.id : null,
             // userAddressSelected?.id userAddressSelected,
             shopSelectedForAddress.id
         );
@@ -673,6 +1176,8 @@ const CarritoClient = () => {
 
         const resArticlesChangeQuantity = await useChangeArticleQuantity(data, "subtract");
         console.log(resArticlesChangeQuantity);
+        refetch();
+        setPriceArticles({});
 
         if (status && resItem && resCartItems && resArticlesChangeQuantity) toast.success("Compra realizada", { id: loadingToast });
         else toast.error("Error al realizar la compra", { id: loadingToast });
@@ -778,9 +1283,48 @@ const CarritoClient = () => {
         changeUserWantUseAddress(Number(preferenSelected.value));
     };
 
+    const { price, discount, paypalFee, deliveryPrice, totalPrice, setPrice, setDiscount, setPaypalFee, setDeliveryPrice, setTotalPrice } = zusCart();
     useEffect(() => {
-        console.log(currencySelected);
-    }, [currencySelected]);
+        if (!priceArticles || !shopSelectedForAddress || userAddressesIsLoading || !currencySelected) return;
+
+        const currentPrice = parseFloat(
+            Object.values(priceArticles)
+                .reduce((acc, curr) => acc + parseFloat(curr.priceWithoutDiscount.toFixed(2)), 0)
+                .toFixed(2)
+        );
+        const currenrDiscount = parseFloat(
+            Object.values(priceArticles)
+                .reduce((acc, curr) => acc + parseFloat(curr.totalDiscount.toFixed(2)), 0.0)
+                .toFixed(2)
+        );
+
+        const currentDeliveryPrice =
+            deliveryPreferenceSelected.value == 1
+                ? parseFloat(convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code).toFixed(2))
+                : 0;
+
+        const subtotal = currentPrice - currenrDiscount + currentDeliveryPrice;
+
+        const currentPaypalFee = payMethodSelected.is_paypal_method ? getPaypalFee(subtotal, currencySelected.iso_code) : 0;
+
+        const currentTotalPrice = parseFloat((subtotal + currentPaypalFee).toFixed(2));
+
+        console.error(shopSelectedForAddress);
+        console.error(userAddressSelected);
+        console.error(getDeliveryPrice(shopSelectedForAddress, userAddressSelected));
+
+        console.warn(currentPrice, "precio");
+        console.warn(currenrDiscount, "Descuento");
+        console.warn(currentDeliveryPrice, "Delivery");
+        console.warn(currentPaypalFee, "paypal fee");
+        console.warn(currentTotalPrice, "Total");
+
+        setPrice(currentPrice);
+        setDiscount(currenrDiscount);
+        setPaypalFee(currentPaypalFee);
+        setDeliveryPrice(currentDeliveryPrice);
+        setTotalPrice(currentTotalPrice);
+    }, [priceArticles, shopSelectedForAddress, userAddressSelected, currencySelected, payMethodSelected, deliveryPreferenceSelected]);
 
     if (isLoading || !hasData || isLoadingShopsForUserCart || isLoadingPaymentMethods || !currencySelected) return <LoadingParagraph />;
 
@@ -794,6 +1338,7 @@ const CarritoClient = () => {
                 <Icon icon="solar:arrow-left-outline" width="24" height="24" />
                 <p className="text-2xl font-bold text-center">Finalizar compra</p>
             </div> */}
+            <Divider h={"0.5px"} />
             <Spacer />
             <div>
                 <p className="text-xl font-bold">Preferencia de entrega</p>
@@ -873,7 +1418,6 @@ const CarritoClient = () => {
                 </motion.div>
             </div>
             <Divider h={"0.5px"} />
-
             {wantUseAddress == 1 ? (
                 <div>
                     <p className="text-xl font-bold">Dirreccion de entrega</p>
@@ -890,10 +1434,8 @@ const CarritoClient = () => {
                                 </div>
                             </div>
                             <div className="size-4/6">
-                                <p className="text-lg font-bold">{userAddressSelected?.neighborhood}</p>
-                                <p>
-                                    {userAddressSelected?.address_1} {userAddressSelected?.address_2}
-                                </p>
+                                <p className="text-lg font-bold">{showText(userAddressSelected?.location ?? "", 23)}</p>
+                                <p>{userAddressSelected?.street}</p>
                             </div>
                             <div className="size-1/6 grid place-items-center" onClick={() => setShowUserAddresses(!showUserAddresses)}>
                                 <Icon icon="iconamoon:edit-fill" width="24" height="24" />
@@ -923,10 +1465,8 @@ const CarritoClient = () => {
                                             </div>
                                         </div>
                                         <div className="size-4/6">
-                                            <p className="text-lg font-bold">{address.neighborhood}</p>
-                                            <p>
-                                                {address.address_1} {address.address_2}
-                                            </p>
+                                            <p className="text-lg font-bold">{showText(address.location ?? "", 23)}</p>
+                                            <p>{address.street}</p>
                                         </div>
                                         <div className="size-1/6 grid place-items-center">
                                             <Icon icon="ep:select" width="24" height="24" />
@@ -993,7 +1533,6 @@ const CarritoClient = () => {
                     </motion.div>
                 </div>
             )}
-
             {/* <div>
                 <p className="text-xl font-bold">Dirreccion de compra</p>
                 <Spacer /> */}
@@ -1157,7 +1696,7 @@ const CarritoClient = () => {
             {/* </motion.div>
             </div> */}
             <Divider h={"0.5px"} />
-            <Spacer />
+            {/* <Spacer /> */}
             <div>
                 <p className="text-xl font-bold">Lista de articulos</p>
                 <Spacer />
@@ -1239,7 +1778,7 @@ const CarritoClient = () => {
                     </div>
                 );
             })} */}
-            <Divider h={"0.5px"} />
+            {/* <Divider h={"0.5px"} /> */}
             <div>
                 <p className="text-xl font-bold">Moneda de pago</p>
                 <Spacer />
@@ -1381,7 +1920,6 @@ const CarritoClient = () => {
 
                 {/* <p className="mt-3">{payMethodSelected.description}</p> */}
             </div>
-
             {/* <div>
                 <p className="text-xl font-bold">Metodo de pago</p>
                 <Spacer />
@@ -1408,6 +1946,37 @@ const CarritoClient = () => {
             const [totalDiscount, setTotalDiscount] = useState(0); const
             [priceWithDiscount, setPriceWithDiscount] = useState(0); */}
             <Divider h={"0.5px"} />
+            <p className="text-xl font-bold">Precio</p>
+            <Spacer />
+            <div className="bg-white p-6 rounded-2xl flex flex-col gap-6">
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Total</p>
+                    <p className="font-semibold">{showPriceWithCurrency(currencySelected, price, false)}</p>
+                </div>
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Descuento</p>
+                    <p className="font-bold">{showPriceWithCurrency(currencySelected, discount, false)}</p>
+                </div>
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Comicion de paypal</p>
+                    <p className="font-bold">{showPriceWithCurrency(currencySelected, paypalFee, false)}</p>
+                </div>
+
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Costo de envio</p>
+                    <p className="font-bold">{showPriceWithCurrency(currencySelected, deliveryPrice, false)}</p>
+                </div>
+                <Divider mt={0} mb={0} h={"0.5px"} />
+                {/* TODO: VALIDAR BIEN CADA CANTIDAD */}
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Total General</p>
+                    <p className="font-bold">{showPriceWithCurrency(currencySelected, totalPrice, false)}</p>
+                </div>
+            </div>
+            <Divider h={"0.5px"} />
+            {/* <Divider h={"0.5px"} />
+            <p className="text-xl font-bold">Precio</p>
+            <Spacer />
             <div className="bg-white p-6 rounded-2xl flex flex-col gap-6">
                 <div className="flex justify-between">
                     <p className="text-gray-500 text-sm">Total</p>
@@ -1445,28 +2014,88 @@ const CarritoClient = () => {
                             : showPriceWithCurrency(currencySelected, 0, false)}
                     </p>
                 </div>
-                <Divider mt={0} mb={0} h={"0.5px"} />
                 <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Costo de envio</p>
+                    <p className="font-bold">
+                        {deliveryPreferenceSelected.value == 1
+                            ? showPriceWithCurrency(
+                                  currencySelected,
+                                  convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code),
+                                  false
+                              )
+                            : showPriceWithCurrency(currencySelected, 0, false)}
+                    </p>
+                </div>
+                <Divider mt={0} mb={0} h={"0.5px"} />
+                TODO: VALIDAR BIEN CADA CANTIDAD
+                <div className="flex justify-between">
+                    <p className="text-gray-500 text-sm">Total General</p>
+                    <p className="font-bold">
+                        {price - discount + paypalFee + deliveryPrice}
+                        preccion sin descuento
+                        {Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithoutDiscount, 0)}
+                        <br />
+                        descuento{Object.values(priceArticles).reduce((acc, curr) => acc + curr.totalDiscount, 0.0)}
+                        <br />
+                        costo delivery
+                        {convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code)}
+                        <br />
+                        comision paypal
+                        {calculateTotalWithPaypalFee(
+                            Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0),
+                            currencySelected.iso_code
+                        ) - Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0)}
+                        {getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price}
+                        {convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code)}
+                        <br />
+                        {showPriceWithCurrency(
+                            currencySelected,
+                            calculateTotalWithPaypalFee(
+                                Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0) +
+                                    (deliveryPreferenceSelected.value == 1
+                                        ? convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code)
+                                        : 0),
+                                currencySelected.iso_code
+                            ),
+                            false
+                        )}
+                        {calculateTotalWithPaypalFee(
+                            Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0) +
+                                convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code),
+                            currencySelected.iso_code
+                        )}
+                    </p>
+                </div> */}
+            {/* <div className="flex justify-between">
                     <p className="text-gray-500 text-sm">Total General</p>
                     <p className="font-bold">
                         {payMethodSelected.is_paypal_method == 1
                             ? showPriceWithCurrency(
                                   currencySelected,
                                   calculateTotalWithPaypalFee(
-                                      Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0),
+                                      Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0) +
+                                          (deliveryPreferenceSelected.value == 1
+                                              ? convertDOP(
+                                                    getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price,
+                                                    currencySelected.iso_code
+                                                )
+                                              : 0),
                                       currencySelected.iso_code
                                   ),
                                   false
                               )
                             : showPriceWithCurrency(
                                   currencySelected,
-                                  Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0),
+                                  Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0) +
+                                      (deliveryPreferenceSelected.value == 1
+                                          ? convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code)
+                                          : 0),
                                   false
                               )}
                     </p>
-                </div>
-            </div>
-            <Divider h={"0.5px"} />
+                </div> */}
+            {/* </div> */}
+            {/* <Divider h={"0.5px"} /> */}
             <button className="bg-black text-white p-5 rounded-full w-full text-sm" onClick={handleClickPay}>
                 <p>Realizar Compra</p>
             </button>

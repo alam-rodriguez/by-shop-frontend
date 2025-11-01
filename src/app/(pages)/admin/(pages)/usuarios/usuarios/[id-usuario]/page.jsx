@@ -17,6 +17,7 @@ import {
     useChangeUserCanBuy,
     useChangeUserEmailVerified,
     useChangeUserType,
+    useChangeUserTypeId,
     useGetUserById,
     useSetShopAdmin,
     useSetShopSubAdmin,
@@ -26,6 +27,8 @@ import { useGetShops } from "@/app/hooks/request/shops/requestsShops";
 // Components
 import Spacer from "@/app/components/home/Spacer";
 import Select from "@/app/components/inputs/Select";
+import { useGetUsersTypes } from "@/app/hooks/request/users/requestsUsersTypes";
+import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 
 const page = () => {
     const {
@@ -43,12 +46,14 @@ const page = () => {
 
     const { ["id-usuario"]: idUser } = useParams();
 
-    const { data: user, isLoading } = useGetUserById(idUser);
+    const { data: user, isLoading, refetch } = useGetUserById(idUser);
     const { data: shops, isLoading: isLoadingShops } = useGetShops();
 
     useEffect(() => {
-        console.log(shops);
-    }, [shops]);
+        console.log(user);
+    }, [user]);
+
+    const { data: usersType, isLoading: isLoadingUsersTypes } = useGetUsersTypes();
 
     const [showSelectShops, setShowSelectShops] = useState(false);
     const [showSelectShopsForMakeAdmin, setShowSelectShopsForMakeAdmin] = useState(false);
@@ -67,6 +72,23 @@ const page = () => {
             });
         else
             toast.error("Error al verificar el email", {
+                id: loadingToast,
+            });
+    };
+
+    const setUserType = async (userTypeId) => {
+        const idUser = user.id;
+        const loadingToast = toast.loading("Cambiando Tipo de usuario...");
+
+        const res = await useChangeUserTypeId(idUser, userTypeId);
+
+        if (res) {
+            toast.success("Tipo de usuario cambiado correctamente", {
+                id: loadingToast,
+            });
+            refetch();
+        } else
+            toast.error("Error al cambiar el tipo de usuario", {
                 id: loadingToast,
             });
     };
@@ -160,7 +182,7 @@ const page = () => {
             });
     };
 
-    if (isLoading) return <>Cargando</>;
+    if (isLoading || isLoadingUsersTypes) return <LoadingParagraph />;
     return (
         <div className="m-4">
             <div key={user.id} className="bg-gray-300 p-4 rounded-md">
@@ -180,9 +202,13 @@ const page = () => {
                     <p>Estado:</p>
                     <p>{user.status == 1 ? "Activo" : "Inactivo"}</p>
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                     <p>Tipo de usuario:</p>
                     <p>{user.type == 1 ? "Normal" : "Administrador"}</p>
+                </div> */}
+                <div className="flex justify-between">
+                    <p>Tipo de usuario:</p>
+                    <p>{user.user_type_name}</p>
                 </div>
                 <div className="flex justify-between">
                     <p>Puede comprar:</p>
@@ -192,6 +218,15 @@ const page = () => {
                     <p>Fecha de registro:</p>
                     <p>{user.created_at.split("T")[0].split("-").reverse().join("-")}</p>
                 </div>
+            </div>
+
+            <Spacer space={25} />
+            <div className="flex gap-4 flex-col_justify-end flex-wrap">
+                {usersType.map((userType) => (
+                    <button key={userType.id} className="px-4 py-2 rounded bg-gray-200 self-end" onClick={() => setUserType(userType.id)}>
+                        Marcar como usuario tipo <span className="font-bold">{userType.name}</span>
+                    </button>
+                ))}
             </div>
             <Spacer space={25} />
             <div className="flex gap-4 flex-col_justify-end flex-wrap">
@@ -211,7 +246,6 @@ const page = () => {
                     Marcar como Soporte
                 </button>
             </div>
-
             <div>
                 {showSelectShops && (
                     <Select

@@ -3,7 +3,6 @@ import { create } from "zustand";
 export const zusCart = create((set) => ({
     totalSelectedArticles: 0,
     totalSelectedPrice: 0,
-
     setTotalSelectedArticles: (articles) =>
         set(() => {
             let count = 0;
@@ -40,4 +39,14 @@ export const zusCart = create((set) => ({
     setShowCurrencies: (show) => set((state) => ({ showCurrencies: typeof show === "boolean" ? show : !state.showCurrencies })),
     currencySelected: null,
     setCurrencySelected: (currency) => set(() => ({ currencySelected: { ...currency } })),
+    price: 0,
+    discount: 0,
+    paypalFee: 0,
+    deliveryPrice: 0,
+    totalPrice: 0,
+    setPrice: (price) => set(() => ({ price })),
+    setDiscount: (discount) => set(() => ({ discount })),
+    setPaypalFee: (paypalFee) => set(() => ({ paypalFee })),
+    setDeliveryPrice: (deliveryPrice) => set(() => ({ deliveryPrice })),
+    setTotalPrice: (totalPrice) => set(() => ({ totalPrice })),
 }));

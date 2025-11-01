@@ -140,6 +140,16 @@ export const getOrders = async (status) => {
     }
 };
 
+export const getOrdersByResponsibleShop = async (idShop, status) => {
+    try {
+        const res = await api.get(`${url}/api/carts/orders?status=${status}/responsible-shop/${idShop}`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener el último carrito del usuario.");
+    }
+};
+
 export const getOrdersFromShop = async (idShop, status) => {
     try {
         const res = await api.get(`${url}/api/carts/orders/shop/${idShop}?status=${status}`);

@@ -257,3 +257,13 @@ export const changeIdCurrencyUser = async (idUser, idCurrency) => {
         throw new Error("Error.");
     }
 };
+
+export const changeUserTypeId = async (idUser, userTypeId) => {
+    try {
+        const res = await api.patch(`/api/users/change-user-type-id/${idUser}`, { user_type_id: userTypeId });
+        return { message: res.data.message, status: res.status };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error.");
+    }
+};
