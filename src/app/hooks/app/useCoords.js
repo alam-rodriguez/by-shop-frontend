@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const useCoords = () => {
     const [coords, setCoords] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [accuracy, setAccuracy] = useState(null);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(typeof window !== "undefined" && !!navigator.geolocation);
+    }, []);
 
     const handleGetLocation = () => {
         // if (!navigator.geolocation) {
         //     setError("Tu navegador no soporta geolocalización");
         //     return;
         // }
-        if (typeof window === "undefined" || !navigator.geolocation) {
+        // if (typeof window === "undefined" || !navigator.geolocation) {
+        //     setError("Tu navegador no soporta geolocalización");
+        //     return;
+        // }
+        if (!isClient) {
             setError("Tu navegador no soporta geolocalización");
             return;
         }
