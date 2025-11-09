@@ -7,7 +7,11 @@ const useCoords = () => {
     const [accuracy, setAccuracy] = useState(null);
 
     const handleGetLocation = () => {
-        if (!navigator.geolocation) {
+        // if (!navigator.geolocation) {
+        //     setError("Tu navegador no soporta geolocalización");
+        //     return;
+        // }
+        if (typeof window === "undefined" || !navigator.geolocation) {
             setError("Tu navegador no soporta geolocalización");
             return;
         }
