@@ -4,7 +4,7 @@
 import React, { use, useEffect, useRef, useState } from "react";
 
 // Next
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // Sonner
 import { Toaster, toast } from "sonner";
@@ -40,6 +40,7 @@ import { useGetCartItemOption } from "@/app/hooks/request/carts/requestsCarts";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 
 const page = () => {
+    const router = useRouter();
     const { uploadImages } = useUploadThing();
 
     const { articulo: idArticulo } = useParams();
@@ -114,12 +115,11 @@ const page = () => {
         const resOptions = await useCreateArticleReviewOption(idReview, dataCartItemOption);
         console.log(resOptions);
 
-        // alert("Opinión creada correctamente");
-
         if (resStatus == 201 && resImages && resOptions) {
-            toast.success("Opinión creada correctamente", {
+            toast.success("Hemos notificados a los administradores de tu opinion, si lo aprueban se publicara automaticamente", {
                 id: loadingToast,
             });
+            router.replace(`/articulos/${idArticulo}`);
         } else {
             toast.error("Error al crear opinión", {
                 id: loadingToast,

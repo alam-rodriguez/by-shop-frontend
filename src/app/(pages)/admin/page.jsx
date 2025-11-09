@@ -37,8 +37,8 @@ const page = () => {
                     {/* <BtnOption url="/admin/tiendas" text="TIENDAS" /> */}
                     {/* <BtnOption url="/admin/marcas" text="MARCAS" /> */}
                     {/* <BtnOption url="/admin/modelos" text="MODELOS" /> */}
-                    <BtnOption url="/admin/tiendas" text="CONFIGURACION" />
-                    <BtnOption url="/admin/tiendas" text="GRAFICAS" />
+                    {/* <BtnOption url="/admin/tiendas" text="CONFIGURACION" /> */}
+                    {/* <BtnOption url="/admin/tiendas" text="GRAFICAS" /> */}
                     {/* <BtnOption url="/admin/categorias-opciones" text="CATEGORIAS DE OPCIONES" /> */}
                     {/* <BtnOption url="/admin/opciones" text="OPCIONES" /> */}
                     {/* <BtnOption url="/admin/valores-opciones" text="VALORES OPCIONES" /> */}
@@ -49,6 +49,7 @@ const page = () => {
                 <p className="text-center">Articulos</p>
                 <div className="flex justify-between flex-wrap gap-y-4">
                     <BtnOption url="/admin/articulos" text="ARTICULOS" />
+                    <BtnOption url="/admin/ofertas" text="OFERTAS" />
                     {/* <BtnOption url="/admin/ofertas" text="OFERTAS" /> */}
                     <BtnOption url="/admin/ofertas" text="OFERTAS POR ARTICULOS" />
                     <BtnOption url="/admin/articulos/solicitudes-comentarios" text="SOLICITUDES DE COMENTARIOS" />
@@ -68,7 +69,7 @@ const page = () => {
                 <p className="text-center">Configuracion</p>
                 <div className="flex justify-between flex-wrap gap-y-4">
                     {/* <BtnOption url="/admin/categorias-directas" text="DATOS DE APP" /> */}
-                    <BtnOption url="/admin/categorias-directas" text="Configuracion tienda" />
+                    <BtnOption url={`/admin/tiendas/${id_shop}`} text="Configuracion tienda" />
                 </div>
             </div>
             <BtnGroup

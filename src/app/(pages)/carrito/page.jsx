@@ -29,15 +29,18 @@ import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import { showPrice, showText } from "@/app/hooks/app/app";
 import CartItem2 from "./components/CartItem2";
 import { useGetCurrencyById } from "@/app/hooks/request/currencies/requestsCurrencies";
+import useUserCartData from "./hooks/useUserCartData";
 
 const page = () => {
     const router = useRouter();
 
-    const { appName } = appSettings();
-    const { id, type, firstName, idCurrency, currencySelected } = zusUser();
-    const { totalSelectedArticles, totalSelectedPrice, setTotalSelectedArticles } = zusCart();
+    const { id, type, firstName, currencySelected, idCurrency: idCurrencyUser } = zusUser();
+    const { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart } = useUserCartData(id);
 
-    const { data, isLoading, refetch } = useGetCartUser(id);
+    const { appName } = appSettings();
+    const { totalSelectedArticles, totalSelectedPrice, setTotalSelectedArticles, refetchArticlesCart } = zusCart();
+
+    // const { data, isLoading, refetch } = useGetCartUser(id);
 
     const { data: savedForLater, isLoading: isLoadingSavedForLater, refetch: refetchSavedForLater } = useGetCartUserSavedForLater(id);
 
@@ -48,11 +51,11 @@ const page = () => {
     // }, [currencySelected]);
 
     useEffect(() => {
-        if (isLoading) return;
-        console.log(data);
+        if (isLoadingArticlesCart) return;
+        console.log(articlesCart);
         console.log(currencySelected);
-        if (data) setTotalSelectedArticles(data);
-    }, [data]);
+        if ((articlesCart, currencySelected)) setTotalSelectedArticles(articlesCart);
+    }, [articlesCart]);
 
     const refreshCart = () => {
         refetch();
@@ -77,7 +80,7 @@ const page = () => {
         refetch();
     };
 
-    if (isLoading || !data || !currencySelected) return <LoadingParagraph />;
+    if (isLoadingArticlesCart || !articlesCart || !currencySelected) return <LoadingParagraph />;
 
     return (
         <div>
@@ -89,11 +92,11 @@ const page = () => {
                 <Spacer space={12} />
                 <div className="flex gap-5 items-center">
                     <Icon className="size-6 text-red-700 text-xl" icon="mdi:money" />
-                    <p className="font-bold text-xl">Total: {showPrice(totalSelectedPrice)}</p>
+                    <p className="font-bold text-xl">Total: {showPrice(price)}</p>
                 </div>
                 <Spacer />
                 <div className="flex flex-col gap-6">
-                    {data.map((articleCart) => (
+                    {articlesCart.map((articleCart) => (
                         <CartItem2
                             key={articleCart.id}
                             idCart={articleCart.id}
@@ -102,12 +105,12 @@ const page = () => {
                             image={articleCart.article_image}
                             articleName={articleCart.name}
                             articleDescription={articleCart.description}
-                            articlePrice={articleCart.price + articleCart.price_options}
+                            articlePrice={parseFloat(articleCart.price) + parseFloat(articleCart.price_options)}
                             articleOptions={articleCart.options}
                             articleValues={articleCart.values}
                             exchangeRate={articleCart.exchange_rate}
                             isoCode={articleCart.iso_code}
-                            refetch={refetch}
+                            refetch={refetchArticlesCart}
                         />
                         // <div key={articleCart.id} className="flex bg-white rounded-lg p-4 gap-4 shadow">
                         //     <div className="grid place-items-center p-1 w-1/4 bg-gray-200 rounded-md">

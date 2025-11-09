@@ -222,3 +222,14 @@ body {
   -ms-overflow-style: none; /* IE y Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+
+.custom-overlay {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+}

@@ -1,4 +1,16 @@
 /** @type {import('next').NextConfig} */
+
+import nextPWA from "next-pwa";
+
+const withPWA = nextPWA({
+    dest: "public",
+    register: true,
+    skipWaiting: true,
+    // disable: process.env.NODE_ENV === "development",
+    disable: false,
+    // swSrc: "public/sw-custom.js",
+});
+
 const nextConfig = {
     images: {
         // domains: ["utfs.io", "058205erp7.ufs.sh", "8cfbi9foz7.ufs.sh", "cdn-icons-png.flaticon.com", "cdn.pixabay.com"],
@@ -40,4 +52,5 @@ const nextConfig = {
     },
 };
 
-export default nextConfig;
+// export default nextConfig;
+export default withPWA(nextConfig);

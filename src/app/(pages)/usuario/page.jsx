@@ -35,6 +35,8 @@ import { toast } from "sonner";
 import ImageA from "@/app/components/others/ImageA";
 import Spacer from "@/app/components/home/Spacer";
 import { getDateInSpanish } from "@/app/hooks/app/app";
+import useInstallApp from "@/app/hooks/app/useInstallApp";
+import api from "@/app/api/api";
 
 const page = () => {
     const router = useRouter();
@@ -108,6 +110,10 @@ const page = () => {
         });
         toast.info("Sesion cerrada");
     };
+
+    const { handleInstall } = useInstallApp();
+
+    // Helper para convertir la clave pública
 
     return (
         <div>
@@ -216,6 +222,8 @@ const page = () => {
                 ) : (
                     <UserOption icon="mdi:login" text="Iniciar sesión" isButton={true} link="/usuario/sesion" validate={false} />
                 )}
+                <Spacer space={40} />
+                <UserOption icon="duo-icons:app" text="Instalar app" isButton={true} onClick={handleInstall} />
 
                 {/* <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">

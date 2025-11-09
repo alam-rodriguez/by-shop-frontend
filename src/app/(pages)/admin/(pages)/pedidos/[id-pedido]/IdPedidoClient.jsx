@@ -36,7 +36,11 @@ import ButtonGray from "@/app/components/others/ButtonGray";
 // Alerts
 import useAlert from "@/app/alerts/react-confirm-alert/useAlert";
 import { getOrderById } from "@/app/request/carts/requestsCarts";
-import { useCreateDeliveryOrder } from "@/app/hooks/request/deliveries/requestsDeliveries";
+import { useCreateDeliveryOrder, useGetDeliveryOrderExists } from "@/app/hooks/request/deliveries/requestsDeliveries";
+import {
+    useSendPushNotificationsToClientForOrderUpdate,
+    useSendPushNotificationsToDeliveriesForNewOrder,
+} from "@/app/hooks/request/web-push-notifications/webPushNotifications";
 
 const IdPedidoClient = () => {
     const { ["id-pedido"]: idOrder } = useParams();
@@ -204,9 +208,34 @@ const IdPedidoClient = () => {
         });
         if (!want) return;
 
-        const loadingToast = toast.loading("Actualizando Estado de la imagen...");
+        const loadingToast = toast.loading("Actualizando Estado de pedido...");
 
         const res = await useUpdateCartBoughtStatus(idOrder, status);
+
+        const payloadNotification = {
+            title: "Estado de pedido actualizado",
+            body:
+                status == 0
+                    ? "Su pedidos ha sido cancelado"
+                    : status == 2
+                    ? "Su pedido esta en preparacion"
+                    : status == 3 && wantUseAddress
+                    ? "Su pedido esta siendo enviado"
+                    : status == 3 && !wantUseAddress
+                    ? "Su pedido esta listo para retirar"
+                    : status == 4 && wantUseAddress
+                    ? "Su pedido ha sido entregado"
+                    : status == 4 && !wantUseAddress == "Su pedido ha sido retirado",
+        };
+
+        if (!status == 5) {
+            const resNotification = await useSendPushNotificationsToClientForOrderUpdate(order.id_user, payloadNotification);
+            console.log(resNotification);
+        }
+
+        // console.log(order.id_user);
+        // console.log(resNotification);
+        // console.log("------------");
         if (res)
             toast.success("Estado de la imagen actualizado", {
                 id: loadingToast,
@@ -252,9 +281,24 @@ const IdPedidoClient = () => {
     };
 
     const publishOrderForDelivery = async () => {
-        console.log(order.id);
+        const loadingToast = toast.loading("Publicando delivery...");
+        const deliveryOrderExists = await useGetDeliveryOrderExists(order.id);
+        if (deliveryOrderExists) {
+            toast.info("Esta Orden ya esta publicada", {
+                id: loadingToast,
+            });
+            return;
+        }
         const res = await useCreateDeliveryOrder(order.id, 100);
-        console.log(res);
+        const resNotifications = await useSendPushNotificationsToDeliveriesForNewOrder();
+        if (res && resNotifications)
+            toast.success("Delivery publicado", {
+                id: loadingToast,
+            });
+        else
+            toast.error("Error al publicar el delivery", {
+                id: loadingToast,
+            });
     };
 
     if (type == 4 || type == 5 || isResponsible) {

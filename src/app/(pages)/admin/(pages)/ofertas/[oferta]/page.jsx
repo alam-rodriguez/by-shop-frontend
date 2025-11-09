@@ -30,7 +30,7 @@ import SelectRact from "react-select";
 import Input from "@/app/components/inputs/Input";
 import Select from "@/app/components/inputs/Select";
 import createOfferSchema from "@/app/schemas/offers.schema";
-import { useGetArticles } from "@/app/hooks/request/articles/requestsArticles";
+import { useGetArticles, useGetArticlesFromShop } from "@/app/hooks/request/articles/requestsArticles";
 import {
     useCreateOffer,
     useCreateOfferCategory,
@@ -40,10 +40,13 @@ import {
     useDeleteOfferCategory,
     useDeleteOfferArticle,
 } from "@/app/hooks/request/offers/requestsOffers";
-import { getDataSelectMultiForAddAndDelete, getDefaultsValuesForSelectMulti } from "@/app/hooks/app/app";
+import { getDataSelectMultiForAddAndDelete, getDefaultsValuesForSelectMulti, isUUID } from "@/app/hooks/app/app";
 import InputFile from "@/app/components/inputs/InputFile";
+import { zusUser } from "@/app/zustand/user/zusUser";
 const page = () => {
     const { oferta } = useParams();
+
+    const { id_shop: shopId } = zusUser();
 
     console.log(oferta);
 
@@ -118,6 +121,7 @@ const page = () => {
     const { data: indirectsCategories, isLoading: isLoadingIndirectsCategories } = useGetIndirectsCategories();
     const { data: generalCategories, isLoading: isLoadingGeneralCategories } = useGetGeneralCategories();
     const { data: articles, isLoading: isLoadingArticles } = useGetArticles();
+    const { data: articlesFromShop, isLoading: isLoadingArticlesFromShop } = useGetArticlesFromShop(shopId);
 
     // function getDefaultsSelected(itemsSelected, allItems) {
     //     return allItems
@@ -310,12 +314,16 @@ const page = () => {
     };
 
     const onSubmit = async (data) => {
+        if (isUUID(shopId)) data.shop_id = shopId;
         console.log(wanCreate);
         console.log(data);
-        // return;
         if (wanCreate) create(data);
         else edit(data);
     };
+
+    useEffect(() => {
+        console.log(errors);
+    }, [errors]);
 
     if (isLoadingOffer) return <p>Cargando...</p>;
 
@@ -434,19 +442,35 @@ const page = () => {
                     isMulti={true}
                 />
 
-                <Select
-                    register={register}
-                    errors={errors}
-                    type="number"
-                    name="articles"
-                    items={articles ? articles : []}
-                    selectClassName="border-2 border-gray-300 rounded-md p-2"
-                    errorClassName="text-red-700"
-                    optionNameForShow="name"
-                    label="Articulos"
-                    control={control}
-                    isMulti={true}
-                />
+                {!isUUID(shopId) ? (
+                    <Select
+                        register={register}
+                        errors={errors}
+                        type="number"
+                        name="articles"
+                        items={articles ? articles : []}
+                        selectClassName="border-2 border-gray-300 rounded-md p-2"
+                        errorClassName="text-red-700"
+                        optionNameForShow="name"
+                        label="Articulos"
+                        control={control}
+                        isMulti={true}
+                    />
+                ) : (
+                    <Select
+                        register={register}
+                        errors={errors}
+                        type="number"
+                        name="articles"
+                        items={articlesFromShop ?? []}
+                        selectClassName="border-2 border-gray-300 rounded-md p-2"
+                        errorClassName="text-red-700"
+                        optionNameForShow="name"
+                        label="Articulos"
+                        control={control}
+                        isMulti={true}
+                    />
+                )}
 
                 <Select
                     register={register}

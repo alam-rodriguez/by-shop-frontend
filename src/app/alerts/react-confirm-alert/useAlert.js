@@ -40,6 +40,7 @@ const useAlert = () => {
     const confirmAlertCustom = ({ head = "", content = "", confirmText = "Sí", cancelText = "No" }) => {
         return new Promise((resolve) => {
             confirmAlert({
+                overlayClassName: "custom-overlay",
                 customUI: ({ onClose }) => {
                     const handleConfirm = () => {
                         onClose();

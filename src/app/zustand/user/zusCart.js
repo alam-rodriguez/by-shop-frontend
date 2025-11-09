@@ -4,9 +4,11 @@ export const zusCart = create((set) => ({
     totalSelectedArticles: 0,
     totalSelectedPrice: 0,
     setTotalSelectedArticles: (articles) =>
-        set(() => {
+        set((state) => {
+            // if (!state.currencySelected) return;
             let count = 0;
             let price = 0;
+            console.log();
             articles.forEach((article) => {
                 if (article.status == 1) {
                     count += article.quantity;
@@ -15,12 +17,7 @@ export const zusCart = create((set) => ({
             });
             return { totalSelectedArticles: articles.length, totalSelectedPrice: price };
         }),
-    currencySelected: {
-        id: 1,
-        name: "DOP",
-        value: 1,
-        operation: "multiply",
-    },
+    currencySelected: null,
     setCurrencySelected: (currency) => set(() => ({ currencySelected: currency })),
     payMethodSelected: {
         id: 1,
@@ -49,4 +46,6 @@ export const zusCart = create((set) => ({
     setPaypalFee: (paypalFee) => set(() => ({ paypalFee })),
     setDeliveryPrice: (deliveryPrice) => set(() => ({ deliveryPrice })),
     setTotalPrice: (totalPrice) => set(() => ({ totalPrice })),
+    quantity: 0,
+    setQuantity: (quantity) => set(() => quantity),
 }));

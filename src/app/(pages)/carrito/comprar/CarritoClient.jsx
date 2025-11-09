@@ -59,6 +59,7 @@ import { getCartUserReadyToBuy } from "@/app/request/carts/requestsCarts";
 import { getUserAddresses } from "@/app/request/users/requestsUsersAddresses";
 import { getShopsForUserCart } from "@/app/request/shops/requestShops";
 import { getCurrencyById } from "@/app/request/currencies/requestsCurrencies";
+import { useSendPushNotificationsForNewsOrders } from "@/app/hooks/request/web-push-notifications/webPushNotifications";
 
 const CarritoClient = () => {
     // const { token } = useParams();
@@ -1141,9 +1142,9 @@ const CarritoClient = () => {
             imageUrl,
             currencySelected,
             wantUseAddress,
-            userAddressSelected ? userAddressSelected.id : null,
+            userAddressSelected ? userAddressSelected.id : null
             // userAddressSelected.id,
-            shopSelectedForAddress.id
+            // shopSelectedForAddress.id
         );
         // return;
 
@@ -1176,10 +1177,12 @@ const CarritoClient = () => {
 
         const resArticlesChangeQuantity = await useChangeArticleQuantity(data, "subtract");
         console.log(resArticlesChangeQuantity);
+        const resPushNotifications = await useSendPushNotificationsForNewsOrders(resData.id);
         refetch();
         setPriceArticles({});
 
-        if (status && resItem && resCartItems && resArticlesChangeQuantity) toast.success("Compra realizada", { id: loadingToast });
+        if (status && resItem && resCartItems && resArticlesChangeQuantity && resPushNotifications)
+            toast.success("Compra realizada", { id: loadingToast });
         else toast.error("Error al realizar la compra", { id: loadingToast });
         router.push("/usuario/pedidos");
     };

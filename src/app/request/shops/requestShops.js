@@ -59,3 +59,13 @@ export const getShopsForUserCart = async (idUser) => {
         throw new Error("Error al obtener la tienda.");
     }
 };
+
+export const getShopsForUserCartBought = async (idCartBought) => {
+    try {
+        const res = await api.get(`/api/shops/for-cart-bought/${idCartBought}`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener la tienda.");
+    }
+};

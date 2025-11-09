@@ -31,6 +31,7 @@ const Footer = () => {
         // else if (pathname.startsWith("/menu")) setPageActive("menu");
         else if (pathname.startsWith("/tiendas")) setPageActive("tiendas");
         else if (pathname.startsWith("/delivery")) setPageActive("delivery");
+        else if (pathname.startsWith("/deliveries")) setPageActive("deliveries");
         else setPageActive("inicio");
     }, [pathname]);
 
@@ -57,28 +58,37 @@ const Footer = () => {
             </Link>
 
             {userTypeName != "DELIVERY" && (
-                <Link
-                    className={`flex-1 flex justify-center items-center flex-col relative ${pageActive === "carrito" && "text-red-700"}`}
-                    // onClick={() => router.push("/carrito")}
-                    href="/carrito"
-                >
-                    <Icon icon="mdi-light:cart" width="24" height="24" />
-                    <p>Carrito</p>
-                    {dataCartUser && (
-                        <div
-                            className="absolute border border-red-700 rounded-full grid place-items-center"
-                            style={{ right: 28, top: -10, width: 18, height: 18 }}
-                        >
-                            <p className="tracking-normal leading-none_ text-sm font-bold" style={{ lineHeight: 0 }}>
-                                {dataCartUser.length}
-                            </p>
-                        </div>
-                    )}
+                <>
+                    <Link
+                        className={`flex-1 flex justify-center items-center flex-col relative ${pageActive === "carrito" && "text-red-700"}`}
+                        // onClick={() => router.push("/carrito")}
+                        href="/carrito"
+                    >
+                        <Icon icon="mdi-light:cart" width="24" height="24" />
+                        <p>Carrito</p>
+                        {dataCartUser && (
+                            <div
+                                className="absolute border border-red-700 rounded-full grid place-items-center"
+                                style={{ right: 28, top: -10, width: 18, height: 18 }}
+                            >
+                                <p className="tracking-normal leading-none_ text-sm font-bold" style={{ lineHeight: 0 }}>
+                                    {dataCartUser.length}
+                                </p>
+                            </div>
+                        )}
 
-                    {/* <p className="absolute" style={{ right: 28, top: -10 }}>
+                        {/* <p className="absolute" style={{ right: 28, top: -10 }}>
                     3
                 </p> */}
-                </Link>
+                    </Link>
+                    <Link
+                        className={`flex-1 flex justify-center items-center flex-col ${pageActive === "tiendas" && "text-red-700"}`}
+                        href="/tiendas"
+                    >
+                        <Icon icon="clarity:store-line" width="24" height="24" />
+                        <p>Tiendas</p>
+                    </Link>
+                </>
             )}
 
             {/* <div
@@ -89,15 +99,23 @@ const Footer = () => {
                 <p>Menu</p>
             </div> */}
 
-            <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === "tiendas" && "text-red-700"}`} href="/tiendas">
-                <Icon icon="clarity:store-line" width="24" height="24" />
-                <p>Tiendas</p>
-            </Link>
             {userTypeName == "DELIVERY" && (
-                <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === "delivery" && "text-red-700"}`} href="/delivery">
-                    <Icon icon="ph:motorcycle-thin" width="24" height="24" />
-                    <p>Delivery</p>
-                </Link>
+                <>
+                    <Link
+                        className={`flex-1 flex justify-center items-center flex-col ${pageActive === "delivery" && "text-red-700"}`}
+                        href="/delivery"
+                    >
+                        <Icon icon="material-symbols-light:history-rounded" width="24" height="24" />
+                        <p>Historial</p>
+                    </Link>
+                    <Link
+                        className={`flex-1 flex justify-center items-center flex-col ${pageActive === "deliveries" && "text-red-700"}`}
+                        href="/deliveries"
+                    >
+                        <Icon icon="ph:motorcycle-thin" width="24" height="24" />
+                        <p>Deliveries</p>
+                    </Link>
+                </>
             )}
         </div>
     );

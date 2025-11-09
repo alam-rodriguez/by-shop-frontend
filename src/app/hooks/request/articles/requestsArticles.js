@@ -112,7 +112,6 @@ export const useCreateArticleHighlightedParagraphs = async (id_article, highligh
 
 export const useArticleIsInList = (id_user, id_article) => {
     const data = { id_user: id_user, id_article: id_article };
-    console.log(data);
     return useQuery({
         queryKey: [`article-${id_article}-is-in-list`],
         staleTime: Infinity,

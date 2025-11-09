@@ -139,6 +139,7 @@ const page = ({ params }) => {
     }, [offerArticle]);
 
     useEffect(() => {
+        console.log(optionsSelected);
         setPrice();
     }, [articleSelected, optionsSelected, quantity, offerArticle]);
 
@@ -343,6 +344,16 @@ const page = ({ params }) => {
             });
     };
 
+    const canBuyOneMore = (fn, wantAdd = false) => {
+        if (wantAdd) {
+            if (quantity + 1 > articleSelected.quantity) {
+                toast.warning("No hay mas articulos disponibles");
+                return;
+            }
+        }
+        fn();
+    };
+
     // CREATE TABLE articles_list_users(
     //     id char(36) NOT NULL PRIMARY KEY,
     //     id_article char(36) NOT NULL,
@@ -427,9 +438,9 @@ const page = ({ params }) => {
                 <div className="flex items-start justify-between">
                     <p className="font-bold text-3xl">{data.name}</p>
                     {articlesIsInList && articlesIsInList.id != null && articlesIsInList.status == 1 ? (
-                        <Icon className="size-7" icon="ph:heart" onClick={handleClickAddToList} />
-                    ) : (
                         <Icon className="size-7 text-red-500" icon="ph:heart-fill" onClick={handleClickAddToList} />
+                    ) : (
+                        <Icon className="size-7" icon="ph:heart" onClick={handleClickAddToList} />
                     )}
                 </div>
                 <Spacer space={12} />
@@ -444,7 +455,7 @@ const page = ({ params }) => {
                     </div>
                 </div>
                 <Divider h={1} />
-                <p className="font-bold text-xl">Description</p>
+                <p className="font-bold text-xl">Descripcion</p>
                 <p className="text-sm tracking-tight text-gray-600">{data.description}</p>
                 <Spacer space={12} />
 
@@ -539,9 +550,9 @@ const page = ({ params }) => {
                 <div className="flex gap-3 items-center">
                     <p className="font-bold text-lg">Cantidad</p>
                     <div className="flex items-center gap-4 bg-slate-200 rounded-3xl py-2 px-4">
-                        <Icon className="text-lg" icon="proicons:subtract" onClick={() => setQuantity(quantity - 1)} />
+                        <Icon className="text-lg" icon="proicons:subtract" onClick={() => canBuyOneMore(() => setQuantity(quantity - 1))} />
                         <p className="font-bold text-lg">{quantity}</p>
-                        <Icon className="text-xl" icon="ion:add-outline" onClick={() => setQuantity(quantity + 1)} />
+                        <Icon className="text-xl" icon="ion:add-outline" onClick={() => canBuyOneMore(() => setQuantity(quantity + 1), true)} />
                     </div>
                 </div>
 

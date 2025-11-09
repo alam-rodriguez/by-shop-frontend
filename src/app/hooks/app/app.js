@@ -286,3 +286,28 @@ export const getDateInSpanish = (date) => {
     // Formatear la fecha
     return `${day} de ${month} del ${year}`;
 };
+
+export function timeAgo(dateString) {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diff = (now - past) / 1000; // diferencia en segundos
+
+    const units = [
+        { name: "año", seconds: 31536000 },
+        { name: "mes", seconds: 2592000 },
+        { name: "día", seconds: 86400 },
+        { name: "hora", seconds: 3600 },
+        { name: "minuto", seconds: 60 },
+        { name: "segundo", seconds: 1 },
+    ];
+
+    for (const unit of units) {
+        const value = Math.floor(diff / unit.seconds);
+        if (value >= 1) {
+            const plural = value > 1 ? "s" : "";
+            return `hace ${value} ${unit.name}${plural}`;
+        }
+    }
+
+    return "justo ahora";
+}

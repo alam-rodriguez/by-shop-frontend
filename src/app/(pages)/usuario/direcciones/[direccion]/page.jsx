@@ -42,6 +42,8 @@ import {
     useGetLocationsCountries,
 } from "@/app/hooks/request/locations/requestsLocations";
 import { isUUID } from "@/app/hooks/app/app";
+import useCoords from "@/app/hooks/app/useCoords";
+import Spacer from "@/app/components/home/Spacer";
 
 const page = () => {
     const { direccion: idAddress } = useParams();
@@ -77,12 +79,22 @@ const page = () => {
         if (id != "") setValue("id_user", id);
     }, [id]);
 
-    useEffect(() => {
-        if (!isUUID(watch("neighborhood_id")) || !neighborhoodsByMunicipality) return;
-        const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == watch("neighborhood_id"));
+    const { coords, error, loading, accuracy, handleGetLocation } = useCoords();
+
+    // useEffect(() => {
+    //     alert("neighborhood");
+    //     if (!isUUID(watch("neighborhood_id")) || !neighborhoodsByMunicipality) return;
+    //     const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == watch("neighborhood_id"));
+    //     setValue("latitude", neighborhoodSelected.latitude);
+    //     setValue("longitude", neighborhoodSelected.longitude);
+    // }, [watch("neighborhood_id")]);
+
+    const handleChangeNeighborhood = (neighborhoodIdSelected) => {
+        if (!isUUID(neighborhoodIdSelected) || !neighborhoodsByMunicipality) return;
+        const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == neighborhoodIdSelected);
         setValue("latitude", neighborhoodSelected.latitude);
         setValue("longitude", neighborhoodSelected.longitude);
-    }, [watch("neighborhood_id")]);
+    };
 
     const { data: address, isLoading: isLoadingAddress } = useGetAddressById(idAddress);
 
@@ -91,6 +103,13 @@ const page = () => {
         reset(address);
         setValue("preferred_address", address.preferred_address === 1);
     }, [address]);
+
+    useEffect(() => {
+        if (error || !coords) return;
+        setValue("latitude", coords.lat);
+        setValue("longitude", coords.lng);
+        console.log(coords);
+    }, [coords]);
 
     const create = async (data) => {
         const loadingToast = toast.loading("Guardando direccion...");
@@ -186,6 +205,7 @@ const page = () => {
                 errorClassName="text-red-700"
                 optionNameForShow="name"
                 label="Vecindario"
+                onChange={handleChangeNeighborhood}
             />
             <Input
                 register={register}
@@ -276,6 +296,16 @@ const page = () => {
                     width="48%"
                 />
             </div>
+            <Spacer />
+            <button
+                onClick={handleGetLocation}
+                disabled={loading}
+                className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
+            >
+                {loading ? "Obteniendo ubicación precisa..." : "📍 Obtener ubicación exacta"}
+            </button>
+            {error && <p className="text-red-500">{error}</p>}
+            <Spacer />
             <Input
                 register={register}
                 errors={errors}

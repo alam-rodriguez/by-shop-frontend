@@ -29,6 +29,8 @@ import {
     useGetLocationProvincesByCountry,
     useGetLocationsCountries,
 } from "@/app/hooks/request/locations/requestsLocations";
+import useCoords from "@/app/hooks/app/useCoords";
+import Spacer from "@/app/components/home/Spacer";
 
 const page = () => {
     const { tienda: idShop } = useParams();
@@ -43,6 +45,8 @@ const page = () => {
     const wanCreate = Object.keys(shopSelected).length == 0 ? true : false;
 
     const [schemaIsRequired, setSchemaIsRequired] = useState(wanCreate);
+
+    const { coords, error, loading, accuracy, handleGetLocation } = useCoords();
 
     useEffect(() => {
         console.log(shopSelected);
@@ -76,12 +80,19 @@ const page = () => {
         console.log(provincesByCountry);
     }, [provincesByCountry]);
 
-    useEffect(() => {
-        if (!isUUID(watch("neighborhood_id")) || !neighborhoodsByMunicipality) return;
-        const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == watch("neighborhood_id"));
+    // useEffect(() => {
+    //     if (!isUUID(watch("neighborhood_id")) || !neighborhoodsByMunicipality) return;
+    //     const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == watch("neighborhood_id"));
+    //     setValue("latitude", neighborhoodSelected.latitude);
+    //     setValue("longitude", neighborhoodSelected.longitude);
+    // }, [watch("neighborhood_id")]);
+
+    const handleChangeNeighborhood = (neighborhoodIdSelected) => {
+        if (!isUUID(neighborhoodIdSelected) || !neighborhoodsByMunicipality) return;
+        const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == neighborhoodIdSelected);
         setValue("latitude", neighborhoodSelected.latitude);
         setValue("longitude", neighborhoodSelected.longitude);
-    }, [watch("neighborhood_id")]);
+    };
 
     const { data: shop, isLoading } = useGetShopById(idShop);
     useEffect(() => {
@@ -132,6 +143,13 @@ const page = () => {
                 id: loadingToast,
             });
     };
+
+    useEffect(() => {
+        if (error || !coords) return;
+        setValue("latitude", coords.lat);
+        setValue("longitude", coords.lng);
+        console.log(coords);
+    }, [coords]);
 
     // id, name, description, logo, type, status;
 
@@ -190,7 +208,6 @@ const page = () => {
                 optionNameForShow="name"
                 label="Tipo"
             />
-
             <Select
                 register={register}
                 errors={errors}
@@ -250,6 +267,7 @@ const page = () => {
                 errorClassName="text-red-700"
                 optionNameForShow="name"
                 label="Vecindario"
+                onChange={handleChangeNeighborhood}
             />
             <Input
                 register={register}
@@ -325,8 +343,33 @@ const page = () => {
                     width="48%"
                 />
             </div>
+            <Spacer />
+            <button
+                onClick={handleGetLocation}
+                disabled={loading}
+                className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
+            >
+                {loading ? "Obteniendo ubicación precisa..." : "📍 Obtener ubicación exacta"}
+            </button>
+            {/* {coords && (
+                <div className="text-center">
+                    <p>Latitud: {coords.lat.toFixed(6)}</p>
+                    <p>Longitud: {coords.lng.toFixed(6)}</p>
+                    <p className="text-sm text-gray-500">Precisión: ±{Math.round(accuracy)} metros</p>
+                    <a
+                        href={`https://www.google.com/maps?q=${coords.lat},${coords.lng}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline"
+                    >
+                        Ver en Google Maps
+                    </a>
+                </div>
+            )} */}
 
-            <ButtonGrayDown>Crear Tienda</ButtonGrayDown>
+            {error && <p className="text-red-500">{error}</p>}
+
+            <ButtonGrayDown>{wantCreate ? "Crear" : "Editar"} Tienda</ButtonGrayDown>
         </form>
     );
 };

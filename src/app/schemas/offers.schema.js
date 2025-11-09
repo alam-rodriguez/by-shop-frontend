@@ -14,6 +14,7 @@ const createOfferSchema = (isRequired) => {
             .string()
             .uuid()
             .default(() => uuidv4()),
+        shop_id: z.string().uuid().nullable().default(null),
         name: z.string().min(4).max(255),
         description: z.string().min(4).max(255),
         percent_discount: z.number().min(0).max(100),

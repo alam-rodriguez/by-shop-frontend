@@ -33,6 +33,7 @@ import {
 // Zustans
 import { zusUser } from "@/app/zustand/user/zusUser";
 import { useQuery } from "@tanstack/react-query";
+import useSetServiceWorker from "../../app/useSetServiceWorker";
 
 export const useUserExist = async (email) => {
     return await userExist(email);
@@ -98,13 +99,16 @@ export const useCreateCodeVerificationEmail = async (email) => {
 
 export const useRequestsUsers = () => {
     const { setUserInfo, setCurrencySelected } = zusUser();
+    const { setServiceWorker } = useSetServiceWorker();
 
     const useGetUserInformation = async () => {
         const { status, data } = await getUserInformation();
         console.log(data);
         console.log(status);
-        if (status == 200) setUserInfo(data);
-        else
+        if (status == 200) {
+            setUserInfo(data);
+            setServiceWorker();
+        } else
             setUserInfo({
                 id: "",
                 firstName: "",

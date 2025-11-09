@@ -22,6 +22,7 @@ const Select = ({
     width = "100%",
     optionByDefaultText = "",
     optionByDefaultValue = "",
+    onChange = () => {},
 }) => {
     if (!isMulti)
         return (
@@ -36,6 +37,10 @@ const Select = ({
                     id={name}
                     value={itemSelected}
                     defaultValue={optionByDefaultValue}
+                    // onChange={() => onChange()}
+                    onChange={(e) => {
+                        onChange(e.target.value); // notifica al padre
+                    }}
                 >
                     <option value={optionByDefaultValue} disabled>
                         {optionByDefaultText || "Seleccione una opción"}
