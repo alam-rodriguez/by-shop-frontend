@@ -42,7 +42,9 @@ import {
     useGetLocationsCountries,
 } from "@/app/hooks/request/locations/requestsLocations";
 import { isUUID } from "@/app/hooks/app/app";
-import useCoords from "@/app/hooks/app/useCoords";
+import dynamic from "next/dynamic";
+const useCoords = dynamic(() => import("@/app/hooks/app/useCoords"), { ssr: false });
+// import useCoords from "@/app/hooks/app/useCoords";
 import Spacer from "@/app/components/home/Spacer";
 
 const page = () => {
