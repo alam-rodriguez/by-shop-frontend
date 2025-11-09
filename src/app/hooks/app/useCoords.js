@@ -8,7 +8,7 @@ const useCoords = () => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        setIsClient(typeof window !== "undefined" && !!navigator.geolocation);
+        // setIsClient(typeof window !== "undefined" && !!navigator.geolocation);
     }, []);
 
     const handleGetLocation = () => {
@@ -20,7 +20,11 @@ const useCoords = () => {
         //     setError("Tu navegador no soporta geolocalización");
         //     return;
         // }
-        if (!isClient) {
+        // if (!isClient) {
+        //     setError("Tu navegador no soporta geolocalización");
+        //     return;
+        // }
+        if (typeof window === "undefined" || !("geolocation" in navigator)) {
             setError("Tu navegador no soporta geolocalización");
             return;
         }

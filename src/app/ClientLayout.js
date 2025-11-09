@@ -8,6 +8,7 @@ import { useLayoutEffect } from "react";
 import { useRequestsUsers } from "./hooks/request/users/requestsUsers";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import RegisterServiceWorker from "./components/RegisterServiceWorker";
 
 export default function ClientLayout({ children }) {
     const { useGetUserInformation, useGetUserCurrencyOrMainCurrency } = useRequestsUsers();
@@ -19,6 +20,7 @@ export default function ClientLayout({ children }) {
 
     return (
         <>
+            <RegisterServiceWorker />
             <Toaster />
             <QueryClientProvider client={queryClient}>
                 <Header />

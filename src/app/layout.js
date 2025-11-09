@@ -35,14 +35,6 @@ export const viewport = {
     initialScale: 1,
 };
 
-if ("serviceWorker" in navigator) {
-    // 1️⃣ El de next-pwa (cache y offline)
-    navigator.serviceWorker.register("/sw.js").then(() => console.log("Service Worker (PWA) registrado"));
-
-    // 2️⃣ El tuyo (push notifications)
-    navigator.serviceWorker.register("/push-sw.js").then(() => console.log("Service Worker (Push) registrado"));
-}
-
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
