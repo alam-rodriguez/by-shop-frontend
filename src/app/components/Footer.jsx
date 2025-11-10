@@ -48,18 +48,21 @@ const Footer = () => {
 
     return (
         <div className="flex fixed left-0 bottom-0 w-screen bg-gray-100 border-t-2 border-gray-300 z-50 pb-5 pt-3">
-            <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === "inicio" && "text-red-700"}`} href="/">
+            <FooterItem text="Inicio" icon="solar:home-2-outline" link="/" pageActive={pageActive} pageName="inicio" />
+            {/* FooterItem = ({(icon, link, pathname)}) FooterItem = ({(icon, link, pathname)}) */}
+            {/* <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === "inicio" && "text-red-700"}`} href="/">
                 <Icon icon="solar:home-2-outline" width="24" height="24" className="" />
                 <p>Inicio</p>
-            </Link>
-            <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === "usuario" && "text-red-700"}`} href="/usuario">
+            </Link> */}
+            <FooterItem text="Usuario" icon="mage:user" link="/usuario" pageActive={pageActive} pageName="usuario" />
+            {/* FooterItem = ({(text, icon, link, pathname, pageActive, pageName)}) */}
+            {/* <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === "usuario" && "text-red-700"}`} href="/usuario">
                 <Icon icon="mage:user" width="24" height="24" />
                 <p>Usuario</p>
-            </Link>
-
+            </Link> */}
             {userTypeName != "DELIVERY" && (
                 <>
-                    <Link
+                    {/* <Link
                         className={`flex-1 flex justify-center items-center flex-col relative ${pageActive === "carrito" && "text-red-700"}`}
                         // onClick={() => router.push("/carrito")}
                         href="/carrito"
@@ -76,21 +79,21 @@ const Footer = () => {
                                 </p>
                             </div>
                         )}
-
-                        {/* <p className="absolute" style={{ right: 28, top: -10 }}>
+                    </Link> */}
+                    {/* <p className="absolute" style={{ right: 28, top: -10 }}>
                     3
                 </p> */}
-                    </Link>
-                    <Link
+                    <FooterItem text="Carrito" icon="mdi-light:cart" link="/carrito" pageActive={pageActive} pageName="carrito" />
+                    {/* <Link
                         className={`flex-1 flex justify-center items-center flex-col ${pageActive === "tiendas" && "text-red-700"}`}
                         href="/tiendas"
                     >
                         <Icon icon="clarity:store-line" width="24" height="24" />
                         <p>Tiendas</p>
-                    </Link>
+                    </Link> */}
+                    <FooterItem text="Tiendas" icon="clarity:store-line" link="/tiendas" pageActive={pageActive} pageName="tiendas" />
                 </>
             )}
-
             {/* <div
                 className={`flex-1 flex justify-center items-center flex-col ${pageActive === "menu" && "text-red-700"}`}
                 onClick={() => router.push("/menu")}
@@ -98,23 +101,36 @@ const Footer = () => {
                 <Icon icon="pepicons-pencil:menu-circle" width="24" height="24" />
                 <p>Menu</p>
             </div> */}
-
             {userTypeName == "DELIVERY" && (
                 <>
-                    <Link
+                    {/* <Link
                         className={`flex-1 flex justify-center items-center flex-col ${pageActive === "delivery" && "text-red-700"}`}
                         href="/delivery"
                     >
                         <Icon icon="material-symbols-light:history-rounded" width="24" height="24" />
                         <p>Historial</p>
-                    </Link>
-                    <Link
+                    </Link> */}
+                    <FooterItem
+                        text="Historial"
+                        icon="material-symbols-light:history-rounded"
+                        link="/delivery"
+                        pageActive={pageActive}
+                        pageName="delivery"
+                    />
+                    {/* <Link
                         className={`flex-1 flex justify-center items-center flex-col ${pageActive === "deliveries" && "text-red-700"}`}
                         href="/deliveries"
                     >
                         <Icon icon="ph:motorcycle-thin" width="24" height="24" />
                         <p>Deliveries</p>
-                    </Link>
+                    </Link> */}
+                    <FooterItem
+                        text="Deliveris"
+                        icon="material-symbols-light:history-rounded"
+                        link="ph:motorcycle-thin"
+                        pageActive={pageActive}
+                        pageName="deliveries"
+                    />
                 </>
             )}
         </div>
@@ -162,12 +178,23 @@ const Footer = () => {
 
 export default Footer;
 
-const FooterItem = ({ icon, link, pathname }) => {
+// const FooterItem = ({ icon, link, pathname }) => {
+//     const router = useRouter();
+
+//     return (
+//         <div className={`${pathname == link ? "page-active" : ""}`}>
+//             <Icon icon={icon} className="text-4xl mt-2" onClick={() => router.push(link)} />
+//         </div>
+//     );
+// };
+
+const FooterItem = ({ text, icon, link, pathname, pageActive, pageName }) => {
     const router = useRouter();
 
     return (
-        <div className={`${pathname == link ? "page-active" : ""}`}>
-            <Icon icon={icon} className="text-4xl mt-2" onClick={() => router.push(link)} />
-        </div>
+        <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === pageName && "text-red-700"}`} href={link}>
+            <Icon icon={icon} className="size-5" />
+            <p className="text-sm">{text}</p>
+        </Link>
     );
 };

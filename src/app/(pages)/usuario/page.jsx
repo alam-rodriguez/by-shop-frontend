@@ -117,25 +117,25 @@ const page = () => {
 
     return (
         <div>
-            <div className="p-4 bg-gray-200 h-24 relative">
+            <div className="p-4 bg-gray-200 h-20 relative">
                 {/* <div className="flex justify-between">
                     <Icon icon="material-symbols:close-rounded" className="size-7 text-gray-500" />
                     <p className="text-xl font-medium">Your Profile</p>
                     <Icon icon="famicons:notifications-outline" className="size-7 text-gray-500" />
                 </div> */}
                 <ImageA
-                    className="size-24 rounded-full object-cover absolute top-full left-1/2- -translate-y-1/2 -translate-x-1/2-"
+                    className="size-20 rounded-full object-cover absolute top-full left-1/2- -translate-y-1/2 -translate-x-1/2-"
                     src={picture && picture != "" ? picture : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png"}
                 />
             </div>
-            <div className="bg-gray-100 p-4">
+            <div className="bg-gray-100 p-2">
                 <Spacer space={50} />
-                <p className="font-bold text-2xl">
+                <p className="font-bold text-lg">
                     {firstName} {lastName}
                 </p>
-                <p className="text-gray-500">{email}</p>
+                <p className="text-gray-500 text-xs">{email}</p>
             </div>
-            <div className="bg-white p-4 pt-8">
+            <div className="bg-white p-2 pt-6">
                 <UserOption
                     icon="mdi:account-circle"
                     text="Informacion personal"
@@ -164,11 +164,11 @@ const page = () => {
                         </div>
                     }
                 />
-                <Spacer space={40} />
+                <Spacer space={25} />
                 <UserOption icon="mdi:clipboard-list-outline" text="Pedidos" link="/usuario/pedidos" isButton={true} />
-                <Spacer space={40} />
+                <Spacer space={25} />
                 <UserOption icon="mdi:map-marker" text="Direcciones" link="/usuario/direcciones" isButton={true} />
-                <Spacer space={40} />
+                <Spacer space={25} />
                 {/* <UserOption icon="mdi:account-lock" text="Registro y seguridad" /> */}
                 {/* <Spacer space={40} /> */}
                 <UserOption
@@ -188,7 +188,7 @@ const page = () => {
                         </div>
                     }
                 />
-                <Spacer space={40} />
+                <Spacer space={25} />
                 {/* <UserOption icon="ic:baseline-language" text="Lenguaje" /> */}
                 {/* <Spacer space={40} /> */}
                 {/* <UserOption icon="ic:baseline-language" text="Lenguaje" /> */}
@@ -216,13 +216,13 @@ const page = () => {
                         </div>
                     }
                 />
-                <Spacer space={40} />
+                <Spacer space={25} />
                 {id != "" ? (
                     <UserOption icon="mdi:logout" text="Cerrar sesión" isButton={true} onClick={handleClickLogout} />
                 ) : (
                     <UserOption icon="mdi:login" text="Iniciar sesión" isButton={true} link="/usuario/sesion" validate={false} />
                 )}
-                <Spacer space={40} />
+                <Spacer space={25} />
                 <UserOption icon="duo-icons:app" text="Instalar app" isButton={true} onClick={handleInstall} />
 
                 {/* <div className="flex justify-between items-center">
@@ -605,15 +605,15 @@ const UserOption = ({ icon, text, isButton = false, onClick = () => {}, link = "
         <>
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                    <Icon icon={icon} className="size-7 text-gray-700" />
-                    <p className="text-xl text-gray-700">{text}</p>
+                    <Icon icon={icon} className="size-5 text-gray-700" />
+                    <p className="text-base text-gray-700">{text}</p>
                 </div>
                 {isButton ? (
-                    <Icon icon="icon-park-outline:right" className="size-7 text-gray-700" onClick={handleClick} />
+                    <Icon icon="icon-park-outline:right" className="size-5 text-gray-700" onClick={handleClick} />
                 ) : (
                     <Icon
                         icon="icon-park-outline:down"
-                        className={`size-7 text-gray-700 transition-transform duration-300 ${show ? "rotate-180" : "rotate-0"}`}
+                        className={`size-5 text-gray-700 transition-transform duration-300 ${show ? "rotate-180" : "rotate-0"}`}
                         onClick={handleClick}
                     />
                 )}

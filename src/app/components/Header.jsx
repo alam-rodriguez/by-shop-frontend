@@ -47,21 +47,21 @@ const Header = () => {
     }
 
     return (
-        <div className="flex justify-between p-4 sticky top-0 z-50 bg-gray-100 gap-2">
+        <div className="flex justify-between p-2 sticky top-0 z-50 bg-gray-100 gap-2">
             {pathname != "/" && pathname != "/usuario" && pathname != "/carrito" && pathname != "/menu" && (
-                <div className="bg-white size-12 rounded-full grid place-items-center" onClick={() => router.back()}>
-                    <Icon icon="icon-park-outline:left" className="size-7 text-gray-500" />
+                <div className="bg-white size-8 rounded-full grid place-items-center" onClick={() => router.back()}>
+                    <Icon icon="icon-park-outline:left" className="size-5 text-gray-500" />
                 </div>
             )}
 
-            <div className="bg-white  rounded-full h-12 relative overflow-hidden flex-1" onFocus={() => router.push("/buscador")}>
+            <div className="bg-white  rounded-full h-8 relative overflow-hidden flex-1" onFocus={() => router.push("/buscador")}>
                 <Icon
                     icon="majesticons:search-line"
-                    className="absolute left-5 top-1/2 -translate-x-1/2 -translate-y-1/2 size-8 text-gray-500 text-xl"
+                    className="absolute left-5 top-1/2 -translate-x-1/2 -translate-y-1/2 size-5 text-gray-500 text-xl"
                 />
                 <input
                     type="text"
-                    className="border-none outline-none shadow-none ring-0 focus:ring-0 focus:outline-none focus:border-none w-full h-full pl-10 text-lg"
+                    className="border-none outline-none shadow-none ring-0 focus:ring-0 focus:outline-none focus:border-none w-full h-full pl-10 text-sm"
                     placeholder="Buscar articulo"
                     onKeyDown={handleKeyDown}
                     onChange={setseekerPhrase}

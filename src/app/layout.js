@@ -32,7 +32,7 @@ export const themeColor = "#0f172a";
 
 export const viewport = {
     width: "device-width",
-    initialScale: 0.8,
+    initialScale: 1,
 };
 
 export default function RootLayout({ children }) {
