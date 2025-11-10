@@ -2,7 +2,7 @@ import api from "@/app/api/api";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const url = process.env.BACKEND_BASE_URL;
+const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const getGeneralCategoriesGroups = async () => {

@@ -1,6 +1,6 @@
 import api from "@/app/api/api";
 
-const url = process.env.BACKEND_BASE_URL;
+const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const createArticleBoxContent = async (articleBoxContent) => {
