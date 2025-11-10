@@ -47,7 +47,7 @@ const Header = () => {
     }
 
     return (
-        <div className="flex justify-between p-2 sticky top-0 z-50 bg-gray-100 gap-2">
+        <div className="flex justify-between p-4 sticky top-0 z-50 bg-gray-100 gap-2">
             {pathname != "/" && pathname != "/usuario" && pathname != "/carrito" && pathname != "/menu" && (
                 <div className="bg-white size-8 rounded-full grid place-items-center" onClick={() => router.back()}>
                     <Icon icon="icon-park-outline:left" className="size-5 text-gray-500" />

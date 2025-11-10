@@ -29,6 +29,7 @@ import { useGetDepartmentsForApp } from "./hooks/request/categories/requestsDepa
 // Global State
 import { zusUser } from "./zustand/user/zusUser";
 import Link from "next/link";
+import Divider from "./components/home/Divider";
 
 const page = () => {
     const router = useRouter();
@@ -75,7 +76,7 @@ const page = () => {
                 </div>
                 <Spacer />
                 <div className="flex gap-3 overflow-scroll no-scrollbar flex-nowrap">
-                    {directsCategories.map((directCategory) => (
+                    {/* {directsCategories.map((directCategory) => (
                         <div
                             key={directCategory.id}
                             className="min-w-max h-14 flex items-center rounded-lg overflow-hidden shadow-lg bg-white py-1 px-3 gap-2 flex-shrink-0"
@@ -85,6 +86,18 @@ const page = () => {
                                 <ImageA className="w-full h-full object-cover" src={directCategory.image} />
                             </div>
                             <p className="">{directCategory.name}</p>
+                        </div>
+                    ))} */}
+                    {directsCategories.map((directCategory) => (
+                        <div
+                            key={directCategory.id}
+                            className="min-w-max h-10 flex items-center rounded-lg overflow-hidden shadow-lg bg-white py-1 px-3 gap-2 flex-shrink-0"
+                            onClick={() => router.push(`/articulos?categoria-directa=${directCategory.id}`)}
+                        >
+                            <div className="size-6 grid place-items-center rounded-full bg-white overflow-hidden">
+                                <ImageA className="w-full h-full object-cover" src={directCategory.image} />
+                            </div>
+                            <p className="text-xs">{directCategory.name}</p>
                         </div>
                     ))}
                     {/* <div className="min-w-max h-14 flex items-center rounded-lg overflow-hidden shadow-lg bg-white py-1 px-3 gap-2 flex-shrink-0">
@@ -127,7 +140,7 @@ const page = () => {
                         </div>
                     </div>
                 ))} */}
-                {indirectsCategories.map((indirectCategory) => (
+                {/* {indirectsCategories.map((indirectCategory) => (
                     <div key={indirectCategory.id}>
                         <div className="flex justify-between">
                             <p className="font-bold text-2xl">{indirectCategory.name}</p>
@@ -153,6 +166,40 @@ const page = () => {
                                             <p className="font-bold text-red-700 text-lg">${article.price.toString().split(".")[0]}</p>
                                             <div className="bg-red-700 text-white py-2 px-3 rounded-full">
                                                 <p className="text-sm">Add to Cart</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                ))} */}
+
+                {indirectsCategories.map((indirectCategory) => (
+                    <div key={indirectCategory.id}>
+                        <div className="flex justify-between items-center">
+                            <p className="font-bold text-lg">{indirectCategory.name}</p>
+                            <p className="text-red-700 text-xs">See All</p>
+                        </div>
+                        <Spacer space={10} />
+                        <div className="flex justify-between flex-wrap gap-3">
+                            {indirectCategory.articles.map((article) => (
+                                <Link
+                                    key={article.id}
+                                    className="bg-white rounded-xl overflow-hidden h-72"
+                                    style={{ width: "calc(50% - 10px)" }}
+                                    href={`/articulos/${article.id}`}
+                                >
+                                    <div className="" style={{ height: "70%" }}>
+                                        <ImageA className="w-full h-full object-cover" src={article.main_image} />
+                                    </div>
+                                    <div className="h-2/6 p-2" style={{ height: "30%" }}>
+                                        <p className="font-bold text-xs">{showText(article.description, 17)}</p>
+                                        <Spacer space={5} />
+                                        <div className="flex justify-between items-center">
+                                            <p className="font-bold text-red-700">${article.price.toString().split(".")[0]}</p>
+                                            <div className="bg-red-700 text-white py-2 px-3 rounded-full text-xs">
+                                                <p className="text-xs">Add to Cart</p>
                                             </div>
                                         </div>
                                     </div>

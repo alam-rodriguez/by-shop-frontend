@@ -11,7 +11,7 @@ const Departments = ({ text, departments = [] }) => {
 
     return (
         <div className="mx-4">
-            <p className="my-2 font-bold text-xl tracking-wide">{text}</p>
+            <p className="my-2 font-bold text-lg tracking-wide">{text}</p>
             <div className="flex justify-between flex-wrap">
                 {departments.map((department) => (
                     <Department key={department.id} img={department.image} text={department.short_name} link="/" />
@@ -58,7 +58,7 @@ const Department = ({ img, text }) => {
         <div className="mb-5" style={{ width: "calc(50% - 10px)" }}>
             {/* <img className="h-20- h-16 w-full object-cover rounded-lg" src={img} alt="" /> */}
             <Image src={img} alt="imagen" className="w-full h-16 object-cover rounded-lg" width={1920} height={1080} />
-            <p className="font-medium tracking-wide">{text}</p>
+            <p className="font-medium tracking-wide text-xs">{text}</p>
         </div>
     );
 };

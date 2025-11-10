@@ -47,7 +47,7 @@ const Footer = () => {
         return null;
 
     return (
-        <div className="flex fixed left-0 bottom-0 w-screen bg-gray-100 border-t-2 border-gray-300 z-50 pb-5 pt-3">
+        <div className="flex fixed left-0 bottom-0 w-screen bg-gray-100 border-t-2 border-gray-300 z-50 pb-3 pt-3">
             <FooterItem text="Inicio" icon="solar:home-2-outline" link="/" pageActive={pageActive} pageName="inicio" />
             {/* FooterItem = ({(icon, link, pathname)}) FooterItem = ({(icon, link, pathname)}) */}
             {/* <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === "inicio" && "text-red-700"}`} href="/">
