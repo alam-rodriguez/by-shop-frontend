@@ -1,14 +1,14 @@
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const getGeneralCategoriesGroups = async () => {
-    const res = await fetch(`${url}/api/categories/general-categories-groups`);
+    const res = await fetch(`${url}/categories/general-categories-groups`);
     const data = await res.json();
     return { res, data };
 };
 
 export const createGeneralCategoriesGroup = async (generalCategoryGroup) => {
-    const res = await fetch(`${url}/api/categories/general-categories-groups`, {
+    const res = await fetch(`${url}/categories/general-categories-groups`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -20,7 +20,7 @@ export const createGeneralCategoriesGroup = async (generalCategoryGroup) => {
 };
 
 export const updateGeneralCategoriesGroup = async (generalCategoryGroup) => {
-    const res = await fetch(`${url}/api/categories/general-categories-groups/${generalCategoryGroup.id}`, {
+    const res = await fetch(`${url}/categories/general-categories-groups/${generalCategoryGroup.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -32,7 +32,7 @@ export const updateGeneralCategoriesGroup = async (generalCategoryGroup) => {
 };
 
 export const createGeneralCategoryGroupCategory = async (category) => {
-    const res = await fetch(`${url}/api/categories/general-categories-groups-categories`, {
+    const res = await fetch(`${url}/categories/general-categories-groups-categories`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export const createGeneralCategoryGroupCategory = async (category) => {
 };
 
 export const updateGeneralCategoryGroupCategory = async (category) => {
-    const res = await fetch(`${url}/api/categories/general-categories-groups-categories/${category.id}`, {
+    const res = await fetch(`${url}/categories/general-categories-groups-categories/${category.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export const updateGeneralCategoryGroupCategory = async (category) => {
 };
 
 export const getGeneralCategoriesGroupsForApp = async () => {
-    const res = await fetch(`${url}/api/categories/general-categories-groups-for-app`);
+    const res = await fetch(`${url}/categories/general-categories-groups-for-app`);
     const data = await res.json();
     return { res, data };
 };

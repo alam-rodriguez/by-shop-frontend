@@ -1,16 +1,16 @@
 import api from "@/app/api/api";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const getPaymentMethods = async () => {
-    const res = await fetch(`${url}/api/payment-methods`);
+    const res = await fetch(`${url}/payment-methods`);
     const data = await res.json();
     return { res, data };
 };
 
 export const createPaymentMethod = async (paymentMethod) => {
-    const res = await fetch(`${url}/api/payment-methods`, {
+    const res = await fetch(`${url}/payment-methods`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const createPaymentMethod = async (paymentMethod) => {
 };
 
 export const updatePaymentMethod = async (paymentMethod) => {
-    const res = await fetch(`${url}/api/payment-methods/${paymentMethod.id}`, {
+    const res = await fetch(`${url}/payment-methods/${paymentMethod.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",

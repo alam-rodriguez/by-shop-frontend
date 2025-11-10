@@ -1,17 +1,17 @@
 import api from "@/app/api/api";
 import axios from "axios";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const getArticles = async () => {
-    const res = await fetch(`${url}/api/articles`);
+    const res = await fetch(`${url}/articles`);
     const data = await res.json();
     return { res, data };
 };
 
 export const createArticle = async (article) => {
-    const res = await fetch(`${url}/api/articles`, {
+    const res = await fetch(`${url}/articles`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export const createArticle = async (article) => {
 };
 
 export const updateArticle = async (article) => {
-    const res = await fetch(`${url}/api/articles/${article.id}`, {
+    const res = await fetch(`${url}/articles/${article.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export const updateArticle = async (article) => {
 
 export const getArticlesOfGroupCategory = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/articles/get-articles-group-category/${id}`);
+        const response = await axios.get(`${url}/articles/get-articles-group-category/${id}`);
         console.log(response.data.data);
         return response.data.data;
     } catch (error) {
@@ -47,7 +47,7 @@ export const getArticlesOfGroupCategory = async (id) => {
 
 export const getArticle = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/articles/${id}`);
+        const response = await axios.get(`${url}/articles/${id}`);
         console.log(response.data);
         return response.data.data;
     } catch (error) {
@@ -58,7 +58,7 @@ export const getArticle = async (id) => {
 
 export const getArticleOffer = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/articles/${id}/offer`);
+        const response = await axios.get(`${url}/articles/${id}/offer`);
         console.log(response.data);
         return response.data.data;
     } catch (error) {
@@ -69,7 +69,7 @@ export const getArticleOffer = async (id) => {
 
 export const getArticleOfferByIdCartAndIdOffer = async (idCarttem, idOffer) => {
     try {
-        const response = await axios.get(`${url}/api/articles/${idCarttem}/offer/${idOffer}`);
+        const response = await axios.get(`${url}/articles/${idCarttem}/offer/${idOffer}`);
         console.log(response.data);
         return response.data.data;
     } catch (error) {
@@ -80,7 +80,7 @@ export const getArticleOfferByIdCartAndIdOffer = async (idCarttem, idOffer) => {
 
 export const getArticleOptions = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/articles/options/${id}`);
+        const response = await axios.get(`${url}/articles/options/${id}`);
         console.log(response.data);
         return response.data.data;
     } catch (error) {
@@ -91,7 +91,7 @@ export const getArticleOptions = async (id) => {
 
 export const getArticleBoxContents = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/articles/box-contents/${id}`);
+        const response = await axios.get(`${url}/articles/box-contents/${id}`);
         console.log(response.data);
         return response.data.data;
     } catch (error) {
@@ -102,7 +102,7 @@ export const getArticleBoxContents = async (id) => {
 
 export const getArticleSpecs = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/articles/specs/${id}`);
+        const response = await axios.get(`${url}/articles/specs/${id}`);
         console.log(response.data);
         return response.data.data;
     } catch (error) {
@@ -113,7 +113,7 @@ export const getArticleSpecs = async (id) => {
 
 export const getArticleFeaturesSpecs = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/articles/featured-specs/${id}`);
+        const response = await axios.get(`${url}/articles/featured-specs/${id}`);
         console.log(response.data);
         return response.data.data;
     } catch (error) {
@@ -124,7 +124,7 @@ export const getArticleFeaturesSpecs = async (id) => {
 
 export const getArticleMeasurements = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/articles/measurements/${id}`);
+        const response = await axios.get(`${url}/articles/measurements/${id}`);
         console.log(response.data);
         return response.data.data;
     } catch (error) {
@@ -136,7 +136,7 @@ export const getArticleMeasurements = async (id) => {
 export const addArticleToList = async (article) => {
     console.log(article);
     try {
-        const res = await axios.post(`${url}/api/articles/list`, article);
+        const res = await axios.post(`${url}/articles/list`, article);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -145,7 +145,7 @@ export const addArticleToList = async (article) => {
 
 export const articleIsInList = async (article) => {
     try {
-        const res = await axios.get(`${url}/api/articles/is-in-list`, {
+        const res = await axios.get(`${url}/articles/is-in-list`, {
             params: article,
         });
         console.log(res.data.data);
@@ -157,7 +157,7 @@ export const articleIsInList = async (article) => {
 
 export const updateArticleInListStatus = async (article) => {
     try {
-        const res = await axios.patch(`${url}/api/articles/set-list-status/${article.id}`, article);
+        const res = await axios.patch(`${url}/articles/set-list-status/${article.id}`, article);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -166,7 +166,7 @@ export const updateArticleInListStatus = async (article) => {
 
 export const listArticlesUser = async (id_user) => {
     try {
-        const res = await axios.get(`${url}/api/articles/list-user/${id_user}`);
+        const res = await axios.get(`${url}/articles/list-user/${id_user}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -176,7 +176,7 @@ export const listArticlesUser = async (id_user) => {
 export const getArticlesFromDirectCategory = async (id_direct_category) => {
     console.log(id_direct_category);
     try {
-        const res = await axios.get(`${url}/api/articles/get-articles-from-direct-category/${id_direct_category}`);
+        const res = await axios.get(`${url}/articles/get-articles-from-direct-category/${id_direct_category}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -185,7 +185,7 @@ export const getArticlesFromDirectCategory = async (id_direct_category) => {
 
 export const createUserArticleView = async (articleView) => {
     try {
-        const res = await axios.post(`${url}/api/articles/user-views`, articleView);
+        const res = await axios.post(`${url}/articles/user-views`, articleView);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -194,7 +194,7 @@ export const createUserArticleView = async (articleView) => {
 
 export const getUserArticlesViews = async (id_user) => {
     try {
-        const res = await axios.get(`${url}/api/articles/user-views/${id_user}`);
+        const res = await axios.get(`${url}/articles/user-views/${id_user}`);
         console.log(res.data.data);
         return res.data.data;
     } catch (error) {
@@ -205,7 +205,7 @@ export const getUserArticlesViews = async (id_user) => {
 
 export const getArticles2 = async () => {
     try {
-        const response = await api.get(`/api/articles`);
+        const response = await api.get(`/articles`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -225,7 +225,7 @@ export const getArticles2 = async () => {
 
 export const finder = async (word) => {
     try {
-        const response = await api.get(`/api/articles/buscardor/${word}`);
+        const response = await api.get(`/articles/buscardor/${word}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -235,7 +235,7 @@ export const finder = async (word) => {
 
 export const getArticlesFromShop = async (idShop) => {
     try {
-        const response = await api.get(`/api/articles/shop/${idShop}`);
+        const response = await api.get(`/articles/shop/${idShop}`);
         console.log(response);
         return response.data.data;
     } catch (error) {
@@ -256,7 +256,7 @@ export const getArticlesFromShop = async (idShop) => {
 
 export const getArticlesFromGeneralCategory = async (id_general_category) => {
     try {
-        const res = await api.get(`/api/articles/get-articles-from-general-category/${id_general_category}`);
+        const res = await api.get(`/articles/get-articles-from-general-category/${id_general_category}`);
         console.log(res);
         return res.data.data;
     } catch (error) {
@@ -275,7 +275,7 @@ export const getArticlesFromGeneralCategory = async (id_general_category) => {
 
 export const getArticlesCanBeInterested = async (id_article) => {
     try {
-        const res = await api.get(`/api/articles/get-articles-can-be-interested/${id_article}`);
+        const res = await api.get(`/articles/get-articles-can-be-interested/${id_article}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -284,7 +284,7 @@ export const getArticlesCanBeInterested = async (id_article) => {
 
 export const getArticlesSimilar = async (id_article) => {
     try {
-        const res = await api.get(`/api/articles/get-articles-similar/${id_article}`);
+        const res = await api.get(`/articles/get-articles-similar/${id_article}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -293,7 +293,7 @@ export const getArticlesSimilar = async (id_article) => {
 
 export const getArticleOtherImages = async (id_article) => {
     try {
-        const res = await api.get(`/api/articles/articles-other-images/${id_article}`);
+        const res = await api.get(`/articles/articles-other-images/${id_article}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -302,7 +302,7 @@ export const getArticleOtherImages = async (id_article) => {
 
 export const getArticleByIdCart = async (idCart) => {
     try {
-        const response = await api.get(`/api/articles/id-cart/${idCart}`);
+        const response = await api.get(`/articles/id-cart/${idCart}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -312,7 +312,7 @@ export const getArticleByIdCart = async (idCart) => {
 
 export const changeArticleQuantity = async (idArticle, quantity, action = "add") => {
     try {
-        const response = await api.patch(`/api/articles/change-quantity/${idArticle}?action=${action}`, { quantity });
+        const response = await api.patch(`/articles/change-quantity/${idArticle}?action=${action}`, { quantity });
         return { status: response.status, message: response.data.message, data: response.data.data };
     } catch (error) {
         console.log(error);
@@ -322,7 +322,7 @@ export const changeArticleQuantity = async (idArticle, quantity, action = "add")
 
 export const getArticlesByIdShop = async (idShop) => {
     try {
-        const response = await api.get(`/api/articles/by-id-shop/${idShop}`);
+        const response = await api.get(`/articles/by-id-shop/${idShop}`);
         return response.data.data;
     } catch (error) {
         console.log(error);

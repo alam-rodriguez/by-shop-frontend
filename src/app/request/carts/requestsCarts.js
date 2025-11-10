@@ -1,12 +1,12 @@
 import api from "@/app/api/api";
 import axios from "axios";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const createCartItem = async (article) => {
     try {
-        const res = await axios.post(`${url}/api/carts`, article);
+        const res = await axios.post(`${url}/carts`, article);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -14,14 +14,14 @@ export const createCartItem = async (article) => {
 };
 
 export const updateCartItem = async (article) => {
-    const res = await axios.put(`${url}/api/carts`, article);
+    const res = await axios.put(`${url}/carts`, article);
     console.log(res);
     return { res, data: res.data };
 };
 
 export const createCartItemOption = async (article) => {
     try {
-        const res = await axios.post(`${url}/api/carts/items-options`, article);
+        const res = await axios.post(`${url}/carts/items-options`, article);
         console.log(res);
         return { status: res.status, data: res.data };
     } catch (error) {
@@ -32,7 +32,7 @@ export const createCartItemOption = async (article) => {
 export const getCartItemOption = async (idCart) => {
     console.log(idCart);
     try {
-        const res = await axios.get(`${url}/api/carts/items-options/${idCart}`);
+        const res = await axios.get(`${url}/carts/items-options/${idCart}`);
         console.log(res);
         return res.data.data;
     } catch (error) {
@@ -42,7 +42,7 @@ export const getCartItemOption = async (idCart) => {
 
 export const getCartUser = async (id) => {
     try {
-        const res = await axios.get(`${url}/api/carts/${id}`);
+        const res = await axios.get(`${url}/carts/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -53,7 +53,7 @@ export const getCartUser = async (id) => {
 export const updateCartItemStatus = async (id, cartStatus) => {
     console.log(cartStatus);
     try {
-        const res = await axios.put(`${url}/api/carts/set-item-status/${id}`, cartStatus);
+        const res = await axios.put(`${url}/carts/set-item-status/${id}`, cartStatus);
         console.log(res);
         return { status: res.status, data: res.data };
     } catch (error) {
@@ -63,7 +63,7 @@ export const updateCartItemStatus = async (id, cartStatus) => {
 
 export const updateCartItemQuantity = async (id, cartQuantity) => {
     try {
-        const res = await axios.put(`${url}/api/carts/set-item-quantity/${id}`, cartQuantity);
+        const res = await axios.put(`${url}/carts/set-item-quantity/${id}`, cartQuantity);
         console.log(res);
         return { status: res.status, data: res.data };
     } catch (error) {
@@ -73,7 +73,7 @@ export const updateCartItemQuantity = async (id, cartQuantity) => {
 
 export const getCartUserSavedForLater = async (id) => {
     try {
-        const res = await axios.get(`${url}/api/carts/saved-for-later/${id}`);
+        const res = await axios.get(`${url}/carts/saved-for-later/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -83,7 +83,7 @@ export const getCartUserSavedForLater = async (id) => {
 
 export const getCartUserReadyToBuy = async (id) => {
     try {
-        const res = await axios.get(`${url}/api/carts/ready-to-buy/${id}`);
+        const res = await axios.get(`${url}/carts/ready-to-buy/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -93,7 +93,7 @@ export const getCartUserReadyToBuy = async (id) => {
 
 export const createCartBuy = async (article) => {
     try {
-        const res = await axios.post(`${url}/api/carts/buy`, article);
+        const res = await axios.post(`${url}/carts/buy`, article);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -102,7 +102,7 @@ export const createCartBuy = async (article) => {
 
 export const createCartBuyItem = async (article) => {
     try {
-        const res = await axios.post(`${url}/api/carts/buy-item`, article);
+        const res = await axios.post(`${url}/carts/buy-item`, article);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -111,7 +111,7 @@ export const createCartBuyItem = async (article) => {
 
 export const getCartUserBought = async (id) => {
     try {
-        const res = await axios.get(`${url}/api/carts/boughts/${id}`);
+        const res = await axios.get(`${url}/carts/boughts/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -121,7 +121,7 @@ export const getCartUserBought = async (id) => {
 
 export const getLasCartItemUserOfArticle = async (iduser, id_article) => {
     try {
-        const res = await api.get(`${url}/api/carts/boughts/last-cart-item/${iduser}/${id_article}`);
+        const res = await api.get(`${url}/carts/boughts/last-cart-item/${iduser}/${id_article}`);
         console.log(res);
         return res.data.data;
     } catch (error) {
@@ -132,7 +132,7 @@ export const getLasCartItemUserOfArticle = async (iduser, id_article) => {
 
 export const getOrders = async (status) => {
     try {
-        const res = await api.get(`${url}/api/carts/orders?status=${status}`);
+        const res = await api.get(`${url}/carts/orders?status=${status}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -142,7 +142,7 @@ export const getOrders = async (status) => {
 
 export const getOrdersByResponsibleShop = async (idShop, status) => {
     try {
-        const res = await api.get(`${url}/api/carts/orders?status=${status}/responsible-shop/${idShop}`);
+        const res = await api.get(`${url}/carts/orders?status=${status}/responsible-shop/${idShop}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -152,7 +152,7 @@ export const getOrdersByResponsibleShop = async (idShop, status) => {
 
 export const getOrdersFromShop = async (idShop, status) => {
     try {
-        const res = await api.get(`${url}/api/carts/orders/shop/${idShop}?status=${status}`);
+        const res = await api.get(`${url}/carts/orders/shop/${idShop}?status=${status}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -162,7 +162,7 @@ export const getOrdersFromShop = async (idShop, status) => {
 
 export const getOrdersFromShopAndOrder = async (idShop, idOrder) => {
     try {
-        const res = await api.get(`${url}/api/carts/orders/shop/${idShop}/${idOrder}`);
+        const res = await api.get(`${url}/carts/orders/shop/${idShop}/${idOrder}`);
         // console.log(res.data);
         return res.data.data;
     } catch (error) {
@@ -175,7 +175,7 @@ export const updateCartBoughtItemStatus = async (id, cartBoughtStatus) => {
     console.log(id, cartBoughtStatus);
     alert(id, cartBoughtStatus);
     try {
-        const res = await axios.put(`${url}/api/carts/boughts/set-item-status/${id}`, { status: cartBoughtStatus });
+        const res = await axios.put(`${url}/carts/boughts/set-item-status/${id}`, { status: cartBoughtStatus });
         // console.log(res);
         return { status: res.status, data: res.data };
     } catch (error) {
@@ -186,7 +186,7 @@ export const updateCartBoughtItemStatus = async (id, cartBoughtStatus) => {
 
 export const getOrderById = async (idOrder) => {
     try {
-        const res = await api.get(`${url}/api/carts/orders/${idOrder}`);
+        const res = await api.get(`${url}/carts/orders/${idOrder}`);
         return res.data.data;
     } catch (error) {
         console.log(error);

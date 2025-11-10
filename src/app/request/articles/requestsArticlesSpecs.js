@@ -1,10 +1,10 @@
 import api from "@/app/api/api";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const createArticleSpec = async (articleSpec) => {
-    const res = await fetch(`${url}/api/articles/specs`, {
+    const res = await fetch(`${url}/articles/specs`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -16,7 +16,7 @@ export const createArticleSpec = async (articleSpec) => {
 };
 
 export const updateArticleSpec = async (articleSpec) => {
-    const res = await fetch(`${url}/api/articles/specs/${articleSpec.id}`, {
+    const res = await fetch(`${url}/articles/specs/${articleSpec.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",

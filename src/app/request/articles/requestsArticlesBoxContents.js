@@ -1,10 +1,10 @@
 import api from "@/app/api/api";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const createArticleBoxContent = async (articleBoxContent) => {
-    const res = await fetch(`${url}/api/articles/box-contents`, {
+    const res = await fetch(`${url}/articles/box-contents`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -16,7 +16,7 @@ export const createArticleBoxContent = async (articleBoxContent) => {
 };
 
 export const updateArticleBoxContent = async (articleBoxContent) => {
-    const res = await fetch(`${url}/api/articles/box-contents/${articleBoxContent.id}`, {
+    const res = await fetch(`${url}/articles/box-contents/${articleBoxContent.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export const updateArticleBoxContent = async (articleBoxContent) => {
 
 export const deleteArticleBoxContent = async (idArticle, idArticleBoxContent) => {
     try {
-        const res = await api.delete(`/api/articles/box-contents/${idArticle}/${idArticleBoxContent}`);
+        const res = await api.delete(`/articles/box-contents/${idArticle}/${idArticleBoxContent}`);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);

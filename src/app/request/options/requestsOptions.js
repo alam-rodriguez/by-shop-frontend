@@ -1,17 +1,17 @@
 import api from "@/utils/axiosConfig";
 import axios from "axios";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const getOptions = async () => {
-    const res = await fetch(`${url}/api/options`);
+    const res = await fetch(`${url}/options`);
     const data = await res.json();
     return { res, data };
 };
 
 export const createOption = async (option) => {
-    const res = await fetch(`${url}/api/options`, {
+    const res = await fetch(`${url}/options`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export const createOption = async (option) => {
 };
 
 export const updateOption = async (option) => {
-    const res = await fetch(`${url}/api/options/${option.id}`, {
+    const res = await fetch(`${url}/options/${option.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -35,13 +35,13 @@ export const updateOption = async (option) => {
 };
 
 export const getOptionsValues = async () => {
-    const res = await fetch(`${url}/api/options/values-options`);
+    const res = await fetch(`${url}/options/values-options`);
     const data = await res.json();
     return { res, data };
 };
 
 export const createOptionValue = async (optionValue) => {
-    const res = await fetch(`${url}/api/options/values-options`, {
+    const res = await fetch(`${url}/options/values-options`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export const createOptionValue = async (optionValue) => {
 };
 
 export const updateOptionValue = async (optionValue) => {
-    const res = await fetch(`${url}/api/options/values-options/${optionValue.id}`, {
+    const res = await fetch(`${url}/options/values-options/${optionValue.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export const updateOptionValue = async (optionValue) => {
 
 export const getOptionCategories = async () => {
     try {
-        const res = await axios.get(`${url}/api/options/option-categories`);
+        const res = await axios.get(`${url}/options/option-categories`);
         return res.data.data;
     } catch (error) {
         throw new Error("Error al obtener las categorías.");
@@ -74,7 +74,7 @@ export const getOptionCategories = async () => {
 };
 
 export const createOptionCategory = async (optionCategory) => {
-    const res = await fetch(`${url}/api/options/option-categories/${optionCategory.id}`, {
+    const res = await fetch(`${url}/options/option-categories/${optionCategory.id}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export const createOptionCategory = async (optionCategory) => {
 };
 
 export const updateOptionCatgory = async (optionCategory) => {
-    const res = await fetch(`${url}/api/options/option-categories/${optionCategory.id}`, {
+    const res = await fetch(`${url}/options/option-categories/${optionCategory.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",

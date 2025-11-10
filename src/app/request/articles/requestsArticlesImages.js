@@ -1,11 +1,11 @@
 // Axios
 import api from "@/app/api/api";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const createArticleImage = async (articleImage) => {
-    const res = await fetch(`${url}/api/articles/images`, {
+    const res = await fetch(`${url}/articles/images`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

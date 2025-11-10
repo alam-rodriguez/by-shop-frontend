@@ -1,16 +1,16 @@
 import api from "@/app/api/api";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const getBrands = async () => {
-    const res = await fetch(`${url}/api/brands`);
+    const res = await fetch(`${url}/brands`);
     const data = await res.json();
     return { res, data };
 };
 
 export const createBrand = async (brand) => {
-    const res = await fetch(`${url}/api/brands`, {
+    const res = await fetch(`${url}/brands`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const createBrand = async (brand) => {
 };
 
 export const updateBrand = async (brand) => {
-    const res = await fetch(`${url}/api/brands/${brand.id}`, {
+    const res = await fetch(`${url}/brands/${brand.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",

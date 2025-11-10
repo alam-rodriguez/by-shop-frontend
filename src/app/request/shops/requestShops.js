@@ -1,13 +1,15 @@
 import api from "@/app/api/api";
 
+const url = process.env.BACKEND_BASE_URL;
+
 export const getShops = async () => {
-    const res = await fetch("http://localhost:3001/api/shops");
+    const res = await fetch(`${url}/shops`);
     const data = await res.json();
     return { res, data };
 };
 
 export const createShop = async (shop) => {
-    const res = await fetch("http://localhost:3001/api/shops", {
+    const res = await fetch(`${url}/shops`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -19,7 +21,7 @@ export const createShop = async (shop) => {
 };
 
 export const updateShop = async (shop) => {
-    const res = await fetch(`http://localhost:3001/api/shops/${shop.id}`, {
+    const res = await fetch(`${url}/shops/${shop.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",

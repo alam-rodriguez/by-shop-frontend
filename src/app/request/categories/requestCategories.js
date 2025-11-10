@@ -1,29 +1,29 @@
 import api from "@/app/api/api";
 import axios from "axios";
 
-const url = "http://localhost:3001";
+const url = process.env.BACKEND_BASE_URL;
 // const url = "http://192.168.16.63:8081";
 
 export const getDirectsCategories = async () => {
-    const res = await fetch(`${url}/api/categories/direct-categories`);
+    const res = await fetch(`${url}/categories/direct-categories`);
     const data = await res.json();
     return { res, data };
 };
 
 export const getIndirectsCategories = async () => {
-    const res = await fetch(`${url}/api/categories/indirect-categories`);
+    const res = await fetch(`${url}/categories/indirect-categories`);
     const data = await res.json();
     return { res, data };
 };
 
 export const getGeneralCategories = async () => {
-    const res = await fetch(`${url}/api/categories/general-categories`);
+    const res = await fetch(`${url}/categories/general-categories`);
     const data = await res.json();
     return { res, data };
 };
 
 export const createCategory = async (category) => {
-    const res = await fetch(`${url}/api/categories`, {
+    const res = await fetch(`${url}/categories`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export const createCategory = async (category) => {
 };
 
 export const updateCategory = async (category) => {
-    const res = await fetch(`${url}/api/categories/${category.id}`, {
+    const res = await fetch(`${url}/categories/${category.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const updateCategory = async (category) => {
 
 export const getDirectsCategoriesForApp = async (id) => {
     try {
-        const response = await axios.get(`${url}/api/categories/direct-categories-for-app`);
+        const response = await axios.get(`${url}/categories/direct-categories-for-app`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -58,7 +58,7 @@ export const getDirectsCategoriesForApp = async (id) => {
 
 export const getGeneralCategoriesArticles = async () => {
     try {
-        const response = await axios.get(`${url}/api/categories/general-category-articles`);
+        const response = await axios.get(`${url}/categories/general-category-articles`);
         console.log(response.data.data);
         return response.data.data;
     } catch (error) {
@@ -69,7 +69,7 @@ export const getGeneralCategoriesArticles = async () => {
 
 export const getGeneralCategoriesGroupAndCategories = async () => {
     try {
-        const response = await axios.get(`${url}/api/categories/general-category-group-and-categories`);
+        const response = await axios.get(`${url}/categories/general-category-group-and-categories`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -79,7 +79,7 @@ export const getGeneralCategoriesGroupAndCategories = async () => {
 
 export const getDepartmentsArticles = async () => {
     try {
-        const response = await axios.get(`${url}/api/categories/departments`);
+        const response = await axios.get(`${url}/categories/departments`);
         console.log(response.data.data);
         return response.data.data;
     } catch (error) {
@@ -90,7 +90,7 @@ export const getDepartmentsArticles = async () => {
 
 export const createDepartment = async (data) => {
     try {
-        const response = await axios.post(`${url}/api/categories/departments`, data);
+        const response = await axios.post(`${url}/categories/departments`, data);
         return { status: res.status, data: response.data.data, message: response.data.message };
     } catch (error) {
         console.log(error);
@@ -100,7 +100,7 @@ export const createDepartment = async (data) => {
 
 export const getDirectsCategories2 = async () => {
     try {
-        const response = await axios.get(`${url}/api/categories/direct-categories`);
+        const response = await axios.get(`${url}/categories/direct-categories`);
         console.log(response.data.data);
         return response.data.data;
     } catch (error) {
