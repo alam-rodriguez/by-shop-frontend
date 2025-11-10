@@ -3,7 +3,7 @@ import api from "@/app/api/api";
 
 export const getLocationsCountries = async () => {
     try {
-        const res = await api.get(`/api/locations/countries`);
+        const res = await api.get(`/locations/countries`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ export const getLocationsCountries = async () => {
 
 export const getLocationCountryById = async (id) => {
     try {
-        const res = await api.get(`/api/locations/countries/${id}`);
+        const res = await api.get(`/locations/countries/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -23,7 +23,7 @@ export const getLocationCountryById = async (id) => {
 
 export const createLocationCountry = async (country) => {
     try {
-        const res = await api.post(`/api/locations/countries`, country);
+        const res = await api.post(`/locations/countries`, country);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -33,7 +33,7 @@ export const createLocationCountry = async (country) => {
 
 export const updateLocationCountry = async (country) => {
     try {
-        const res = await api.put(`/api/locations/countries/${country.id}`, country);
+        const res = await api.put(`/locations/countries/${country.id}`, country);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -43,7 +43,7 @@ export const updateLocationCountry = async (country) => {
 
 export const getLocationsProvinces = async () => {
     try {
-        const res = await api.get(`/api/locations/provinces`);
+        const res = await api.get(`/locations/provinces`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -53,7 +53,7 @@ export const getLocationsProvinces = async () => {
 
 export const getLocationProvinceById = async (id) => {
     try {
-        const res = await api.get(`/api/locations/provinces/${id}`);
+        const res = await api.get(`/locations/provinces/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -63,7 +63,7 @@ export const getLocationProvinceById = async (id) => {
 
 export const getLocationProvincesByCountry = async (id) => {
     try {
-        const res = await api.get(`/api/locations/provinces/by-country/${id}`);
+        const res = await api.get(`/locations/provinces/by-country/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -73,7 +73,7 @@ export const getLocationProvincesByCountry = async (id) => {
 
 export const createLocationProvince = async (province) => {
     try {
-        const res = await api.post(`/api/locations/provinces`, province);
+        const res = await api.post(`/locations/provinces`, province);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -83,7 +83,7 @@ export const createLocationProvince = async (province) => {
 
 export const updateLocationProvinces = async (province) => {
     try {
-        const res = await api.put(`/api/locations/provinces/${province.id}`, province);
+        const res = await api.put(`/locations/provinces/${province.id}`, province);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -93,7 +93,7 @@ export const updateLocationProvinces = async (province) => {
 
 export const getLocationsMunicipalities = async () => {
     try {
-        const res = await api.get(`/api/locations/municipalities`);
+        const res = await api.get(`/locations/municipalities`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -103,7 +103,7 @@ export const getLocationsMunicipalities = async () => {
 
 export const getLocationMunicipalityById = async (id) => {
     try {
-        const res = await api.get(`/api/locations/municipalities/${id}`);
+        const res = await api.get(`/locations/municipalities/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -113,7 +113,7 @@ export const getLocationMunicipalityById = async (id) => {
 
 export const getLocationMunicipalitiesByprovince = async (id) => {
     try {
-        const res = await api.get(`/api/locations/municipalities/by-province/${id}`);
+        const res = await api.get(`/locations/municipalities/by-province/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -123,7 +123,7 @@ export const getLocationMunicipalitiesByprovince = async (id) => {
 
 export const createLocationMunicipality = async (province) => {
     try {
-        const res = await api.post(`/api/locations/municipalities`, province);
+        const res = await api.post(`/locations/municipalities`, province);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -133,7 +133,7 @@ export const createLocationMunicipality = async (province) => {
 
 export const updateLocationMunicipality = async (province) => {
     try {
-        const res = await api.put(`/api/locations/municipalities/${province.id}`, province);
+        const res = await api.put(`/locations/municipalities/${province.id}`, province);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -143,7 +143,7 @@ export const updateLocationMunicipality = async (province) => {
 
 export const getLocationsNeighborhoods = async () => {
     try {
-        const res = await api.get(`/api/locations/neighborhoods`);
+        const res = await api.get(`/locations/neighborhoods`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -153,7 +153,7 @@ export const getLocationsNeighborhoods = async () => {
 
 export const getLocationNeighborhoodById = async (id) => {
     try {
-        const res = await api.get(`/api/locations/neighborhoods/${id}`);
+        const res = await api.get(`/locations/neighborhoods/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -162,7 +162,7 @@ export const getLocationNeighborhoodById = async (id) => {
 };
 export const getLocationNeighborhoodsByMunicipality = async (id) => {
     try {
-        const res = await api.get(`/api/locations/neighborhoods/by-municipality/${id}`);
+        const res = await api.get(`/locations/neighborhoods/by-municipality/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -172,7 +172,7 @@ export const getLocationNeighborhoodsByMunicipality = async (id) => {
 
 export const createLocationNeighborhood = async (province) => {
     try {
-        const res = await api.post(`/api/locations/neighborhoods`, province);
+        const res = await api.post(`/locations/neighborhoods`, province);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -182,7 +182,7 @@ export const createLocationNeighborhood = async (province) => {
 
 export const updateLocationNeighborhood = async (province) => {
     try {
-        const res = await api.put(`/api/locations/neighborhoods/${province.id}`, province);
+        const res = await api.put(`/locations/neighborhoods/${province.id}`, province);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);

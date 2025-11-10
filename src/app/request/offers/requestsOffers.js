@@ -3,7 +3,7 @@ import api from "@/app/api/api.js";
 
 export const getOffers = async () => {
     try {
-        const response = await api.get(`/api/offers`);
+        const response = await api.get(`/offers`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ export const getOffers = async () => {
 
 export const getOffer = async (id) => {
     try {
-        const response = await api.get(`/api/offers/${id}`);
+        const response = await api.get(`/offers/${id}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -23,7 +23,7 @@ export const getOffer = async (id) => {
 
 export const createOffer = async (offer) => {
     try {
-        const response = await api.post(`/api/offers`, offer);
+        const response = await api.post(`/offers`, offer);
         console.log(response);
         return { status: response.status, data: response.data.data };
     } catch (error) {
@@ -34,7 +34,7 @@ export const createOffer = async (offer) => {
 
 export const createOfferCategory = async (offer) => {
     try {
-        const response = await api.post(`/api/offers/categories`, offer);
+        const response = await api.post(`/offers/categories`, offer);
         return { status: response.status, data: response.data.data };
     } catch (error) {
         console.log(error);
@@ -44,7 +44,7 @@ export const createOfferCategory = async (offer) => {
 
 export const deleteOfferCategory = async (idOffer, idCategory) => {
     try {
-        const response = await api.delete(`/api/offers/categories/${idOffer}/${idCategory}`);
+        const response = await api.delete(`/offers/categories/${idOffer}/${idCategory}`);
         return { status: response.status, data: response.data.data };
     } catch (error) {
         console.log(error);
@@ -54,7 +54,7 @@ export const deleteOfferCategory = async (idOffer, idCategory) => {
 
 export const createOfferArticle = async (offer) => {
     try {
-        const response = await api.post(`/api/offers/articles`, offer);
+        const response = await api.post(`/offers/articles`, offer);
         return { status: response.status, data: response.data.data };
     } catch (error) {
         console.log(error);
@@ -64,7 +64,7 @@ export const createOfferArticle = async (offer) => {
 
 export const deleteOfferArticle = async (idOffer, idArticle) => {
     try {
-        const response = await api.delete(`/api/offers/articles/${idOffer}/${idArticle}`);
+        const response = await api.delete(`/offers/articles/${idOffer}/${idArticle}`);
         return { status: response.status, data: response.data.data };
     } catch (error) {
         console.log(error);
@@ -74,7 +74,7 @@ export const deleteOfferArticle = async (idOffer, idArticle) => {
 
 export const updateOffer = async (offer) => {
     try {
-        const response = await api.put(`/api/offers/${offer.id}`, offer);
+        const response = await api.put(`/offers/${offer.id}`, offer);
         console.log(response);
         return { status: response.status, data: response.data.data };
     } catch (error) {
@@ -85,7 +85,7 @@ export const updateOffer = async (offer) => {
 
 export const updateOfferCategory = async (offerCategory) => {
     try {
-        const response = await api.put(`/api/offers/categories/${offerCategory.id}`, offerCategory);
+        const response = await api.put(`/offers/categories/${offerCategory.id}`, offerCategory);
         return { status: response.status, data: response.data.data };
     } catch (error) {
         console.log(error);

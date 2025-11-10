@@ -29,7 +29,7 @@ export const updateArticleSpec = async (articleSpec) => {
 
 export const deleteArticleSpec = async (idArticleSpec) => {
     try {
-        const res = await api.delete(`/api/articles/specs/${idArticleSpec}`);
+        const res = await api.delete(`/articles/specs/${idArticleSpec}`);
         return { status: res.status, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -38,7 +38,7 @@ export const deleteArticleSpec = async (idArticleSpec) => {
 
 export const getArticleSpecs = async (idArticle) => {
     try {
-        const res = await api.get(`/api/articles/specs/${idArticle}`);
+        const res = await api.get(`/articles/specs/${idArticle}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -47,7 +47,7 @@ export const getArticleSpecs = async (idArticle) => {
 
 export const updateArticleSpec2 = async (idArticleSpec, articleSpec) => {
     try {
-        const res = await api.put(`/api/articles/specs/${idArticleSpec}`, articleSpec);
+        const res = await api.put(`/articles/specs/${idArticleSpec}`, articleSpec);
         return { status: res.status, message: res.data.message };
     } catch (error) {
         console.log(error);

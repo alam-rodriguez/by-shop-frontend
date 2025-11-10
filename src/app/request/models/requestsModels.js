@@ -36,7 +36,7 @@ export const updateModel = async (model) => {
 
 export const getModelById = async (id) => {
     try {
-        const res = await api.get(`/api/models/${id}`);
+        const res = await api.get(`/models/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);

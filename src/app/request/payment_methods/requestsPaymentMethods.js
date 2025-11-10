@@ -35,7 +35,7 @@ export const updatePaymentMethod = async (paymentMethod) => {
 
 export const getPaymentMethods2 = async () => {
     try {
-        const response = await api.get(`/api/payment-methods`);
+        const response = await api.get(`/payment-methods`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -45,7 +45,7 @@ export const getPaymentMethods2 = async () => {
 
 export const getPaymentMethodById = async (id) => {
     try {
-        const response = await api.get(`/api/payment-methods/${id}`);
+        const response = await api.get(`/payment-methods/${id}`);
         return response.data.data;
     } catch (error) {
         console.log(error);

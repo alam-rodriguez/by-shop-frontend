@@ -29,7 +29,7 @@ export const createArticleHighlightedParagraph = async (articleHighlightedParagr
 
 export const updateArticleHighlightedParagraph = async (idArticleHighlightedParagraph, articleHighlightedParagraph) => {
     try {
-        const res = await api.put(`/api/articles/highlighted-paragraphs/${idArticleHighlightedParagraph}`, {
+        const res = await api.put(`/articles/highlighted-paragraphs/${idArticleHighlightedParagraph}`, {
             paragraph: articleHighlightedParagraph,
         });
         return { status: res.status, message: res.data.message };
@@ -40,7 +40,7 @@ export const updateArticleHighlightedParagraph = async (idArticleHighlightedPara
 
 export const deleteArticleHighlightedParagraph = async (idHighlightedParagraph) => {
     try {
-        const res = await api.delete(`/api/articles/highlighted-paragraphs/${idHighlightedParagraph}`);
+        const res = await api.delete(`/articles/highlighted-paragraphs/${idHighlightedParagraph}`);
         return { status: res.status, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -49,7 +49,7 @@ export const deleteArticleHighlightedParagraph = async (idHighlightedParagraph) 
 
 export const getArticleHighlightedParagraphs = async (idArticle) => {
     try {
-        const res = await api.get(`/api/articles/highlighted-paragraphs/${idArticle}`);
+        const res = await api.get(`/articles/highlighted-paragraphs/${idArticle}`);
         // console.log(res);
         return res.data.data;
     } catch (error) {

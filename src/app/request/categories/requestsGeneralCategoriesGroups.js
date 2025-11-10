@@ -85,7 +85,7 @@ export const getCategoriesOfGeneralCategoryGroupForApp = async (id) => {
 
 export const getGeneralCategoryGroupById = async (id) => {
     try {
-        const response = await api.get(`/api/categories/general-categories-groups/${id}`);
+        const response = await api.get(`/categories/general-categories-groups/${id}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -95,7 +95,7 @@ export const getGeneralCategoryGroupById = async (id) => {
 
 export const deleteGeneralCategoryGroupCategory = async (idGeneralCategoryGroup, idCategory) => {
     try {
-        const response = await api.delete(`/api/categories/general-categories-groups-categories/${idGeneralCategoryGroup}/${idCategory}`);
+        const response = await api.delete(`/categories/general-categories-groups-categories/${idGeneralCategoryGroup}/${idCategory}`);
         return { status: response.status, message: response.data.message };
     } catch (error) {
         console.log(error);

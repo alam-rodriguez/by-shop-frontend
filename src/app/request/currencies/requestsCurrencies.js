@@ -3,7 +3,7 @@ import api from "@/app/api/api";
 
 export const getCurrencies = async () => {
     try {
-        const res = await api.get(`/api/currencies/`);
+        const res = await api.get(`/currencies/`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ export const getCurrencies = async () => {
 
 export const getCurrenciesForCustomers = async () => {
     try {
-        const res = await api.get(`/api/currencies/for-customers`);
+        const res = await api.get(`/currencies/for-customers`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -23,7 +23,7 @@ export const getCurrenciesForCustomers = async () => {
 
 export const getCurrencyById = async (idCurrency) => {
     try {
-        const res = await api.get(`/api/currencies/${idCurrency}`);
+        const res = await api.get(`/currencies/${idCurrency}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -33,7 +33,7 @@ export const getCurrencyById = async (idCurrency) => {
 
 export const createCurrency = async (currency) => {
     try {
-        const res = await api.post(`/api/currencies/`, currency);
+        const res = await api.post(`/currencies/`, currency);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -43,7 +43,7 @@ export const createCurrency = async (currency) => {
 
 export const updateCurrency = async (currency) => {
     try {
-        const res = await api.put(`/api/currencies/${currency.id}`, currency);
+        const res = await api.put(`/currencies/${currency.id}`, currency);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -53,7 +53,7 @@ export const updateCurrency = async (currency) => {
 
 export const canBeMainCurrency = async (idCurrency) => {
     try {
-        const res = await api.get(`/api/currencies/can-be-main-currency/${idCurrency}`);
+        const res = await api.get(`/currencies/can-be-main-currency/${idCurrency}`);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);

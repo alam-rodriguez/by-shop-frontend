@@ -3,7 +3,7 @@ import api from "@/app/api/api";
 
 export const createDeliveryOrder = async (deliveryOrder) => {
     try {
-        const res = await api.post(`/api/deliveries`, deliveryOrder);
+        const res = await api.post(`/deliveries`, deliveryOrder);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ export const createDeliveryOrder = async (deliveryOrder) => {
 
 export const getDeliveriesOrders = async () => {
     try {
-        const res = await api.get(`/api/deliveries`);
+        const res = await api.get(`/deliveries`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -23,7 +23,7 @@ export const getDeliveriesOrders = async () => {
 
 export const getDeliveriesOrdersHistoryByDeliveryUserId = async (deliveryUserId) => {
     try {
-        const res = await api.get(`/api/deliveries/history-by-delivery-user/${deliveryUserId}`);
+        const res = await api.get(`/deliveries/history-by-delivery-user/${deliveryUserId}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -33,7 +33,7 @@ export const getDeliveriesOrdersHistoryByDeliveryUserId = async (deliveryUserId)
 
 export const getDeliveryOrderById = async (id) => {
     try {
-        const res = await api.get(`/api/deliveries/${id}`);
+        const res = await api.get(`/deliveries/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -43,7 +43,7 @@ export const getDeliveryOrderById = async (id) => {
 
 export const getDeliveryOrderExists = async (idCartBouth) => {
     try {
-        const res = await api.get(`/api/deliveries/order-exists/${idCartBouth}`);
+        const res = await api.get(`/deliveries/order-exists/${idCartBouth}`);
         return { status: res.status, data: res.data.data, message: res.data.message, exists: res.data.exists };
     } catch (error) {
         console.log(error);
@@ -53,7 +53,7 @@ export const getDeliveryOrderExists = async (idCartBouth) => {
 
 export const createDeliveryOrderPreference = async (deliveryOrderPreference) => {
     try {
-        const res = await api.post(`/api/deliveries/order-preference`, deliveryOrderPreference);
+        const res = await api.post(`/deliveries/order-preference`, deliveryOrderPreference);
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -63,7 +63,7 @@ export const createDeliveryOrderPreference = async (deliveryOrderPreference) => 
 
 export const getDeliveryOrderPreference = async (idDelivery, deliveryOrderId) => {
     try {
-        const res = await api.get(`/api/deliveries/order-preference/${idDelivery}/${deliveryOrderId}`);
+        const res = await api.get(`/deliveries/order-preference/${idDelivery}/${deliveryOrderId}`);
         return { status: res.status, data: res.data.data, message: res.data.message, hasPreference: res.data.hasPreference };
     } catch (error) {
         console.log(error);
@@ -73,7 +73,7 @@ export const getDeliveryOrderPreference = async (idDelivery, deliveryOrderId) =>
 
 export const updateDeliveryOrderPreference = async (id, status, delivery_order_id, id_delivery) => {
     try {
-        const res = await api.patch(`/api/deliveries/order-preference/${id}`, { status, delivery_order_id, id_delivery });
+        const res = await api.patch(`/deliveries/order-preference/${id}`, { status, delivery_order_id, id_delivery });
         return { status: res.status, data: res.data.data, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -83,7 +83,7 @@ export const updateDeliveryOrderPreference = async (id, status, delivery_order_i
 
 export const deliveryCanGetOrder = async (deliveryOrderId, deliveryId) => {
     try {
-        const res = await api.get(`/api/deliveries/delivery-can-get-order/${deliveryOrderId}/${deliveryId}`);
+        const res = await api.get(`/deliveries/delivery-can-get-order/${deliveryOrderId}/${deliveryId}`);
         return {
             status: res.status,
             data: res.data.data,
@@ -99,7 +99,7 @@ export const deliveryCanGetOrder = async (deliveryOrderId, deliveryId) => {
 
 export const updateDeliveryOrderDeliveryId = async (deliveryOrderId, id_delivery, status) => {
     try {
-        const res = await api.patch(`/api/deliveries/update-delivery-order-delivery-id/${deliveryOrderId}`, { id_delivery, status });
+        const res = await api.patch(`/deliveries/update-delivery-order-delivery-id/${deliveryOrderId}`, { id_delivery, status });
         return {
             status: res.status,
             data: res.data.data,
@@ -113,7 +113,7 @@ export const updateDeliveryOrderDeliveryId = async (deliveryOrderId, id_delivery
 
 export const updateDeliveryOrderStatus = async (deliveryOrderId, status) => {
     try {
-        const res = await api.patch(`/api/deliveries/update-status/${deliveryOrderId}`, { status });
+        const res = await api.patch(`/deliveries/update-status/${deliveryOrderId}`, { status });
         return {
             status: res.status,
             data: res.data.data,

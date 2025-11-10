@@ -30,7 +30,7 @@ export const createArticleImage = async (articleImage) => {
 
 export const deleteArticleImage = async (id) => {
     try {
-        const res = await api.delete(`/api/articles/images/${id}`);
+        const res = await api.delete(`/articles/images/${id}`);
         return { status: res.status, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -39,7 +39,7 @@ export const deleteArticleImage = async (id) => {
 
 export const updateArticleImage = async (id, image) => {
     try {
-        const res = await api.patch(`/api/articles/images/${id}`, { image });
+        const res = await api.patch(`/articles/images/${id}`, { image });
         return { status: res.status, message: res.data.message };
     } catch (error) {
         console.log(error);

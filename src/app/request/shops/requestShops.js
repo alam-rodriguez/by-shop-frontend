@@ -34,7 +34,7 @@ export const updateShop = async (shop) => {
 
 export const getShops2 = async () => {
     try {
-        const res = await api.get(`/api/shops`);
+        const res = await api.get(`/shops`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -44,7 +44,7 @@ export const getShops2 = async () => {
 
 export const getShopById = async (id) => {
     try {
-        const res = await api.get(`/api/shops/${id}`);
+        const res = await api.get(`/shops/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -54,7 +54,7 @@ export const getShopById = async (id) => {
 
 export const getShopsForUserCart = async (idUser) => {
     try {
-        const res = await api.get(`/api/shops/for-cart-user/${idUser}`);
+        const res = await api.get(`/shops/for-cart-user/${idUser}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -64,7 +64,7 @@ export const getShopsForUserCart = async (idUser) => {
 
 export const getShopsForUserCartBought = async (idCartBought) => {
     try {
-        const res = await api.get(`/api/shops/for-cart-bought/${idCartBought}`);
+        const res = await api.get(`/shops/for-cart-bought/${idCartBought}`);
         return res.data.data;
     } catch (error) {
         console.log(error);

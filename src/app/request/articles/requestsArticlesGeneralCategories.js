@@ -30,7 +30,7 @@ export const updateArticleGeneralCategory = async (articleGeneralCategory) => {
 
 export const deleteArticleGeneralCategory = async (idArticle, idGeneralCategory) => {
     try {
-        const res = await api.delete(`/api/articles/general-categories/${idArticle}/${idGeneralCategory}`);
+        const res = await api.delete(`/articles/general-categories/${idArticle}/${idGeneralCategory}`);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);

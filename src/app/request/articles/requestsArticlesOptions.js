@@ -29,7 +29,7 @@ export const createArticleOption = async (articleOption) => {
 
 export const getArticleOptions = async (idArticle) => {
     try {
-        const res = await api.get(`/api/articles/options/${idArticle}`);
+        const res = await api.get(`/articles/options/${idArticle}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -38,7 +38,7 @@ export const getArticleOptions = async (idArticle) => {
 
 export const deleteArticleOption = async (idArticleOption) => {
     try {
-        const res = await api.delete(`/api/articles/options/${idArticleOption}`);
+        const res = await api.delete(`/articles/options/${idArticleOption}`);
         return { status: res.status, message: res.data.message };
     } catch (error) {
         console.log(error);
@@ -47,7 +47,7 @@ export const deleteArticleOption = async (idArticleOption) => {
 
 export const updateArticleOption = async (idArticleOption, articleOption) => {
     try {
-        const res = await api.put(`/api/articles/options/${idArticleOption}`, articleOption);
+        const res = await api.put(`/articles/options/${idArticleOption}`, articleOption);
         console.log(res);
         return { status: res.status, message: res.data.message };
     } catch (error) {

@@ -2,7 +2,7 @@ import api from "@/app/api/api";
 
 export const createArticleReview = async (articleReview) => {
     try {
-        const res = await api.post(`/api/articles/reviews`, articleReview);
+        const res = await api.post(`/articles/reviews`, articleReview);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -12,7 +12,7 @@ export const createArticleReview = async (articleReview) => {
 
 export const createArticleReviewImage = async (articleReviewImage) => {
     try {
-        const res = await api.post(`/api/articles/reviews-images`, articleReviewImage);
+        const res = await api.post(`/articles/reviews-images`, articleReviewImage);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -22,7 +22,7 @@ export const createArticleReviewImage = async (articleReviewImage) => {
 
 export const createArticleReviewOption = async (articleReviewOption) => {
     try {
-        const res = await api.post(`/api/articles/reviews-article-options`, articleReviewOption);
+        const res = await api.post(`/articles/reviews-article-options`, articleReviewOption);
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -32,7 +32,7 @@ export const createArticleReviewOption = async (articleReviewOption) => {
 
 export const getArticleReviews = async (idArticle) => {
     try {
-        const res = await api.get(`/api/articles/reviews/${idArticle}`);
+        const res = await api.get(`/articles/reviews/${idArticle}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -42,7 +42,7 @@ export const getArticleReviews = async (idArticle) => {
 
 export const getArticleReviewsData = async (idArticle) => {
     try {
-        const res = await api.get(`/api/articles/reviews-article-data/${idArticle}`);
+        const res = await api.get(`/articles/reviews-article-data/${idArticle}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -52,7 +52,7 @@ export const getArticleReviewsData = async (idArticle) => {
 
 export const getRequestsReviews = async () => {
     try {
-        const response = await api.get(`/api/articles/requests-reviews-articles`);
+        const response = await api.get(`/articles/requests-reviews-articles`);
         console.log(response);
         return response.data.data;
     } catch (error) {
@@ -63,7 +63,7 @@ export const getRequestsReviews = async () => {
 
 export const getRequestsReviewsByShop = async (idShop) => {
     try {
-        const response = await api.get(`/api/articles/requests-reviews-articles/${idShop}`);
+        const response = await api.get(`/articles/requests-reviews-articles/${idShop}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -73,7 +73,7 @@ export const getRequestsReviewsByShop = async (idShop) => {
 
 export const getReviewArticle = async (id) => {
     try {
-        const response = await api.get(`/api/articles/review-article/${id}`);
+        const response = await api.get(`/articles/review-article/${id}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -84,7 +84,7 @@ export const getReviewArticle = async (id) => {
 export const changeReviewStatus = async (id, status) => {
     console.log(id, status);
     try {
-        const res = await api.patch(`/api/articles/change-review-status/${id}`, { status });
+        const res = await api.patch(`/articles/change-review-status/${id}`, { status });
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);

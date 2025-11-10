@@ -2,7 +2,7 @@
 import api from "@/app/api/api";
 
 export const createOrderPaypal = async (purchase_units) => {
-    const res = await api.post(`api/payments/paypal/create-order`, {
+    const res = await api.post(`/payments/paypal/create-order`, {
         return_url: window.location.href,
         cancel_url: window.location.href,
         purchase_units,

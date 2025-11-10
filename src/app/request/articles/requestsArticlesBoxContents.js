@@ -39,7 +39,7 @@ export const deleteArticleBoxContent = async (idArticle, idArticleBoxContent) =>
 
 export const getArticlesForBoxContent = async (idShop, idArticle) => {
     try {
-        const response = await api.get(`/api/articles/box-contents/${idShop}/${idArticle}`);
+        const response = await api.get(`/articles/box-contents/${idShop}/${idArticle}`);
         return response.data.data;
     } catch (error) {
         console.log(error);

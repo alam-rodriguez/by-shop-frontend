@@ -196,7 +196,7 @@ export const getOrderById = async (idOrder) => {
 
 export const updateCartBoughtItemStatusImage = async (id, cartBoughtStatusImage) => {
     try {
-        const res = await api.patch(`/api/carts/boughts/set-status-image/${id}`, { status: cartBoughtStatusImage });
+        const res = await api.patch(`/carts/boughts/set-status-image/${id}`, { status: cartBoughtStatusImage });
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -206,7 +206,7 @@ export const updateCartBoughtItemStatusImage = async (id, cartBoughtStatusImage)
 
 export const updateCartBoughtStatus = async (id, cartBoughtStatus) => {
     try {
-        const res = await api.patch(`/api/carts/boughts/set-status/${id}`, { status: cartBoughtStatus });
+        const res = await api.patch(`/carts/boughts/set-status/${id}`, { status: cartBoughtStatus });
         return { status: res.status, data: res.data };
     } catch (error) {
         console.log(error);
@@ -216,7 +216,7 @@ export const updateCartBoughtStatus = async (id, cartBoughtStatus) => {
 
 export const getOrderByIdCart = async (idCart) => {
     try {
-        const res = await api.get(`/api/carts/order-by-id-cart/${idCart}`);
+        const res = await api.get(`/carts/order-by-id-cart/${idCart}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -226,7 +226,7 @@ export const getOrderByIdCart = async (idCart) => {
 
 export const searchArticlesOrderedUserByWord = async (idUser, word) => {
     try {
-        const res = await api.get(`${url}/api/carts/boughts/search-articles/${idUser}/${word}`);
+        const res = await api.get(`${url}/carts/boughts/search-articles/${idUser}/${word}`);
         return { data: res.data.data, status: res.status, message: res.data.message };
     } catch (error) {
         console.log(error);

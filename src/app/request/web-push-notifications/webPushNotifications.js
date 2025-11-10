@@ -2,7 +2,7 @@ import api from "@/app/api/api";
 
 export const sendPushNotificationsForNewsOrders = async (orderId) => {
     try {
-        const res = await api.post(`/api/web-push-notification/send-notification-for-news-orders/${orderId}`);
+        const res = await api.post(`/web-push-notification/send-notification-for-news-orders/${orderId}`);
         return { message: res.data.message, status: res.status };
     } catch (error) {
         console.log(error);
@@ -12,7 +12,7 @@ export const sendPushNotificationsForNewsOrders = async (orderId) => {
 
 export const sendPushNotificationsToClientForOrderUpdate = async (userId, payload) => {
     try {
-        const res = await api.post(`/api/web-push-notification/send-notification-client-update-status-order/${userId}`, { payload });
+        const res = await api.post(`/web-push-notification/send-notification-client-update-status-order/${userId}`, { payload });
         return { message: res.data.message, status: res.status };
     } catch (error) {
         console.log(error);
@@ -22,7 +22,7 @@ export const sendPushNotificationsToClientForOrderUpdate = async (userId, payloa
 
 export const sendPushNotificationsToDeliveriesForNewOrder = async (payload) => {
     try {
-        const res = await api.post(`/api/web-push-notification//send-notification-for-new-order-to-deliveries`);
+        const res = await api.post(`/web-push-notification//send-notification-for-new-order-to-deliveries`);
         return { message: res.data.message, status: res.status };
     } catch (error) {
         console.log(error);

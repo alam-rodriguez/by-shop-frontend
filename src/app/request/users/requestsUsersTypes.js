@@ -3,7 +3,7 @@ import api from "@/app/api/api";
 
 export const getUsersTypes = async () => {
     try {
-        const res = await api.get(`/api/users/types`);
+        const res = await api.get(`/users/types`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ export const getUsersTypes = async () => {
 
 export const createUserType = async (userType) => {
     try {
-        const res = await api.post(`/api/users/types`, userType);
+        const res = await api.post(`/users/types`, userType);
         return { message: res.data.message, status: res.status, data: res.data.data };
     } catch (error) {
         console.log(error);

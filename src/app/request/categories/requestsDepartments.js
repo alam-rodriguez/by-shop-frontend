@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const getDepartmentsForApp = async () => {
     try {
-        const response = await api.get(`/api/categories/departments-for-app`);
+        const response = await api.get(`/categories/departments-for-app`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -14,7 +14,7 @@ export const getDepartmentsForApp = async () => {
 
 export const getDepartmentById = async (id) => {
     try {
-        const response = await api.get(`/api/categories/departments/${id}`);
+        const response = await api.get(`/categories/departments/${id}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -24,7 +24,7 @@ export const getDepartmentById = async (id) => {
 
 export const updateDepartment = async (department) => {
     try {
-        const response = await api.put(`/api/categories/departments/${department.id}`, department);
+        const response = await api.put(`/categories/departments/${department.id}`, department);
         return { status: response.status, data: response.data.data, message: response.data.message };
     } catch (error) {
         console.log(error);

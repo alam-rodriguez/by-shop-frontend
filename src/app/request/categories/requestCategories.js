@@ -111,7 +111,7 @@ export const getDirectsCategories2 = async () => {
 
 export const getIndirectsCategories2 = async () => {
     try {
-        const response = await api.get(`/api/categories/indirect-categories`);
+        const response = await api.get(`/categories/indirect-categories`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -121,7 +121,7 @@ export const getIndirectsCategories2 = async () => {
 
 export const getIndirectsCategoriesForHome = async () => {
     try {
-        const response = await api.get(`/api/categories/indirect-categories-for-home`);
+        const response = await api.get(`/categories/indirect-categories-for-home`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -131,7 +131,7 @@ export const getIndirectsCategoriesForHome = async () => {
 
 export const getGeneralCategories2 = async () => {
     try {
-        const response = await api.get(`/api/categories/general-categories`);
+        const response = await api.get(`/categories/general-categories`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -141,7 +141,7 @@ export const getGeneralCategories2 = async () => {
 
 export const getGeneralCategoriesOfArticle = async (idArticle) => {
     try {
-        const response = await api.get(`/api/categories/general-categories-of-articles/${idArticle}`);
+        const response = await api.get(`/categories/general-categories-of-articles/${idArticle}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -152,7 +152,7 @@ export const getGeneralCategoriesOfArticle = async (idArticle) => {
 export const createDirectCategoryDepartment = async (data) => {
     console.log(data);
     try {
-        const response = await axios.post(`${url}/api/categories/direct-category-department`, data);
+        const response = await axios.post(`${url}/categories/direct-category-department`, data);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -162,7 +162,7 @@ export const createDirectCategoryDepartment = async (data) => {
 
 export const getCategoriesByType = async (type) => {
     try {
-        const response = await api.get(`/api/categories/by-type?type=${type}`);
+        const response = await api.get(`/categories/by-type?type=${type}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -172,7 +172,7 @@ export const getCategoriesByType = async (type) => {
 
 export const getCategoryById = async (id) => {
     try {
-        const response = await api.get(`/api/categories/id/${id}`);
+        const response = await api.get(`/categories/id/${id}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -182,7 +182,7 @@ export const getCategoryById = async (id) => {
 
 export const getDirectsCategoriesByIdDepartment = async (id) => {
     try {
-        const response = await api.get(`/api/categories/direct-categories-by-department/${id}`);
+        const response = await api.get(`/categories/direct-categories-by-department/${id}`);
         return response.data.data;
     } catch (error) {
         console.log(error);
@@ -192,7 +192,7 @@ export const getDirectsCategoriesByIdDepartment = async (id) => {
 
 export const deleteDepartmentDirectsCategories = async (idDepartment, idCategory) => {
     try {
-        const response = await api.delete(`/api/categories/departments/directs-categories/${idDepartment}/${idCategory}`);
+        const response = await api.delete(`/categories/departments/directs-categories/${idDepartment}/${idCategory}`);
         return { status: response.status, data: response.data.data, message: response.data.message };
     } catch (error) {
         console.log(error);

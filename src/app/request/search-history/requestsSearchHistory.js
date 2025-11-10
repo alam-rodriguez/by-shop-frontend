@@ -3,7 +3,7 @@ import api from "@/app/api/api";
 
 export const createSearchHistory = async (searchHistory) => {
     try {
-        const res = await api.post(`/api/search-history/`, searchHistory);
+        const res = await api.post(`/search-history/`, searchHistory);
         return { status: res.status, message: res.data.message, data: res.data.data };
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ export const createSearchHistory = async (searchHistory) => {
 
 export const getSearchHistoryByIdUser = async (idUser) => {
     try {
-        const res = await api.get(`/api/search-history/${idUser}`);
+        const res = await api.get(`/search-history/${idUser}`);
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -23,7 +23,7 @@ export const getSearchHistoryByIdUser = async (idUser) => {
 
 export const updateStatusSearchHistory = async (id, status) => {
     try {
-        const res = await api.patch(`/api/search-history/update-status/${id}`, { status });
+        const res = await api.patch(`/search-history/update-status/${id}`, { status });
         return { status: res.status, message: res.data.message, data: res.data.data };
     } catch (error) {
         console.log(error);
