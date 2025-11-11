@@ -1,7 +1,7 @@
-import { precacheAndRoute } from "workbox-precaching";
+// import { precacheAndRoute } from "workbox-precaching";
 
 // Necesario para que next-pwa inyecte los assets
-precacheAndRoute(self.__WB_MANIFEST || []);
+// precacheAndRoute(self.__WB_MANIFEST || []);
 
 // self.addEventListener("push", (event) => {
 //     const data = event.data?.json() || {};

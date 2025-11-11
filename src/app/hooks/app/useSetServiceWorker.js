@@ -36,7 +36,7 @@ const useSetServiceWorker = () => {
                 //     },
                 // });
                 await api.post(
-                    "/api/web-push-notification/subscribe",
+                    "/web-push-notification/subscribe",
                     subscription, // 👈 Axios convierte el objeto automáticamente a JSON
                     {
                         headers: {

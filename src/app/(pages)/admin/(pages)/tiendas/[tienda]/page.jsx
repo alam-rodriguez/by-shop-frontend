@@ -84,6 +84,25 @@ const page = () => {
         console.log(provincesByCountry);
     }, [provincesByCountry]);
 
+    const countryId = watch("country_id");
+
+    useEffect(() => {
+        console.log(countryId);
+    }, [countryId]);
+
+    useEffect(() => {
+        console.log(watch("country_id"));
+    }, [watch("country_id")]);
+
+    useEffect(() => {
+        const subscription = watch((value, { name }) => {
+            if (name === "country_id") {
+                console.log(value.country_id);
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [watch]);
+
     // useEffect(() => {
     //     if (!isUUID(watch("neighborhood_id")) || !neighborhoodsByMunicipality) return;
     //     const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == watch("neighborhood_id"));
@@ -92,6 +111,7 @@ const page = () => {
     // }, [watch("neighborhood_id")]);
 
     const handleChangeNeighborhood = (neighborhoodIdSelected) => {
+        // console.log(neighborhoodIdSelected);
         if (!isUUID(neighborhoodIdSelected) || !neighborhoodsByMunicipality) return;
         const neighborhoodSelected = neighborhoodsByMunicipality.find((neighborhood) => neighborhood.id == neighborhoodIdSelected);
         setValue("latitude", neighborhoodSelected.latitude);

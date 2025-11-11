@@ -39,10 +39,11 @@ const Select = ({
                     defaultValue={optionByDefaultValue}
                     // onChange={() => onChange()}
                     onChange={(e) => {
+                        register(name).onChange(e);
                         onChange(e.target.value); // notifica al padre
                     }}
                 >
-                    <option value={optionByDefaultValue} disabled>
+                    <option value={optionByDefaultValue} disabled={false}>
                         {optionByDefaultText || "Seleccione una opción"}
                     </option>
                     {items.map((item) => (
