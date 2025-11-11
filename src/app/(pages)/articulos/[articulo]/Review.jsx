@@ -6,6 +6,7 @@ import Stars from "@/app/components/app/articles/Stars";
 
 // Hooks
 import useApp from "@/app/hooks/app/useApp";
+import ImageZoom from "@/app/components/others/ImageZoom";
 
 const Review = ({ clientName, stars, reviewTitle, reviewContent, reviewDate, options, images, utilCount, status }) => {
     const { getDateInSpanish } = useApp();
@@ -32,7 +33,8 @@ const Review = ({ clientName, stars, reviewTitle, reviewContent, reviewDate, opt
             {images.length > 0 && (
                 <div className="flex gap-10 overflow-x-scroll">
                     {images.map((image, index) => (
-                        <img key={index} className="w-64 min-w-64 h-48 object-cover rounded-xl" src={image} alt="" />
+                        <ImageZoom key={index} src={image} alt="" className="w-64 min-w-64 h-48 object-cover rounded-xl" />
+                        // <img key={index} className="w-64 min-w-64 h-48 object-cover rounded-xl" src={image} alt="" />
                     ))}
                 </div>
             )}

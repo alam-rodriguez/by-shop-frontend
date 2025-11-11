@@ -29,18 +29,18 @@ const FeaturedReviews = ({ idArticle, reviews = [] }) => {
                 <>
                     <div className="m-4 flex items-center justify-between">
                         <div className="">
-                            <p className="text-xl font-semibold mb-2">Reseñas de clientes</p>
-                            <div className="flex items-center gap-2 mb-2">
+                            <p className="text-lg font-semibold mb-2">Reseñas de clientes</p>
+                            <div className="flex items-center gap-1 mb-2">
                                 <Stars average={data.average_rating} showCountStart={false} showCountReviews={false} size={24} />
                                 <p>{data.average_rating.slice(0, 3)} de 5</p>
                             </div>
-                            <p className="text-gray-500 text-sm">{data.total_reviews} reseñas</p>
+                            <p className="text-gray-500 text-xs">{data.total_reviews} reseñas</p>
                         </div>
-                        <Icon icon="weui:arrow-outlined" width="16" height="28" />
+                        {/* <Icon icon="weui:arrow-outlined" width="16" height="28" /> */}
                     </div>
                     <div className="m-4">
                         <Divider h={2.5} />
-                        <p className="text-xl font-semibold mb-10">Opiniones destacadas</p>
+                        <p className="text-lg font-semibold mb-10">Opiniones destacadas</p>
 
                         <div className="flex flex-col gap-10">
                             {reviews.map((review) => (
