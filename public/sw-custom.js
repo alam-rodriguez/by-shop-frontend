@@ -1,3 +1,8 @@
+import { precacheAndRoute } from "workbox-precaching";
+
+// Next PWA inyecta los assets aquí
+precacheAndRoute(self.__WB_MANIFEST || []);
+
 // import { precacheAndRoute } from "workbox-precaching";
 
 // Necesario para que next-pwa inyecte los assets
