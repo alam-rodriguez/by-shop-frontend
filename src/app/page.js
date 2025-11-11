@@ -194,7 +194,7 @@ const page = () => {
                                         <ImageA className="w-full h-full object-cover" src={article.main_image} />
                                     </div>
                                     <div className="h-2/6 p-2" style={{ height: "30%" }}>
-                                        <p className="font-bold text-xs">{showText(article.description, 17)}</p>
+                                        <p className="font-bold text-xs">{showText(article.description, 39)}</p>
                                         <Spacer space={5} />
                                         <div className="flex justify-between items-center">
                                             <p className="font-bold text-red-700">${article.price.toString().split(".")[0]}</p>

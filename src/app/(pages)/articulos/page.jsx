@@ -1,12 +1,13 @@
 // app/carrito/comprar/page.js
 import { Suspense } from "react";
 import Client from "./Client";
+import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 
 export const dynamic = "force-dynamic";
 
 export default function Page() {
     return (
-        <Suspense fallback={<div>Cargando...</div>}>
+        <Suspense fallback={<LoadingParagraph />}>
             <Client />
         </Suspense>
     );

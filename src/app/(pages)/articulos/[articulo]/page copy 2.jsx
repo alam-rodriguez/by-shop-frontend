@@ -395,12 +395,14 @@ const page = ({ params }) => {
 
     return (
         <div>
-            <div className="h-72 relative">
+            <div className="h-96 relative">
                 <div
                     className="container h-full w-full flex flex-shrink-0- shrink-   overflow-x-auto gap-4 no-scrollbar"
                     style={{ scrollSnapType: "x mandatory" }}
                     ref={carruselRef}
                 >
+                    {/* <ImageA className="w-full h-full object-cover" src={data.main_image} /> */}
+
                     <div className="item flex-shrink-0  w-full h-full" style={{ scrollSnapAlign: "start" }}>
                         <ImageA className="w-full h-full object-cover" src={data.main_image} />
                     </div>
@@ -434,26 +436,27 @@ const page = ({ params }) => {
             </div>
             <div className="m-4">
                 <div className="flex items-start justify-between">
-                    <p className="font-bold text-xl">{data.name}</p>
+                    <p className="font-bold text-3xl">{data.name}</p>
                     {articlesIsInList && articlesIsInList.id != null && articlesIsInList.status == 1 ? (
-                        <Icon className="size-5 text-red-500" icon="ph:heart-fill" onClick={handleClickAddToList} />
+                        <Icon className="size-7 text-red-500" icon="ph:heart-fill" onClick={handleClickAddToList} />
                     ) : (
-                        <Icon className="size-5" icon="ph:heart" onClick={handleClickAddToList} />
+                        <Icon className="size-7" icon="ph:heart" onClick={handleClickAddToList} />
                     )}
                 </div>
                 <Spacer space={12} />
                 <div className="flex gap-2 items-center">
+                    {/* <p className="bg-slate-300 rounded px-2 py-1 text-xs font-semibold">9,742 sold</p> */}
                     <p className="bg-slate-300 rounded px-2 py-1 text-xs font-semibold">{data.total_sales} Vendidas</p>
                     <div className="flex gap-1 items-center">
-                        <Icon icon="fluent-color:star-20" className="text-base" />
-                        <span className="text-xs">
-                            {data.average_stars.slice(0, 3)} ({data.total_reviews} reviews)
-                        </span>
+                        {/* <i></i> */}
+                        {/* <p>4.8 (4,749 reviews)</p> */}
+                        <Icon icon="fluent-color:star-20" className="text-xl" />
+                        {data.average_stars.slice(0, 3)} ({data.total_reviews} reviews)
                     </div>
                 </div>
                 <Divider h={1} />
-                <p className="font-bold text-base">Descripcion</p>
-                <p className="text-xs tracking-tight text-gray-600">{data.description}</p>
+                <p className="font-bold text-xl">Descripcion</p>
+                <p className="text-sm tracking-tight text-gray-600">{data.description}</p>
                 <Spacer space={12} />
 
                 <div className="flex gap-4 flex-wrap">
@@ -545,11 +548,11 @@ const page = ({ params }) => {
                 {/* <Divider h={1} /> */}
 
                 <div className="flex gap-3 items-center">
-                    <p className="font-bold text-base">Cantidad</p>
+                    <p className="font-bold text-lg">Cantidad</p>
                     <div className="flex items-center gap-4 bg-slate-200 rounded-3xl py-2 px-4">
-                        <Icon className="text-sm" icon="proicons:subtract" onClick={() => canBuyOneMore(() => setQuantity(quantity - 1))} />
-                        <p className="font-bold text-sm">{quantity}</p>
-                        <Icon className="text-base" icon="ion:add-outline" onClick={() => canBuyOneMore(() => setQuantity(quantity + 1), true)} />
+                        <Icon className="text-lg" icon="proicons:subtract" onClick={() => canBuyOneMore(() => setQuantity(quantity - 1))} />
+                        <p className="font-bold text-lg">{quantity}</p>
+                        <Icon className="text-xl" icon="ion:add-outline" onClick={() => canBuyOneMore(() => setQuantity(quantity + 1), true)} />
                     </div>
                 </div>
 
