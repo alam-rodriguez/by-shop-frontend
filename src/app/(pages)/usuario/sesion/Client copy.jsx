@@ -25,7 +25,6 @@ import appSettings from "@/app/zustand/app/zusApp";
 import { toast, Toaster } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Icon } from "@iconify/react";
-import Spacer from "@/app/components/home/Spacer";
 const Client = () => {
     const { appName } = appSettings();
 
@@ -235,94 +234,83 @@ const Client = () => {
     };
 
     return (
-        <form className="p-4 bg-red-500-">
+        <form className="p-4 flex flex-col gap-8 justify-center h-full bg-red-500 ">
             <Toaster richColors />
-            <Icon icon="mynaui:arrow-left" className="absolute_top-0_left-0_m-8 text-3xl" onClick={() => router.push("/")} />
-            <Spacer space={36} />
+            <Icon icon="mynaui:arrow-left" className="absolute top-0 left-0 m-8 text-3xl" onClick={() => router.push("/")} />
             <p className="text-3xl font-bold w-3/4">
                 {state == 1
-                    ? "Crea tu cuenta"
+                    ? "Create your Account"
                     : state == 2
-                    ? "Inicia sesion"
+                    ? "Log in to your Account"
                     : state == 3
-                    ? "Evirifa tu email"
+                    ? "Verify your Email"
                     : state == 4
-                    ? "Inserta tus datos"
+                    ? "Insert your Data"
                     : "Iniciar Sesion"}
             </p>
             {(state == 1 || state == 2) && (
-                <>
-                    <Spacer space={36} />
-                    <div className="flex flex-col gap-4">
-                        <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
-                            <div className="grid place-content-center w-1/6">
-                                <Icon icon="majesticons:mail" className="text-gray-500 text-2xl" />
-                            </div>
-                            <input
-                                {...register("email")}
-                                // errors={errors}
-                                name="email"
-                                type="email"
-                                className="w-5/6 appearance-none border-none bg-transparent outline-none"
-                            />
-                        </div>
-                        <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
-                            <div className="grid place-content-center w-1/6">
-                                <Icon icon="mdi:password" className="text-gray-500 text-2xl" />
-                            </div>
-                            <input
-                                {...register("password")}
-                                // errors={errors}
-                                name="password"
-                                type="password"
-                                className="w-5/6 appearance-none border-none bg-transparent outline-none"
-                            />
-                        </div>
-                    </div>
-                </>
-            )}
-            {state == 3 && (
-                <>
-                    <Spacer space={36} />
+                <div className="flex flex-col gap-4">
                     <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
                         <div className="grid place-content-center w-1/6">
-                            <Icon icon="lets-icons:user-fill" className="text-gray-500 text-2xl" />
+                            <Icon icon="majesticons:mail" className="text-gray-500 text-2xl" />
                         </div>
                         <input
-                            {...register("name")}
+                            {...register("email")}
                             // errors={errors}
-                            name="name"
-                            type="text"
+                            name="email"
+                            type="email"
                             className="w-5/6 appearance-none border-none bg-transparent outline-none"
-                            placeholder="Ingrese su nombre de usuario"
                         />
                     </div>
-                </>
+                    <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
+                        <div className="grid place-content-center w-1/6">
+                            <Icon icon="mdi:password" className="text-gray-500 text-2xl" />
+                        </div>
+                        <input
+                            {...register("password")}
+                            // errors={errors}
+                            name="password"
+                            type="password"
+                            className="w-5/6 appearance-none border-none bg-transparent outline-none"
+                        />
+                    </div>
+                </div>
+            )}
+
+            {state == 3 && (
+                <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
+                    <div className="grid place-content-center w-1/6">
+                        <Icon icon="lets-icons:user-fill" className="text-gray-500 text-2xl" />
+                    </div>
+                    <input
+                        {...register("name")}
+                        // errors={errors}
+                        name="name"
+                        type="text"
+                        className="w-5/6 appearance-none border-none bg-transparent outline-none"
+                        placeholder="Ingrese su nombre de usuario"
+                    />
+                </div>
             )}
             {state == 4 && (
-                <>
-                    <Spacer space={36} />
-                    <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
-                        <div className="grid place-content-center w-1/6">
-                            <Icon icon="tabler:password" className="text-gray-500 text-2xl" />
-                        </div>
-                        <input
-                            {...register("code")}
-                            // errors={errors}
-                            name="code"
-                            type="number"
-                            className="w-5/6 appearance-none border-none bg-transparent outline-none"
-                            placeholder="Ingresa tu código de verificación"
-                        />
+                <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
+                    <div className="grid place-content-center w-1/6">
+                        <Icon icon="tabler:password" className="text-gray-500 text-2xl" />
                     </div>
-                </>
+                    <input
+                        {...register("code")}
+                        // errors={errors}
+                        name="code"
+                        type="number"
+                        className="w-5/6 appearance-none border-none bg-transparent outline-none"
+                        placeholder="Ingresa tu código de verificación"
+                    />
+                </div>
             )}
-            <Spacer space={36} />
             <div className="flex justify-center items-center gap-2">
                 <input type="checkbox" className="size-4" />
-                <p className="text-xs font-bold">Recordarme</p>
+                <p className="text-xs font-bold">Remenber Me</p>
             </div>
-            <Spacer space={36} />
             <button
                 className="bg-black text-white p-4 rounded-full w-full"
                 type="button"
@@ -330,15 +318,14 @@ const Client = () => {
                     state == 1 ? handleClickSignUp : state == 2 ? handleClickLogIn : state == 3 ? registerUser : state == 4 ? validateEmailCode : null
                 }
             >
-                {state == 1 || state == 3 ? "Registrarse" : state == 2 ? "Iniciar sesion" : state == 4 ? "Verificar" : "Iniciar Sesion"}
+                {state == 1 || state == 3 ? "Sign up" : state == 2 ? "Log in" : state == 4 ? "Verify" : "Iniciar Sesion"}
             </button>
-            <Spacer space={36} />
+
             <div className="flex gap-2 items-center text-gray-500">
                 <hr className="flex-1 border-gray-300" />
-                <p className="flex-1 text-center text-xs">o seguir con </p>
+                <p className="flex-1 text-center">or continue with</p>
                 <hr className="flex-1 border-gray-300" />
             </div>
-            <Spacer space={36} />
             <div className="flex justify-around">
                 <div className="grid place-content-center border border-gray-300 rounded-xl h-16 w-24" onClick={handleClickAuthWithGoogle}>
                     <Icon icon="material-icon-theme:google" className="text-2xl" />
@@ -350,19 +337,19 @@ const Client = () => {
                     <Icon icon="material-icon-theme:google" className="text-2xl" />
                 </div> */}
             </div>
-            <Spacer space={36} />
+
             {state == 1 ? (
                 <p className="text-center text-gray-500">
-                    Ya tienes una cuenta?{" "}
+                    Already have an account?{" "}
                     <span className="text-black cursor-pointer" onClick={() => setState(2)}>
-                        Crear cuenta
+                        Sign in
                     </span>
                 </p>
             ) : state == 2 ? (
                 <p className="text-center text-gray-500">
-                    No tienes una cuenta?{" "}
+                    Dont have an account?{" "}
                     <span className="text-black cursor-pointer" onClick={() => setState(1)}>
-                        Iniciar sesion
+                        Log in
                     </span>
                 </p>
             ) : null}

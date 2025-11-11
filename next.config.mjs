@@ -7,7 +7,8 @@ const withPWA = nextPWA({
     register: true,
     skipWaiting: true,
     // disable: process.env.NODE_ENV === "development",
-    disable: false,
+    // disable: false,
+    disable: process.env.NODE_ENV === "development",
     swSrc: "public/sw-custom.js",
     // swSrc: "public/sw-custom.js",
 });
