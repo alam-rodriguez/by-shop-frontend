@@ -26,6 +26,7 @@ import { toast, Toaster } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Icon } from "@iconify/react";
 import Spacer from "@/app/components/home/Spacer";
+import LoginInput from "@/app/components/inputs/LoginInput";
 const Client = () => {
     const { appName } = appSettings();
 
@@ -36,24 +37,27 @@ const Client = () => {
     const schema = z.object({
         email: z.string().email("El correo electronico no es valido"),
         name: z.string().optional(),
-        password: z.string().min(6, "La contraseña debe tener al menos seis caracteres").optional(),
+        password: z.string().min(6, "La contraseña debe tener al menos seis caracteres"),
         code: z.string().max(6).optional(),
     });
 
     const schema2 = z.object({
         email: z.string().email("El correo electronico no es valido"),
-        name: z.string().min(6),
+        name: z.string().min(3),
         password: z.string().min(6, "La contraseña debe tener al menos seis caracteres"),
         code: z.string().max(6).optional(),
     });
 
-    const schema3 = z.object({
-        code: z.number(),
+    const schemaCode = z.object({
+        email: z.string().email("El correo electronico no es valido"),
+        name: z.string().min(3).optional(),
+        password: z.string().min(6, "La contraseña debe tener al menos seis caracteres"),
+        code: z.string().max(6),
     });
 
-    const schema5 = z.object({
-        password: z.string().min(6, "La contraseña debe tener al menos seis caracteres"),
-    });
+    // const schema5 = z.object({
+    //     password: z.string().min(6, "La contraseña debe tener al menos seis caracteres"),
+    // });
 
     const [page, setPage] = useState(1);
     // 1  = valisar si email existe
@@ -79,7 +83,8 @@ const Client = () => {
         setError,
         reset,
     } = useForm({
-        resolver: zodResolver(page === 1 ? schema : page === 3 ? schema2 : page == 4 ? schema3 : page === 5 ? schema5 : schema),
+        resolver: zodResolver(state === 1 || state === 2 ? schema : state === 3 ? schema2 : state === 4 ? schemaCode : null),
+        // resolver: zodResolver(schema),
     });
 
     const searchParams = useSearchParams();
@@ -234,8 +239,28 @@ const Client = () => {
         window.location.href = "http://localhost:3001/api/auth/google";
     };
 
+    const handleSubmitForm = (data) => {
+        console.log(state);
+        console.log(data);
+
+        if (state == 1) handleClickSignUp();
+        else if (state == 2) handleClickLogIn();
+        else if (state == 3) registerUser();
+        else if (state == 4) validateEmailCode();
+
+        // state == 1 ? handleClickSignUp
+
+        // onClick={
+        //             state == 1 ? handleClickSignUp : state == 2 ? handleClickLogIn : state == 3 ? registerUser : state == 4 ? validateEmailCode : null
+        //         }
+    };
+
+    useEffect(() => {
+        console.log(errors);
+    }, [errors]);
+
     return (
-        <form className="p-4 bg-red-500-">
+        <form className="p-4 bg-red-500-" onSubmit={handleSubmit(handleSubmitForm)}>
             <Toaster richColors />
             <Icon icon="mynaui:arrow-left" className="absolute_top-0_left-0_m-8 text-3xl" onClick={() => router.push("/")} />
             <Spacer space={36} />
@@ -245,18 +270,18 @@ const Client = () => {
                     : state == 2
                     ? "Inicia sesion"
                     : state == 3
-                    ? "Evirifa tu email"
+                    ? "Inserta tu nombre de usuario"
                     : state == 4
-                    ? "Inserta tus datos"
-                    : "Iniciar Sesion"}
+                    ? "Evirifa tu email"
+                    : ""}
             </p>
             {(state == 1 || state == 2) && (
                 <>
                     <Spacer space={36} />
                     <div className="flex flex-col gap-4">
-                        <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
+                        {/* <div className={`bg-gray-200 w-full rounded-2xl flex items-center p-4 ${errors.email && "border border-red-500"}`}>
                             <div className="grid place-content-center w-1/6">
-                                <Icon icon="majesticons:mail" className="text-gray-500 text-2xl" />
+                                <Icon icon="majesticons:mail" className={`${!errors.email ? "text-gray-500" : "text-red-500"} text-2xl`} />
                             </div>
                             <input
                                 {...register("email")}
@@ -266,7 +291,10 @@ const Client = () => {
                                 className="w-5/6 appearance-none border-none bg-transparent outline-none"
                             />
                         </div>
-                        <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
+                        {errors.email && <p className="text-red-500 text-sm ml-4">{errors.email.message}</p>} */}
+                        <LoginInput register={register} errors={errors} type="email" name="email" placeholder="" icon="majesticons:mail" />
+
+                        {/* <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
                             <div className="grid place-content-center w-1/6">
                                 <Icon icon="mdi:password" className="text-gray-500 text-2xl" />
                             </div>
@@ -277,14 +305,15 @@ const Client = () => {
                                 type="password"
                                 className="w-5/6 appearance-none border-none bg-transparent outline-none"
                             />
-                        </div>
+                        </div> */}
+                        <LoginInput register={register} errors={errors} type="password" name="password" placeholder="" icon="mdi:password" />
                     </div>
                 </>
             )}
             {state == 3 && (
                 <>
                     <Spacer space={36} />
-                    <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
+                    {/* <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
                         <div className="grid place-content-center w-1/6">
                             <Icon icon="lets-icons:user-fill" className="text-gray-500 text-2xl" />
                         </div>
@@ -296,13 +325,21 @@ const Client = () => {
                             className="w-5/6 appearance-none border-none bg-transparent outline-none"
                             placeholder="Ingrese su nombre de usuario"
                         />
-                    </div>
+                    </div> */}
+                    <LoginInput
+                        register={register}
+                        errors={errors}
+                        type="text"
+                        name="name"
+                        placeholder="Ingrese su nombre de usuario"
+                        icon="lets-icons:user-fill"
+                    />
                 </>
             )}
             {state == 4 && (
                 <>
                     <Spacer space={36} />
-                    <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
+                    {/* <div className="bg-gray-200 w-full rounded-2xl flex items-center p-4">
                         <div className="grid place-content-center w-1/6">
                             <Icon icon="tabler:password" className="text-gray-500 text-2xl" />
                         </div>
@@ -314,7 +351,15 @@ const Client = () => {
                             className="w-5/6 appearance-none border-none bg-transparent outline-none"
                             placeholder="Ingresa tu código de verificación"
                         />
-                    </div>
+                    </div> */}
+                    <LoginInput
+                        register={register}
+                        errors={errors}
+                        type="text"
+                        name="code"
+                        placeholder="Ingresa tu código de verificación"
+                        icon="tabler:password"
+                    />
                 </>
             )}
             <Spacer space={36} />
@@ -325,10 +370,10 @@ const Client = () => {
             <Spacer space={36} />
             <button
                 className="bg-black text-white p-4 rounded-full w-full"
-                type="button"
-                onClick={
-                    state == 1 ? handleClickSignUp : state == 2 ? handleClickLogIn : state == 3 ? registerUser : state == 4 ? validateEmailCode : null
-                }
+                // type="button"
+                // onClick={
+                //     state == 1 ? handleClickSignUp : state == 2 ? handleClickLogIn : state == 3 ? registerUser : state == 4 ? validateEmailCode : null
+                // }
             >
                 {state == 1 || state == 3 ? "Registrarse" : state == 2 ? "Iniciar sesion" : state == 4 ? "Verificar" : "Iniciar Sesion"}
             </button>
