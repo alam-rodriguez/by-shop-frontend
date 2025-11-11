@@ -32,16 +32,16 @@ const SimilarArticle = ({ id, image, name, price, averageStars, totalSales }) =>
                 <ImageA className="w-full h-full object-cover rounded-2xl" src={image} />
             </div>
             <div className="h-1/3 flex flex-col gap-1">
-                <p className="font-bold text-lg">{showText(name, 15)}</p>
+                <p className="font-bold text-base">{showText(name, 15)}</p>
                 <div className="flex items-center gap-2">
-                    <Icon className="text-base text-gray-500" icon="qlementine-icons:star-half-16" />
-                    <p className="text-gray-500">{averageStars.slice(0, 3)}</p>
-                    <span className="text-gray-500">|</span>
+                    <Icon className="text-sm text-gray-500" icon="qlementine-icons:star-half-16" />
+                    <p className="text-gray-500 text-sm">{averageStars.slice(0, 3)}</p>
+                    <span className="text-gray-500 text-sm">|</span>
                     <p className="bg-slate-300 text-gray-500 rounded px-2 py-1 text-xs font-semibold">{totalSales} vendidados</p>
                 </div>
                 <div className="flex gap-1 items-center">
-                    <p className="font-bold text-lg">${finalPrice.toString().split(".")[0]}.00</p>
-                    {hasOffer && <p className="font-bold text-lg line-through text-gray-400">${price.toString().split(".")[0]}.00</p>}
+                    <p className="font-bold text-base">${finalPrice.toString().split(".")[0]}.00</p>
+                    {hasOffer && <p className="font-bold text-base line-through text-gray-400">${price.toString().split(".")[0]}.00</p>}
                 </div>
             </div>
         </Link>
