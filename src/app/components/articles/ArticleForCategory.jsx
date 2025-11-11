@@ -42,7 +42,7 @@ const ArticleForCategory = ({ id, image, price, name }) => {
     //     </Link>
     // );
     return (
-        <Link key={id} href={`/articulos/${id}`} className="h-52" style={{ width: "calc(50% - 10px)" }}>
+        <Link key={id} href={`/articulos/${id}`} className="h-60" style={{ width: "calc(50% - 10px)" }}>
             <div className="h-4/5 relative">
                 {hasOffer && (
                     <p className="bg-black py-1 px-2 text-white absolute top-0 left-0 m-2 rounded-lg" style={{ fontSize: 9 }}>

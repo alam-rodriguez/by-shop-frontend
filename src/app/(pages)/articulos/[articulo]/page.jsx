@@ -395,7 +395,7 @@ const page = ({ params }) => {
 
     return (
         <div>
-            <div className="h-72 relative">
+            <div className="h-80 relative">
                 <div
                     className="container h-full w-full flex flex-shrink-0- shrink-   overflow-x-auto gap-4 no-scrollbar"
                     style={{ scrollSnapType: "x mandatory" }}
@@ -434,11 +434,11 @@ const page = ({ params }) => {
             </div>
             <div className="m-4">
                 <div className="flex items-start justify-between">
-                    <p className="font-bold text-xl">{data.name}</p>
+                    <p className="font-bold text-2xl">{data.name}</p>
                     {articlesIsInList && articlesIsInList.id != null && articlesIsInList.status == 1 ? (
-                        <Icon className="size-5 text-red-500" icon="ph:heart-fill" onClick={handleClickAddToList} />
+                        <Icon className="size-6 text-red-500" icon="ph:heart-fill" onClick={handleClickAddToList} />
                     ) : (
-                        <Icon className="size-5" icon="ph:heart" onClick={handleClickAddToList} />
+                        <Icon className="size-6" icon="ph:heart" onClick={handleClickAddToList} />
                     )}
                 </div>
                 <Spacer space={12} />
@@ -452,15 +452,15 @@ const page = ({ params }) => {
                     </div>
                 </div>
                 <Divider h={1} />
-                <p className="font-bold text-base">Descripcion</p>
-                <p className="text-xs tracking-tight text-gray-600">{data.description}</p>
+                <p className="font-bold text-lg">Descripcion</p>
+                <p className="text-sm tracking-tight text-gray-600">{data.description}</p>
                 <Spacer space={12} />
 
                 <div className="flex gap-4 flex-wrap">
                     {options.map((options2, i) => {
                         return (
                             <div className="flex-1" style={{ minWidth: "calc(50% - 10px)" }} key={i}>
-                                <p className="font-bold text-xl">{options2[0].option}</p>
+                                <p className="font-bold text-lg">{options2[0].option}</p>
                                 <div className="flex gap-3 mt-2 flex-wrap">
                                     {options2.map((option) => {
                                         if (option.image != "") {
@@ -474,7 +474,7 @@ const page = ({ params }) => {
                                                 >
                                                     {optionsSelected[option.id_option] && optionsSelected[option.id_option].id == option.id && (
                                                         <Icon
-                                                            className="size-7 text-white absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                                            className="size-6 text-white absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
                                                             icon="material-symbols:check-rounded"
                                                         />
                                                     )}
@@ -491,7 +491,7 @@ const page = ({ params }) => {
                                                 >
                                                     {optionsSelected[option.id_option] && optionsSelected[option.id_option].id == option.id && (
                                                         <Icon
-                                                            className="size-7 text-white absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                                            className="size-6 text-white absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
                                                             icon="material-symbols:check-rounded"
                                                         />
                                                     )}
@@ -503,7 +503,7 @@ const page = ({ params }) => {
                                                     className={`border border-black rounded-xl py-1 px-2 ${
                                                         optionsSelected[option.id_option] &&
                                                         optionsSelected[option.id_option].id == option.id &&
-                                                        "bg-black text-white"
+                                                        "bg-black text-white text-sm"
                                                     }`}
                                                     key={option.id}
                                                     onClick={() => setOptionsSelected(option)}
@@ -545,7 +545,7 @@ const page = ({ params }) => {
                 {/* <Divider h={1} /> */}
 
                 <div className="flex gap-3 items-center">
-                    <p className="font-bold text-base">Cantidad</p>
+                    <p className="font-bold text-lg">Cantidad</p>
                     <div className="flex items-center gap-4 bg-slate-200 rounded-3xl py-2 px-4">
                         <Icon className="text-sm" icon="proicons:subtract" onClick={() => canBuyOneMore(() => setQuantity(quantity - 1))} />
                         <p className="font-bold text-sm">{quantity}</p>
