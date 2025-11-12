@@ -4,8 +4,11 @@ import React, { useEffect, useState } from "react";
 import ImageA from "../others/ImageA";
 import { Icon } from "@iconify/react";
 import { useGetAdvertisementsForApp } from "@/app/hooks/request/advertisements/RequestsAdvertisements";
+import { useRouter } from "next/navigation";
 
 const HomeAdvertisements = () => {
+    const router = useRouter();
+
     const { data: advertisements = [], isLoading: isLoadingAdvertisements } = useGetAdvertisementsForApp();
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -23,8 +26,10 @@ const HomeAdvertisements = () => {
 
     const currentAd = advertisements[currentIndex];
 
+    const handleClick = () => router.push(currentAd.link);
+
     return (
-        <div className="w-full h-44 rounded-2xl overflow-hidden relative">
+        <div className="w-full h-44 rounded-2xl overflow-hidden relative" onClick={handleClick}>
             <ImageA className="w-full h-full object-cover absolute z-10" src={currentAd.article_image || ""} />
             <div className="z-20 relative bg-gradient-to-r from-[rgba(0,0,0,0.7)] to-transparent text-white h-full w-full flex flex-col justify-between p-4">
                 <p className="font-semibold text-xl">{currentAd.name}</p>
