@@ -39,6 +39,7 @@ const Client = () => {
         name: z.string().optional(),
         password: z.string().min(6, "La contraseña debe tener al menos seis caracteres"),
         code: z.string().max(6).optional(),
+        remember_me: z.boolean().transform((val) => (val ? 1 : 0)),
     });
 
     const schema2 = z.object({
@@ -46,6 +47,7 @@ const Client = () => {
         name: z.string().min(3),
         password: z.string().min(6, "La contraseña debe tener al menos seis caracteres"),
         code: z.string().max(6).optional(),
+        remember_me: z.boolean().transform((val) => (val ? 1 : 0)),
     });
 
     const schemaCode = z.object({
@@ -53,6 +55,7 @@ const Client = () => {
         name: z.string().min(3).optional(),
         password: z.string().min(6, "La contraseña debe tener al menos seis caracteres"),
         code: z.string().max(6),
+        remember_me: z.boolean().transform((val) => (val ? 1 : 0)),
     });
 
     // const schema5 = z.object({
@@ -364,7 +367,7 @@ const Client = () => {
             )}
             <Spacer space={36} />
             <div className="flex justify-center items-center gap-2">
-                <input type="checkbox" className="size-4" />
+                <input type="checkbox" className="size-4" {...register("remember_me")} />
                 <p className="text-xs font-bold">Recordarme</p>
             </div>
             <Spacer space={36} />

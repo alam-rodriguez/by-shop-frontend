@@ -108,6 +108,8 @@ const page = () => {
                     { url: "/admin/ubicaciones/vecindarios", text: "Vecindarios" },
                 ]}
             />
+
+            <BtnGroup txt="Publicidades" options={[{ url: "/admin/publicidades", text: "Publicidades" }]} />
         </div>
     );
 };

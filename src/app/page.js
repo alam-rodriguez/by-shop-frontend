@@ -30,6 +30,8 @@ import { useGetDepartmentsForApp } from "./hooks/request/categories/requestsDepa
 import { zusUser } from "./zustand/user/zusUser";
 import Link from "next/link";
 import Divider from "./components/home/Divider";
+import { useGetAdvertisementsForApp } from "./hooks/request/advertisements/RequestsAdvertisements";
+import HomeAdvertisements from "./components/advertisements/HomeAdvertisements";
 
 const page = () => {
     const router = useRouter();
@@ -55,12 +57,17 @@ const page = () => {
         console.log(articlesFromGeneralCategories);
     }, [articlesFromGeneralCategories]);
 
-    if (isLoadingDirects || isLoadingArticlesFromGeneralCategories || isLoadingDepartments || isLoadingIndirects) return <LoadingParagraph />;
+    const { data: advertisements, isLoading: isLoadingAdvertisements } = useGetAdvertisementsForApp();
+
+    if (isLoadingDirects || isLoadingArticlesFromGeneralCategories || isLoadingDepartments || isLoadingIndirects || isLoadingAdvertisements)
+        return <LoadingParagraph />;
 
     return (
         <div className="font-sans">
             <div className="m-4">
-                <div className="w-full h-44 rounded-2xl overflow-hidden relative">
+                <HomeAdvertisements />
+
+                {/* <div className="w-full h-44 rounded-2xl overflow-hidden relative">
                     <ImageA
                         className="w-full h-full object-cover absolute z-10"
                         src="https://8cfbi9foz7.ufs.sh/f/0DUeKQjxChl7lBHUB6y7D4zVcm0fFoU6uJhKXLwTOIMGkjN3"
@@ -73,7 +80,7 @@ const page = () => {
                             <Icon icon="ep:right" className="size-6" />
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <Spacer />
                 <div className="flex gap-3 overflow-scroll no-scrollbar flex-nowrap">
                     {/* {directsCategories.map((directCategory) => (
