@@ -18,18 +18,38 @@
 
 # CMD ["npm", "run", "dev"]
 
+# FROM node:20-alpine
+
+# WORKDIR /app
+
+# COPY package*.json ./
+# ENV NODE_OPTIONS="--max-old-space-size=1024"
+# RUN npm install --legacy-peer-deps
+
+# COPY . .
+
+# RUN npm run build
+
+# EXPOSE 3000
+
+# CMD ["npm", "run", "start"]
+
+
 FROM node:20-alpine
 
 WORKDIR /app
 
+# Copia solo las dependencias primero (para cache)
 COPY package*.json ./
-ENV NODE_OPTIONS="--max-old-space-size=1024"
+
+# Instala dependencias con compatibilidad de peer deps
 RUN npm install --legacy-peer-deps
 
+# Copia el resto del código
 COPY . .
 
-RUN npm run build
-
+# Expone el puerto del servidor de Next.js
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+# Usa el modo desarrollo
+CMD ["npm", "run", "dev"]

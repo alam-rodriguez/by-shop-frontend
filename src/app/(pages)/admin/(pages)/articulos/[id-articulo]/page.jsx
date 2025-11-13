@@ -860,7 +860,7 @@ const page = () => {
                     errors={errors}
                     type="text"
                     name="id_direct_category"
-                    items={directCategories}
+                    items={directCategories ?? []}
                     selectClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     optionNameForShow="name"
@@ -871,7 +871,7 @@ const page = () => {
                     errors={errors}
                     type="text"
                     name="id_indirect_category"
-                    items={indirectCategories}
+                    items={indirectCategories ?? []}
                     selectClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     optionNameForShow="name"
@@ -893,7 +893,7 @@ const page = () => {
                     errors={errors}
                     type="text"
                     name="id_model"
-                    items={modelsWidthFilter}
+                    items={modelsWidthFilter ?? []}
                     selectClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     optionNameForShow="name"
@@ -904,7 +904,7 @@ const page = () => {
                     errors={errors}
                     type="text"
                     name="id_currency"
-                    items={currencies}
+                    items={currencies ?? []}
                     selectClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     optionNameForShow="name"
