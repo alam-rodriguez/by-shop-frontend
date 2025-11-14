@@ -83,7 +83,14 @@ const Footer = () => {
                     {/* <p className="absolute" style={{ right: 28, top: -10 }}>
                     3
                 </p> */}
-                    <FooterItem text="Carrito" icon="mdi-light:cart" link="/carrito" pageActive={pageActive} pageName="carrito" />
+                    <FooterItem
+                        text="Carrito"
+                        icon="mdi-light:cart"
+                        link="/carrito"
+                        pageActive={pageActive}
+                        pageName="carrito"
+                        articlesInCart={dataCartUser ? dataCartUser.length : null}
+                    />
                     {/* <Link
                         className={`flex-1 flex justify-center items-center flex-col ${pageActive === "tiendas" && "text-red-700"}`}
                         href="/tiendas"
@@ -188,13 +195,27 @@ export default Footer;
 //     );
 // };
 
-const FooterItem = ({ text, icon, link, pathname, pageActive, pageName }) => {
-    const router = useRouter();
+const FooterItem = ({ text, icon, link, pathname, pageActive, pageName, articlesInCart = null }) => {
+    if (pageName != "carrito")
+        return (
+            <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === pageName && "text-red-700"}`} href={link}>
+                <Icon icon={icon} className="size-5" />
+                <p className="text-sm">{text}</p>
+            </Link>
+        );
 
     return (
-        <Link className={`flex-1 flex justify-center items-center flex-col ${pageActive === pageName && "text-red-700"}`} href={link}>
+        <Link className={`relative flex-1 flex justify-center items-center flex-col ${pageActive === pageName && "text-red-700"}`} href={link}>
             <Icon icon={icon} className="size-5" />
             <p className="text-sm">{text}</p>
+            <div
+                className="absolute border border-red-700 rounded-full grid place-items-center "
+                style={{ right: 23, top: -10, width: 16, height: 16 }}
+            >
+                <span className="tracking-normal leading-none_ text-xs font-bold" style={{ lineHeight: 0 }}>
+                    {articlesInCart}
+                </span>
+            </div>
         </Link>
     );
 };

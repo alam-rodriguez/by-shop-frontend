@@ -89,8 +89,8 @@ const CartItem2 = ({
             <div className="w-3/4">
                 <div className="flex">
                     <div className="w-11/12">
-                        <p className="font-bold text-xl">{showText(articleName, 20)}</p>
-                        <p className="font-bold text-xs text-gray-500">{showText(articleDescription, 73)}</p>
+                        <p className="font-bold text-lg line-clamp-1">{articleName}</p>
+                        <p className="font-bold text-xs text-gray-500 line-clamp-2">{articleDescription}</p>
                         {articleOptions != "" && articleValues != "" && (
                             <p className="text-xs text-gray-500">
                                 {articleOptions} : {articleValues}
@@ -103,15 +103,15 @@ const CartItem2 = ({
                 <div className="flex justify-between items-center_ items-end w-full">
                     <div className="flex_gap-1_items-center">
                         {/* <p className="font-bold text-red-500 text-2xl">{showPrice(finalPrice)}</p> */}
-                        <p className="font-bold text-red-500 text-2xl">
+                        <p className="font-bold text-red-500 text-lg">
                             {showPriceWithCurrencyUser(finalPrice, { exchange_rate: exchangeRate, iso_code: isoCode }, currencySelected)}
                         </p>
-                        {hasOffer && <p className="font-bold text-gray-400 text-xl line-through">{showPrice(articlePrice * quantity)}</p>}
+                        {hasOffer && <p className="font-bold text-gray-400 text-base line-through">{showPrice(articlePrice * quantity)}</p>}
                     </div>
                     <div className="flex items-center gap-1">
-                        <Icon className="size-6 text-gray-500" icon="carbon:subtract-alt" onClick={() => handleClickChangeCount(0)} />
-                        <p className="text-2xl">{quantity}</p>
-                        <Icon className="size-6 text-gray-500" icon="carbon:add-alt" onClick={() => handleClickChangeCount(1)} />
+                        <Icon className="size-5 text-gray-500" icon="carbon:subtract-alt" onClick={() => handleClickChangeCount(0)} />
+                        <p className="text-xl">{quantity}</p>
+                        <Icon className="size-5 text-gray-500" icon="carbon:add-alt" onClick={() => handleClickChangeCount(1)} />
                     </div>
                 </div>
             </div>

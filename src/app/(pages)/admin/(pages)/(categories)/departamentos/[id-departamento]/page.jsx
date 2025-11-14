@@ -114,7 +114,7 @@ const page = () => {
         useGetDirectsCategoriesByIdDepartment(idDepartment);
 
     useEffect(() => {
-        if (isLoadingDirectsCategories || isLoadingDirectsCategoriesDepartment) return;
+        if (isLoadingDirectsCategories || isLoadingDirectsCategoriesDepartment || !directsCategoriesDepartment || !directsCategories) return;
         const directsCategoriesDefaultValues = getDefaultsValuesForSelectMulti(directsCategoriesDepartment, directsCategories, "id");
         setValue("directs_categories", directsCategoriesDefaultValues);
     }, [directsCategories, directsCategoriesDepartment]);

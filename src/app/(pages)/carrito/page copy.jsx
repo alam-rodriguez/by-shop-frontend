@@ -35,10 +35,10 @@ const page = () => {
     const router = useRouter();
 
     const { id, type, firstName, currencySelected, idCurrency: idCurrencyUser } = zusUser();
-    const { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart, refetchArticlesCart } = useUserCartData(id);
+    const { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart } = useUserCartData(id);
 
     const { appName } = appSettings();
-    const { totalSelectedArticles, totalSelectedPrice, setTotalSelectedArticles } = zusCart();
+    const { totalSelectedArticles, totalSelectedPrice, setTotalSelectedArticles, refetchArticlesCart } = zusCart();
 
     // const { data, isLoading, refetch } = useGetCartUser(id);
 
@@ -86,13 +86,13 @@ const page = () => {
         <div>
             <div className="m-4">
                 <div className="flex gap-5 items-center">
-                    <Icon className="size-6 text-red-700 text-base" icon="mdi:cart" />
-                    <p className="font-bold text-base">{totalSelectedArticles} articulos en tu carrito</p>
+                    <Icon className="size-6 text-red-700 text-xl" icon="mdi:cart" />
+                    <p className="font-bold text-xl">{totalSelectedArticles} articulos en tu carrito</p>
                 </div>
                 <Spacer space={12} />
                 <div className="flex gap-5 items-center">
-                    <Icon className="size-6 text-red-700 text-base" icon="mdi:money" />
-                    <p className="font-bold text-base">Total: {showPrice(price)}</p>
+                    <Icon className="size-6 text-red-700 text-xl" icon="mdi:money" />
+                    <p className="font-bold text-xl">Total: {showPrice(price)}</p>
                 </div>
                 <Spacer />
                 <div className="flex flex-col gap-6">
@@ -255,7 +255,7 @@ const page = () => {
 
                 <Spacer />
 
-                <button className="bg-red-500 text-white p-3 rounded-lg w-full text-base" onClick={() => router.push("/carrito/comprar")}>
+                <button className="bg-red-500 text-white p-4 rounded-lg w-full text-xl" onClick={() => router.push("/carrito/comprar")}>
                     Comprar
                 </button>
             </div>

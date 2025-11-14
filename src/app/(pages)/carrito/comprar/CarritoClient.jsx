@@ -1336,7 +1336,7 @@ const CarritoClient = () => {
     return (
         <div className="m-4">
             <Toaster richColors />
-            <p className="text-2xl font-bold text-center mb-4">Finalizar compra</p>
+            <p className="text-xl font-bold text-center mb-4">Finalizar compra</p>
             {/* <div className="flex gap-4 w-full">
                 <Icon icon="solar:arrow-left-outline" width="24" height="24" />
                 <p className="text-2xl font-bold text-center">Finalizar compra</p>
@@ -1344,10 +1344,16 @@ const CarritoClient = () => {
             <Divider h={"0.5px"} />
             <Spacer />
             <div>
-                <p className="text-xl font-bold">Preferencia de entrega</p>
+                <p className="text-lg font-bold">Preferencia de entrega</p>
                 <Spacer />
 
-                <div className="bg-white p-4 rounded-3xl">
+                <Item
+                    name={deliveryPreferenceSelected?.name}
+                    description={deliveryPreferenceSelected?.description}
+                    onClick={() => setOpenPreference(!openPreference)}
+                />
+
+                {/* <div className="bg-white p-4 rounded-3xl">
                     <div className="flex items-center">
                         <div className="size-1/6">
                             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
@@ -1364,7 +1370,7 @@ const CarritoClient = () => {
                             <Icon icon="iconamoon:edit-fill" width="24" height="24" />
                         </div>
                     </div>
-                </div>
+                </div> */}
                 {/* {preferenciasEntrega
                     .filter((preference) => preference.isSelected)
                     .map((preference) => (
@@ -1423,7 +1429,7 @@ const CarritoClient = () => {
             <Divider h={"0.5px"} />
             {wantUseAddress == 1 ? (
                 <div>
-                    <p className="text-xl font-bold">Dirreccion de entrega</p>
+                    <p className="text-lg font-bold">Dirreccion de entrega</p>
                     <Spacer />
                     {/* setUserAddressSelected */}
 
@@ -1481,7 +1487,7 @@ const CarritoClient = () => {
                 </div>
             ) : (
                 <div>
-                    <p className="text-xl font-bold">Tienda de entrega</p>
+                    <p className="text-lg font-bold">Tienda de entrega</p>
                     <Spacer />
                     <div className="bg-white p-4 rounded-3xl">
                         <div className="flex items-center">
@@ -1701,7 +1707,7 @@ const CarritoClient = () => {
             <Divider h={"0.5px"} />
             {/* <Spacer /> */}
             <div>
-                <p className="text-xl font-bold">Lista de articulos</p>
+                <p className="text-lg font-bold">Lista de articulos</p>
                 <Spacer />
                 <div className="flex flex-col gap-4 p-4- rounded-3xl">
                     {data.map((order) => (
@@ -1783,7 +1789,7 @@ const CarritoClient = () => {
             })} */}
             {/* <Divider h={"0.5px"} /> */}
             <div>
-                <p className="text-xl font-bold">Moneda de pago</p>
+                <p className="text-lg font-bold">Moneda de pago</p>
                 <Spacer />
                 <div className="bg-white p-4 rounded-3xl">
                     <div className="flex items-center">
@@ -1839,7 +1845,7 @@ const CarritoClient = () => {
             </div>
             <Divider h={"0.5px"} />
             <div>
-                <p className="text-xl font-bold">Metodo de pago</p>
+                <p className="text-lg font-bold">Metodo de pago</p>
                 <Spacer />
                 <div className="bg-white p-4 rounded-3xl">
                     <div className="flex items-center">
@@ -1949,7 +1955,7 @@ const CarritoClient = () => {
             const [totalDiscount, setTotalDiscount] = useState(0); const
             [priceWithDiscount, setPriceWithDiscount] = useState(0); */}
             <Divider h={"0.5px"} />
-            <p className="text-xl font-bold">Precio</p>
+            <p className="text-lg font-bold">Precio</p>
             <Spacer />
             <div className="bg-white p-6 rounded-2xl flex flex-col gap-6">
                 <div className="flex justify-between">
@@ -2314,3 +2320,26 @@ const CarritoClient = () => {
 };
 
 export default CarritoClient;
+
+const Item = ({ name, description, onClick = () => {} }) => {
+    return (
+        <div className="bg-white p-4 rounded-3xl">
+            <div className="flex items-center">
+                <div className="size-1/6">
+                    <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
+                        <div className="bg-black grid place-items-center rounded-full size-full">
+                            <Icon className="text-white size-5" icon="mingcute:location-fill" />
+                        </div>
+                    </div>
+                </div>
+                <div className="size-4/6">
+                    <p className="text-base font-bold line-clamp-1">{name}</p>
+                    <p className="text-sm line-clamp-2">{description}</p>
+                </div>
+                <div className="size-1/6 grid place-items-center" onClick={onClick}>
+                    <Icon icon="iconamoon:edit-fill" width="24" height="24" />
+                </div>
+            </div>
+        </div>
+    );
+};
