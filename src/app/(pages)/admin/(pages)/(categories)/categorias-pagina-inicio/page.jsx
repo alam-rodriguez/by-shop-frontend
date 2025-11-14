@@ -15,7 +15,7 @@ import { useGetHomeCategories } from "@/app/hooks/request/categories/requestsHom
 const page = () => {
     const router = useRouter();
 
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
 
     // const type = searchParams.get("tipo");
 
