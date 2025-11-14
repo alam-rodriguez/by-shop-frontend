@@ -60,6 +60,7 @@ const page = () => {
 
                     { url: "/admin/grupos-categorias-generales", text: "GRUPOS DE CATEGORIAS GENERALES" },
                     { url: "/admin/departamentos", text: "DEPARTAMENTOS" },
+                    { url: "/admin/categorias-pagina-inicio", text: "Categorias pagina inicio" },
                 ]}
             />
             {/* <div>

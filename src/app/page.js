@@ -32,6 +32,7 @@ import Link from "next/link";
 import Divider from "./components/home/Divider";
 import { useGetAdvertisementsForApp } from "./hooks/request/advertisements/RequestsAdvertisements";
 import HomeAdvertisements from "./components/advertisements/HomeAdvertisements";
+import { useGetHomeCategoriesForApp } from "./hooks/request/categories/requestsHomeCategories";
 
 const page = () => {
     const router = useRouter();
@@ -59,7 +60,16 @@ const page = () => {
 
     const { data: advertisements, isLoading: isLoadingAdvertisements } = useGetAdvertisementsForApp();
 
-    if (isLoadingDirects || isLoadingArticlesFromGeneralCategories || isLoadingDepartments || isLoadingIndirects || isLoadingAdvertisements)
+    const { data: homeCategories, isLoading: isLoadingHomeCategories } = useGetHomeCategoriesForApp();
+
+    if (
+        isLoadingDirects ||
+        isLoadingArticlesFromGeneralCategories ||
+        isLoadingDepartments ||
+        isLoadingIndirects ||
+        isLoadingAdvertisements ||
+        isLoadingHomeCategories
+    )
         return <LoadingParagraph />;
 
     return (
@@ -182,7 +192,43 @@ const page = () => {
                     </div>
                 ))} */}
 
-                {indirectsCategories.map((indirectCategory) => (
+                <div className="flex flex-col gap-8">
+                    {homeCategories.map((category) => (
+                        <div key={category.id}>
+                            <div className="flex justify-between items-end">
+                                <p className="font-bold text-lg">{category.name}</p>
+                                <p className="text-red-700 text-xs">Ver Todos</p>
+                            </div>
+                            <Spacer space={10} />
+                            <div className="flex justify-between flex-wrap gap-3">
+                                {category.articles.map((article) => (
+                                    <Link
+                                        key={article.id}
+                                        className="bg-white rounded-xl overflow-hidden h-72"
+                                        style={{ width: "calc(50% - 10px)" }}
+                                        href={`/articulos/${article.id}`}
+                                    >
+                                        <div className="" style={{ height: "70%" }}>
+                                            <ImageA className="w-full h-full object-cover" src={article.main_image} />
+                                        </div>
+                                        <div className="h-2/6 p-2" style={{ height: "30%" }}>
+                                            <p className="font-bold text-xs line-clamp-2">{article.description}</p>
+                                            <Spacer space={5} />
+                                            <div className="flex justify-between items-center">
+                                                <p className="font-bold text-red-700">${article.price.toString().split(".")[0]}</p>
+                                                <div className="bg-red-700 text-white py-2 px-3 rounded-full text-xs">
+                                                    <p className="text-xs">Add to Cart</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* {indirectsCategories.map((indirectCategory) => (
                     <div key={indirectCategory.id}>
                         <div className="flex justify-between items-center">
                             <p className="font-bold text-lg">{indirectCategory.name}</p>
@@ -214,7 +260,7 @@ const page = () => {
                             ))}
                         </div>
                     </div>
-                ))}
+                ))} */}
 
                 {/* <div>
                     <div className="flex justify-between">
