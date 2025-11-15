@@ -239,7 +239,8 @@ const Client = () => {
     };
 
     const handleClickAuthWithGoogle = () => {
-        window.location.href = "http://localhost:3001/api/auth/google";
+        const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+        window.location.href = `${apiBaseUrl}/auth/google`;
     };
 
     const handleSubmitForm = (data) => {
