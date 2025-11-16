@@ -13,7 +13,7 @@ const withPWA = nextPWA({
     // swSrc: "public/sw-custom.js",
     // swSrc: "sw-custom.js",
     // swSrc: "sw-custom.js",
-    swSrc: "sw-custom.js",
+    swSrc: "./sw-custom.js",
     buildExcludes: [/app-build-manifest.json$/],
     // swSrc: "public/sw-custom.js",
 });
