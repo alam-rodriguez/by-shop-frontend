@@ -10,6 +10,7 @@ const withPWA = nextPWA({
     // disable: false,
     disable: process.env.NODE_ENV === "development",
     swSrc: "public/sw-custom.js",
+    buildExcludes: [/app-build-manifest.json$/],
     // swSrc: "public/sw-custom.js",
 });
 
