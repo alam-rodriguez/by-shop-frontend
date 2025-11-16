@@ -18,7 +18,7 @@ const useSetServiceWorker = () => {
 
                 const subscription = await reg.pushManager.subscribe({
                     userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array("BNQVHeuNN8cPSPsvbhYreQSPL74pbqhWD6wrmZoc0_BIZrf5zNXoQ2ecrju1bbNkF"),
+                    applicationServerKey: urlBase64ToUint8Array(process.env.VAPID_PUBLIC_KEY),
                     // dataUser: {
                     //     user_id: id,
                     //     status: 1,
