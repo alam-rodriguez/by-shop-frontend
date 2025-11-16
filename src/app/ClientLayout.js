@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "../../queryClient";
 
 import { Toaster } from "sonner";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useRequestsUsers } from "./hooks/request/users/requestsUsers";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
