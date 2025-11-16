@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
+import Script from "next/script";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -40,6 +41,18 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased width mb-24 bg-gray-100`}>
                 <ClientLayout>{children}</ClientLayout>
+
+                {/* Google Analytics */}
+                <Script src={`https://www.googletagmanager.com/gtag/js?id=G-PS1FL2THQF`} strategy="afterInteractive" />
+
+                <Script id="google-analytics" strategy="afterInteractive">
+                    {`
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', 'G-PS1FL2THQF');
+                    `}
+                </Script>
             </body>
         </html>
     );
