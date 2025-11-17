@@ -1,9 +1,7 @@
 /* eslint-disable no-undef */
 
-import { precacheAndRoute } from "workbox-precaching";
-
-// Next-PWA inyecta el manifest
-precacheAndRoute(self.__WB_MANIFEST);
+// Workbox (inyectado por next-pwa)
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
 
 // PUSH notifications
 self.addEventListener("push", (event) => {
