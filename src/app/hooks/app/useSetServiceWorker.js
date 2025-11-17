@@ -7,10 +7,8 @@ import api from "@/app/api/api";
 const useSetServiceWorker = () => {
     const setServiceWorker = () => {
         if ("serviceWorker" in navigator && "PushManager" in window) {
-            
             navigator.serviceWorker.register("/sw.js").then(async (reg) => {
                 // navigator.serviceWorker.register("/sw-custom.js").then(async (reg) => {
-
                 console.log("Service Worker registrado ✅");
 
                 const permission = await Notification.requestPermission();
