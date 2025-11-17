@@ -6,8 +6,13 @@ const withPWA = nextPWA({
     dest: "public",
     register: true,
     skipWaiting: true,
+
+    injectManifest: true,
+
     // disable: process.env.NODE_ENV === "development",
     // disable: false,
+    swDest: "public/sw.js",
+
     disable: process.env.NODE_ENV === "development",
     // sw: "public/sw.js",
     swSrc: "public/sw-custom.js",

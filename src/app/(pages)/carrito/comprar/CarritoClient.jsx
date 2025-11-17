@@ -60,6 +60,7 @@ import { getUserAddresses } from "@/app/request/users/requestsUsersAddresses";
 import { getShopsForUserCart } from "@/app/request/shops/requestShops";
 import { getCurrencyById } from "@/app/request/currencies/requestsCurrencies";
 import { useSendPushNotificationsForNewsOrders } from "@/app/hooks/request/web-push-notifications/webPushNotifications";
+import api from "@/app/api/api";
 
 const CarritoClient = () => {
     // const { token } = useParams();
@@ -81,12 +82,17 @@ const CarritoClient = () => {
             router.replace("/carrito/comprar");
             return;
         }
-        const res = await fetch(`http://localhost:3001/api/payments/paypal/capture-order/${token}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
+
+        const res = await api.post(`payments/paypal/capture-order/${token}`);
+        const data = res.data;
+
+        // const res = await fetch(`${pro}/payments/paypal/capture-order/${token}`, {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        // });
+        // const data = await res.json();
         console.log(data);
+        console.log("-------------------------------------");
         // TODO: ESTA FALLANDO AL GUARDAR LA DATA EN EN BACKEND
         // TODO: LA MONEDA DOP NO SE PERMITE EN PAYPAL
         if (data.status == "COMPLETED") {
