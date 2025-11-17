@@ -30,11 +30,25 @@ const withPWA = nextPWA({
     // sw: "sw.js", // el SW final
     // register: true,
     // skipWaiting: true,
+    // dest: "public",
+    // disable: process.env.NODE_ENV === "development",
+    // register: true,
+    // skipWaiting: true,
+    // buildExcludes: [/app-build-manifest.json$/],
     dest: "public",
     disable: process.env.NODE_ENV === "development",
     register: true,
     skipWaiting: true,
-    // buildExcludes: [/app-build-manifest.json$/],
+
+    // 👇 ¡Esto es lo que te falta!
+    importScripts: ["/sw-custom.js"],
+
+    // para evitar que lo elimine
+    // buildExcludes: [/sw-custom\.js$/],
+    buildExcludes: [
+        /app-build-manifest\.json$/, // <--- SOLUCIÓN DEL ERROR
+        /sw-custom\.js$/, // <--- ya lo tenías para importar tu SW
+    ],
 });
 
 const nextConfig = {
