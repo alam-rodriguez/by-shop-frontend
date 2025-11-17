@@ -23,14 +23,18 @@ const withPWA = nextPWA({
 
     // buildExcludes: [/app-build-manifest.json$/],
     // // swSrc: "public/sw-custom.js",
+    // dest: "public",
+    // disable: process.env.NODE_ENV === "development",
+
+    // swSrc: "public/sw-custom.js", // tu template
+    // sw: "sw.js", // el SW final
+    // register: true,
+    // skipWaiting: true,
     dest: "public",
     disable: process.env.NODE_ENV === "development",
-
-    swSrc: "public/sw-custom.js", // tu template
-    sw: "sw.js", // el SW final
     register: true,
     skipWaiting: true,
-    buildExcludes: [/app-build-manifest.json$/],
+    // buildExcludes: [/app-build-manifest.json$/],
 });
 
 const nextConfig = {
