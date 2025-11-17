@@ -1,9 +1,8 @@
 /* eslint-disable no-undef */
 
-// Necesario para Workbox precache
 import { precacheAndRoute } from "workbox-precaching";
 
-// Next-PWA inyecta aquí el manifest
+// Next-PWA inyecta el manifest
 precacheAndRoute(self.__WB_MANIFEST);
 
 // PUSH notifications
@@ -21,7 +20,7 @@ self.addEventListener("push", (event) => {
     event.waitUntil(self.registration.showNotification(title, options));
 });
 
-// Cuando el usuario da click en la notificación
+// Notification click
 self.addEventListener("notificationclick", (event) => {
     event.notification.close();
     event.waitUntil(clients.openWindow(event.notification.data.url));
