@@ -3,26 +3,34 @@
 import nextPWA from "next-pwa";
 
 const withPWA = nextPWA({
-    dest: "public",
-    register: true,
-    skipWaiting: true,
+    // dest: "public",
+    // register: true,
+    // skipWaiting: true,
 
-    // injectManifest: true,
+    // // injectManifest: true,
+
+    // // disable: process.env.NODE_ENV === "development",
+    // // disable: false,
+    // // swDest: "public/sw.js",
+    // sw: "sw.js",
 
     // disable: process.env.NODE_ENV === "development",
-    // disable: false,
-    // swDest: "public/sw.js",
-    sw: "sw.js",
-
-    disable: process.env.NODE_ENV === "development",
-    // sw: "public/sw.js",
-    swSrc: "public/sw-custom.js",
-    // swSrc: "sw-custom.js",
-    // swSrc: "sw-custom.js",
-    // swSrc: "./sw-custom.js",
-
-    buildExcludes: [/app-build-manifest.json$/],
+    // // sw: "public/sw.js",
     // swSrc: "public/sw-custom.js",
+    // // swSrc: "sw-custom.js",
+    // // swSrc: "sw-custom.js",
+    // // swSrc: "./sw-custom.js",
+
+    // buildExcludes: [/app-build-manifest.json$/],
+    // // swSrc: "public/sw-custom.js",
+    dest: "public",
+    disable: process.env.NODE_ENV === "development",
+
+    swSrc: "public/sw-custom.js", // tu template
+    sw: "sw.js", // el SW final
+    register: true,
+    skipWaiting: true,
+    buildExcludes: [/app-build-manifest.json$/],
 });
 
 const nextConfig = {

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
-// Workbox (inyectado por next-pwa)
-workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
+// Esto SOLO funciona después de que next-pwa compila el SW
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
 // PUSH notifications
 self.addEventListener("push", (event) => {
@@ -18,7 +18,7 @@ self.addEventListener("push", (event) => {
     event.waitUntil(self.registration.showNotification(title, options));
 });
 
-// Notification click
+// Cuando el usuario hace clic en la notificación
 self.addEventListener("notificationclick", (event) => {
     event.notification.close();
     event.waitUntil(clients.openWindow(event.notification.data.url));
