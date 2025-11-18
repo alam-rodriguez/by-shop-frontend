@@ -10,6 +10,7 @@ import { isUUID } from "../../app/app";
 export const useGetShops = () =>
     useQuery({
         queryKey: [`shops`],
+        staleTime: Infinity,
         queryFn: () => getShops2(),
     });
 

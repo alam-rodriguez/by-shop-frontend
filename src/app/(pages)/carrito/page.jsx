@@ -26,7 +26,7 @@ import { useRouter } from "next/navigation";
 import ImageA from "@/app/components/others/ImageA";
 import Spacer from "@/app/components/home/Spacer";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
-import { showPrice, showText } from "@/app/hooks/app/app";
+import { isUUID, showPrice, showText } from "@/app/hooks/app/app";
 import CartItem2 from "./components/CartItem2";
 import { useGetCurrencyById } from "@/app/hooks/request/currencies/requestsCurrencies";
 import useUserCartData from "./hooks/useUserCartData";
@@ -51,7 +51,7 @@ const page = () => {
     // }, [currencySelected]);
 
     useEffect(() => {
-        if (isLoadingArticlesCart) return;
+        if (isLoadingArticlesCart || !isUUID(id)) return;
         console.log(articlesCart);
         console.log(currencySelected);
         if ((articlesCart, currencySelected)) setTotalSelectedArticles(articlesCart);
@@ -80,7 +80,9 @@ const page = () => {
         refetch();
     };
 
-    if (isLoadingArticlesCart || !articlesCart || !currencySelected) return <LoadingParagraph />;
+    if (isLoadingArticlesCart || currencySelected == null) return <LoadingParagraph />;
+
+    if (!isUUID(id)) return <LoadingParagraph text="Debes iniciar sesion" />;
 
     return (
         <div>

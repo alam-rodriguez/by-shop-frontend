@@ -264,10 +264,13 @@ const CarritoClient = () => {
 
             const resArticlesChangeQuantity = await useChangeArticleQuantity(cartUser, "subtract");
 
+            const resPushNotifications = await useSendPushNotificationsForNewsOrders(resData.id);
+
             refetch();
             setPriceArticles({});
 
-            if (status && resItem && resCartItems && resArticlesChangeQuantity) toast.success("Compra realizada", { id: loadingToast });
+            if (status && resItem && resCartItems && resArticlesChangeQuantity && resPushNotifications)
+                toast.success("Compra realizada", { id: loadingToast });
             else toast.error("Error al realizar la compra", { id: loadingToast });
             router.replace("/usuario/pedidos");
         } else {
@@ -1318,16 +1321,6 @@ const CarritoClient = () => {
 
         const currentTotalPrice = parseFloat((subtotal + currentPaypalFee).toFixed(2));
 
-        console.error(shopSelectedForAddress);
-        console.error(userAddressSelected);
-        console.error(getDeliveryPrice(shopSelectedForAddress, userAddressSelected));
-
-        console.warn(currentPrice, "precio");
-        console.warn(currenrDiscount, "Descuento");
-        console.warn(currentDeliveryPrice, "Delivery");
-        console.warn(currentPaypalFee, "paypal fee");
-        console.warn(currentTotalPrice, "Total");
-
         setPrice(currentPrice);
         setDiscount(currenrDiscount);
         setPaypalFee(currentPaypalFee);
@@ -1411,24 +1404,30 @@ const CarritoClient = () => {
                     {preferenciasEntrega
                         .filter((preference) => preference.value != deliveryPreferenceSelected?.value)
                         .map((preference) => (
-                            <div key={preference.value} className="bg-white p-4 rounded-3xl" onClick={() => setPreferenciaEntrega(preference)}>
-                                <div className="flex items-center">
-                                    <div className="size-1/6">
-                                        <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
-                                            <div className="bg-black grid place-items-center rounded-full size-full">
-                                                <Icon className="text-white size-5" icon="mingcute:location-fill" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="size-4/6">
-                                        <p className="text-lg font-bold">{preference.name}</p>
-                                        <p>{preference.description}</p>
-                                    </div>
-                                    <div className="size-1/6 grid place-items-center">
-                                        <Icon icon="ep:select" width="24" height="24" />
-                                    </div>
-                                </div>
-                            </div>
+                            <Item
+                                key={preference.value}
+                                name={preference.name}
+                                description={preference.description}
+                                onClick={() => setPreferenciaEntrega(preference)}
+                            />
+                            // <div key={preference.value} className="bg-white p-4 rounded-3xl" onClick={() => setPreferenciaEntrega(preference)}>
+                            //     <div className="flex items-center">
+                            //         <div className="size-1/6">
+                            //             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
+                            //                 <div className="bg-black grid place-items-center rounded-full size-full">
+                            //                     <Icon className="text-white size-5" icon="mingcute:location-fill" />
+                            //                 </div>
+                            //             </div>
+                            //         </div>
+                            //         <div className="size-4/6">
+                            //             <p className="text-lg font-bold">{preference.name}</p>
+                            //             <p>{preference.description}</p>
+                            //         </div>
+                            //         <div className="size-1/6 grid place-items-center">
+                            //             <Icon icon="ep:select" width="24" height="24" />
+                            //         </div>
+                            //     </div>
+                            // </div>
                         ))}
                 </motion.div>
             </div>
@@ -1439,7 +1438,7 @@ const CarritoClient = () => {
                     <Spacer />
                     {/* setUserAddressSelected */}
 
-                    <div className="bg-white p-4 rounded-3xl">
+                    {/* <div className="bg-white p-4 rounded-3xl">
                         <div className="flex items-center">
                             <div className="size-1/6">
                                 <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
@@ -1456,7 +1455,12 @@ const CarritoClient = () => {
                                 <Icon icon="iconamoon:edit-fill" width="24" height="24" />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
+                    <Item
+                        name={userAddressSelected?.location}
+                        description={userAddressSelected?.street}
+                        onClick={() => setShowUserAddresses(!showUserAddresses)}
+                    />
 
                     <motion.div
                         initial={{ height: 0, opacity: 0 }}
@@ -1470,24 +1474,30 @@ const CarritoClient = () => {
                         {userAddresses
                             ?.filter((address) => address.id != userAddressSelected?.id)
                             .map((address) => (
-                                <div key={address.id} className="bg-white p-4 rounded-3xl" onClick={() => setUserAddressPreferred(address)}>
-                                    <div className="flex items-center">
-                                        <div className="size-1/6">
-                                            <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
-                                                <div className="bg-black grid place-items-center rounded-full size-full">
-                                                    <Icon className="text-white size-5" icon="mingcute:location-fill" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="size-4/6">
-                                            <p className="text-lg font-bold">{showText(address.location ?? "", 23)}</p>
-                                            <p>{address.street}</p>
-                                        </div>
-                                        <div className="size-1/6 grid place-items-center">
-                                            <Icon icon="ep:select" width="24" height="24" />
-                                        </div>
-                                    </div>
-                                </div>
+                                <Item
+                                    key={address.id}
+                                    name={address.location}
+                                    description={address.street}
+                                    onClick={() => setUserAddressPreferred(address)}
+                                />
+                                // <div key={address.id} className="bg-white p-4 rounded-3xl" onClick={() => setUserAddressPreferred(address)}>
+                                //     <div className="flex items-center">
+                                //         <div className="size-1/6">
+                                //             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
+                                //                 <div className="bg-black grid place-items-center rounded-full size-full">
+                                //                     <Icon className="text-white size-5" icon="mingcute:location-fill" />
+                                //                 </div>
+                                //             </div>
+                                //         </div>
+                                //         <div className="size-4/6">
+                                //             <p className="text-lg font-bold">{showText(address.location ?? "", 23)}</p>
+                                //             <p>{address.street}</p>
+                                //         </div>
+                                //         <div className="size-1/6 grid place-items-center">
+                                //             <Icon icon="ep:select" width="24" height="24" />
+                                //         </div>
+                                //     </div>
+                                // </div>
                             ))}
                     </motion.div>
                 </div>
@@ -1495,7 +1505,7 @@ const CarritoClient = () => {
                 <div>
                     <p className="text-lg font-bold">Tienda de entrega</p>
                     <Spacer />
-                    <div className="bg-white p-4 rounded-3xl">
+                    {/* <div className="bg-white p-4 rounded-3xl">
                         <div className="flex items-center">
                             <div className="size-1/6">
                                 <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
@@ -1512,7 +1522,8 @@ const CarritoClient = () => {
                                 <Icon icon="iconamoon:edit-fill" width="24" height="24" />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
+                    <Item name={shopSelectedForAddress?.name} description={shopSelectedForAddress?.description} onClick={() => setOpen(!open)} />
 
                     <motion.div
                         initial={{ height: 0, opacity: 0 }}
@@ -1526,24 +1537,25 @@ const CarritoClient = () => {
                         {shopsForUserCart
                             ?.filter((shop) => shop.id != shopSelectedForAddress?.id)
                             .map((shop) => (
-                                <div key={shop.id} className="bg-white p-4 rounded-3xl" onClick={() => setUserShopForCart(shop)}>
-                                    <div className="flex items-center">
-                                        <div className="size-1/6">
-                                            <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
-                                                <div className="bg-black grid place-items-center rounded-full size-full">
-                                                    <Icon className="text-white size-5" icon="mingcute:location-fill" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="size-4/6">
-                                            <p className="text-lg font-bold">{shop.name}</p>
-                                            <p>{shop.description}</p>
-                                        </div>
-                                        <div className="size-1/6 grid place-items-center">
-                                            <Icon icon="ep:select" width="24" height="24" />
-                                        </div>
-                                    </div>
-                                </div>
+                                <Item key={shop.id} name={shop.name} description={shop.description} onClick={() => setUserShopForCart(shop)} />
+                                // <div key={shop.id} className="bg-white p-4 rounded-3xl" onClick={() => setUserShopForCart(shop)}>
+                                //     <div className="flex items-center">
+                                //         <div className="size-1/6">
+                                //             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
+                                //                 <div className="bg-black grid place-items-center rounded-full size-full">
+                                //                     <Icon className="text-white size-5" icon="mingcute:location-fill" />
+                                //                 </div>
+                                //             </div>
+                                //         </div>
+                                //         <div className="size-4/6">
+                                //             <p className="text-lg font-bold">{shop.name}</p>
+                                //             <p>{shop.description}</p>
+                                //         </div>
+                                //         <div className="size-1/6 grid place-items-center">
+                                //             <Icon icon="ep:select" width="24" height="24" />
+                                //         </div>
+                                //     </div>
+                                // </div>
                             ))}
                     </motion.div>
                 </div>
@@ -1797,7 +1809,7 @@ const CarritoClient = () => {
             <div>
                 <p className="text-lg font-bold">Moneda de pago</p>
                 <Spacer />
-                <div className="bg-white p-4 rounded-3xl">
+                {/* <div className="bg-white p-4 rounded-3xl">
                     <div className="flex items-center">
                         <div className="size-1/6">
                             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
@@ -1814,7 +1826,8 @@ const CarritoClient = () => {
                             <Icon icon="iconamoon:edit-fill" width="24" height="24" />
                         </div>
                     </div>
-                </div>
+                </div> */}
+                <Item name={currencySelected?.name} description={currencySelected?.description} onClick={() => setShowCurrencies()} />
 
                 <motion.div
                     initial={{ height: 0, opacity: 0 }}
@@ -1828,24 +1841,30 @@ const CarritoClient = () => {
                     {currencies
                         .filter((currency) => currency.id != currencySelected?.id)
                         .map((currency) => (
-                            <div key={currency.id} className="bg-white p-4 rounded-3xl" onClick={() => setCurrencySelectedForCart(currency)}>
-                                <div className="flex items-center">
-                                    <div className="size-1/6">
-                                        <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
-                                            <div className="bg-black grid place-items-center rounded-full size-full">
-                                                <Icon className="text-white size-5" icon="mingcute:location-fill" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="size-4/6">
-                                        <p className="text-lg font-bold">{currency.name}</p>
-                                        <p>{currency.description}</p>
-                                    </div>
-                                    <div className="size-1/6 grid place-items-center">
-                                        <Icon icon="ep:select" width="24" height="24" />
-                                    </div>
-                                </div>
-                            </div>
+                            <Item
+                                key={currency.id}
+                                name={currency.name}
+                                description={currency.description}
+                                onClick={() => setCurrencySelectedForCart(currency)}
+                            />
+                            // <div key={currency.id} className="bg-white p-4 rounded-3xl" onClick={() => setCurrencySelectedForCart(currency)}>
+                            //     <div className="flex items-center">
+                            //         <div className="size-1/6">
+                            //             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
+                            //                 <div className="bg-black grid place-items-center rounded-full size-full">
+                            //                     <Icon className="text-white size-5" icon="mingcute:location-fill" />
+                            //                 </div>
+                            //             </div>
+                            //         </div>
+                            //         <div className="size-4/6">
+                            //             <p className="text-lg font-bold">{currency.name}</p>
+                            //             <p>{currency.description}</p>
+                            //         </div>
+                            //         <div className="size-1/6 grid place-items-center">
+                            //             <Icon icon="ep:select" width="24" height="24" />
+                            //         </div>
+                            //     </div>
+                            // </div>
                         ))}
                 </motion.div>
             </div>
@@ -1853,7 +1872,7 @@ const CarritoClient = () => {
             <div>
                 <p className="text-lg font-bold">Metodo de pago</p>
                 <Spacer />
-                <div className="bg-white p-4 rounded-3xl">
+                {/* <div className="bg-white p-4 rounded-3xl">
                     <div className="flex items-center">
                         <div className="size-1/6">
                             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
@@ -1870,7 +1889,12 @@ const CarritoClient = () => {
                             <Icon icon="iconamoon:edit-fill" width="24" height="24" />
                         </div>
                     </div>
-                </div>
+                </div> */}
+                <Item
+                    name={payMethodSelected.name}
+                    description={payMethodSelected.description}
+                    onClick={() => setOpenPaymentMethods(!openPaymentMethods)}
+                />
 
                 <motion.div
                     initial={{ height: 0, opacity: 0 }}
@@ -1884,24 +1908,30 @@ const CarritoClient = () => {
                     {paymentMethods
                         .filter((paymentMethod) => paymentMethod.id !== payMethodSelected.id)
                         .map((paymentMethod) => (
-                            <div key={paymentMethod.id} className="bg-white p-4 rounded-3xl" onClick={() => setOrderPaymentMethod(paymentMethod)}>
-                                <div className="flex items-center">
-                                    <div className="size-1/6">
-                                        <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
-                                            <div className="bg-black grid place-items-center rounded-full size-full">
-                                                <Icon className="text-white size-5" icon="mingcute:location-fill" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="size-4/6">
-                                        <p className="text-lg font-bold">{paymentMethod.name}</p>
-                                        <p>{paymentMethod.description}</p>
-                                    </div>
-                                    <div className="size-1/6 grid place-items-center">
-                                        <Icon icon="ep:select" width="24" height="24" />
-                                    </div>
-                                </div>
-                            </div>
+                            <Item
+                                key={paymentMethod.id}
+                                name={paymentMethod.name}
+                                description={paymentMethod.description}
+                                onClick={() => setOrderPaymentMethod(paymentMethod)}
+                            />
+                            // <div key={paymentMethod.id} className="bg-white p-4 rounded-3xl" onClick={() => setOrderPaymentMethod(paymentMethod)}>
+                            //     <div className="flex items-center">
+                            //         <div className="size-1/6">
+                            //             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
+                            //                 <div className="bg-black grid place-items-center rounded-full size-full">
+                            //                     <Icon className="text-white size-5" icon="mingcute:location-fill" />
+                            //                 </div>
+                            //             </div>
+                            //         </div>
+                            //         <div className="size-4/6">
+                            //             <p className="text-lg font-bold">{paymentMethod.name}</p>
+                            //             <p>{paymentMethod.description}</p>
+                            //         </div>
+                            //         <div className="size-1/6 grid place-items-center">
+                            //             <Icon icon="ep:select" width="24" height="24" />
+                            //         </div>
+                            //     </div>
+                            // </div>
                         ))}
                 </motion.div>
 

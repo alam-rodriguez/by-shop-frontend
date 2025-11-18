@@ -231,6 +231,7 @@ const IdPedidoClient = () => {
         if (!status == 5) {
             const resNotification = await useSendPushNotificationsToClientForOrderUpdate(order.id_user, payloadNotification);
             console.log(resNotification);
+            alert(resNotification);
         }
 
         // console.log(order.id_user);
