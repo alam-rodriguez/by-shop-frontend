@@ -10,9 +10,8 @@ export const useSendPushNotificationsForNewsOrders = async (orderId) => {
 };
 
 export const useSendPushNotificationsToClientForOrderUpdate = async (userId, payload) => {
-    alert("Hola");
     const { message, status } = await sendPushNotificationsToClientForOrderUpdate(userId, payload);
-    return status == 200;
+    return status == 201;
 };
 
 export const useSendPushNotificationsToDeliveriesForNewOrder = async () => {

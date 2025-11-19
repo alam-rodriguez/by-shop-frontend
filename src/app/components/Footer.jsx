@@ -131,13 +131,7 @@ const Footer = () => {
                         <Icon icon="ph:motorcycle-thin" width="24" height="24" />
                         <p>Deliveries</p>
                     </Link> */}
-                    <FooterItem
-                        text="Deliveris"
-                        icon="material-symbols-light:history-rounded"
-                        link="ph:motorcycle-thin"
-                        pageActive={pageActive}
-                        pageName="deliveries"
-                    />
+                    <FooterItem text="Deliveris" icon="ph:motorcycle-thin" link="deliveries" pageActive={pageActive} pageName="deliveries" />
                 </>
             )}
         </div>
@@ -208,14 +202,16 @@ const FooterItem = ({ text, icon, link, pathname, pageActive, pageName, articles
         <Link className={`relative flex-1 flex justify-center items-center flex-col ${pageActive === pageName && "text-red-700"}`} href={link}>
             <Icon icon={icon} className="size-5" />
             <p className="text-sm">{text}</p>
-            <div
-                className="absolute border border-red-700 rounded-full grid place-items-center "
-                style={{ right: 23, top: -10, width: 16, height: 16 }}
-            >
-                <span className="tracking-normal leading-none_ text-xs font-bold" style={{ lineHeight: 0 }}>
-                    {articlesInCart}
-                </span>
-            </div>
+            {articlesInCart > 0 && (
+                <div
+                    className={`absolute border ${pageActive === pageName && "border-red-700"} border-black rounded-full grid place-items-center`}
+                    style={{ right: 23, top: -10, width: 16, height: 16 }}
+                >
+                    <span className="tracking-normal leading-none_ text-xs font-bold" style={{ lineHeight: 0 }}>
+                        {articlesInCart}
+                    </span>
+                </div>
+            )}
         </Link>
     );
 };

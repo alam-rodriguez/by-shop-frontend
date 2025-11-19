@@ -12,7 +12,7 @@ export const sendPushNotificationsForNewsOrders = async (orderId) => {
 
 export const sendPushNotificationsToClientForOrderUpdate = async (userId, payload) => {
     try {
-        const res = await api.post(`/web-push-notification/send-notification-client-update-status-order/${userId}`, { payload });
+        const res = await api.post(`/web-push-notification/send-notification-client-update-status-order/${userId}`, payload);
         return { message: res.data.message, status: res.status };
     } catch (error) {
         console.log(error);

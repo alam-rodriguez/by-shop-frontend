@@ -226,12 +226,13 @@ const IdPedidoClient = () => {
                     : status == 4 && wantUseAddress
                     ? "Su pedido ha sido entregado"
                     : status == 4 && !wantUseAddress == "Su pedido ha sido retirado",
+            url: `/usuario/pedidos/${order.articles[0].cart_id}/detalles`,
         };
-
-        if (!status == 5) {
+        console.log(order);
+        console.log(payloadNotification);
+        if (status != 5) {
             const resNotification = await useSendPushNotificationsToClientForOrderUpdate(order.id_user, payloadNotification);
             console.log(resNotification);
-            alert(resNotification);
         }
 
         // console.log(order.id_user);
