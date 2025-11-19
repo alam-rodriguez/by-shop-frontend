@@ -275,7 +275,8 @@ const page = () => {
             <p className="text-2xl font-bold">Codigo Qr:</p>
             <Spacer space={12} />
             <div className="grid place-items-center">
-                <QRGenerator value={window.location.href} className="w-auto h-auto" />
+                {/* <QRGenerator value={window.location.href} className="w-auto h-auto" /> */}
+                <QRGenerator value={`${window.location.origin}/admin/pedidos/${dataOrder.id_order}`} className="w-auto h-auto" />
             </div>
         </div>
     );

@@ -100,23 +100,29 @@ const page = () => {
 
         const images = [];
         dataArticleReview.images.forEach((image) => {
-            images.push({ imageFile: image.file, folder: "folder", fileName: "nombre.png" });
+            images.push({ imageFile: image.file, folder: "reviews", fileName: dataArticleReview.title });
         });
 
         console.log(images);
+        let resImages = true;
+        if (images.length > 0) {
+            const imagesUrl = await uploadImages(images);
+            console.log(imagesUrl);
 
-        const imagesUrl = await uploadImages(images);
-
-        console.log(imagesUrl);
-
-        const resImages = await useCreateArticleReviewImage(idReview, imagesUrl);
-        console.log(resImages);
+            resImages = await useCreateArticleReviewImage(idReview, imagesUrl);
+            console.log(resImages);
+        }
 
         const resOptions = await useCreateArticleReviewOption(idReview, dataCartItemOption);
         console.log(resOptions);
 
+        // TODO: MANDAR NOTIFICIONES PARE COMENTARIO
+
         if (resStatus == 201 && resImages && resOptions) {
-            toast.success("Hemos notificados a los administradores de tu opinion, si lo aprueban se publicara automaticamente", {
+            // toast.success("Hemos notificados a los administradores de tu opinion, si lo aprueban se publicara automaticamente", {
+            //     id: loadingToast,
+            // });
+            toast.success("Tu opinio ha sido publicada correctamente", {
                 id: loadingToast,
             });
             router.replace(`/articulos/${idArticulo}`);
