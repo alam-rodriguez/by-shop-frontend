@@ -65,23 +65,23 @@ const page = () => {
 
     console.log(type);
 
-    const { isLoading, data } = useGetCartUserBought(id);
+    // const { isLoading, data } = useGetCartUserBought(id);
 
-    const { data: listArticles, isLoading: isLoadingListArticles } = useListArticlesUser(id);
+    // const { data: listArticles, isLoading: isLoadingListArticles } = useListArticlesUser(id);
 
-    useEffect(() => {
-        console.log(listArticles);
-    }, [listArticles]);
+    // useEffect(() => {
+    //     console.log(listArticles);
+    // }, [listArticles]);
 
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
+    // useEffect(() => {
+    //     console.log(data);
+    // }, [data]);
 
-    const { data: articlesViews, isLoading: isLoadingArticlesViews } = useGetUserArticlesViews(id);
+    // const { data: articlesViews, isLoading: isLoadingArticlesViews } = useGetUserArticlesViews(id);
 
-    useEffect(() => {
-        console.log(articlesViews);
-    }, [articlesViews]);
+    // useEffect(() => {
+    //     console.log(articlesViews);
+    // }, [articlesViews]);
 
     const handleClickLogout = async () => {
         console.log("hola");

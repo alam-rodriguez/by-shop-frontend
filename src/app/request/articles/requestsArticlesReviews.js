@@ -91,3 +91,13 @@ export const changeReviewStatus = async (id, status) => {
         throw new Error("Error al cambiar el estado de la opinión.");
     }
 };
+
+export const getReviewArticleUser = async (userId, articleId) => {
+    try {
+        const response = await api.get(`articles/review-user/${userId}/${articleId}`);
+        return response.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener la opinión del artículo.");
+    }
+};

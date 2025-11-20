@@ -34,6 +34,7 @@ import {
     useCreateArticleReviewImage,
     useGetLasCartItemUserOfArticle,
     useCreateArticleReviewOption,
+    useGetReviewArticleUser,
 } from "@/app/hooks/request/articles/requestsArticlesReviews";
 import useUploadThing from "@/app/hooks/upload-thing/useUploadThing";
 import { useGetCartItemOption } from "@/app/hooks/request/carts/requestsCarts";
@@ -72,6 +73,7 @@ const page = () => {
         formState: { errors },
         control,
         setValue,
+        reset,
     } = useForm({
         defaultValues: {
             id_article: idArticulo,
@@ -80,12 +82,21 @@ const page = () => {
         resolver: zodResolver(reviewSchema),
     });
 
+    const { data: articleReviewUser, isLoading: isLoadingArticleReviewUser } = useGetReviewArticleUser(idUser, idArticulo);
+
+    useEffect(() => {
+        if (isLoadingArticleReviewUser || !articleReviewUser) return;
+        console.error(articleReviewUser);
+        setStars(articleReviewUser.rating);
+        reset(articleReviewUser);
+    }, [isLoadingArticleReviewUser, articleReviewUser]);
+
     const { fields, append, remove } = useFieldArray({
         control,
         name: "images",
     });
 
-    const onSubmit = async (dataArticleReview) => {
+    const create = async (dataArticleReview) => {
         console.log(dataLasCartItemUserOfArticle);
         console.log(dataCartItemOption);
         // return;
@@ -132,6 +143,66 @@ const page = () => {
             });
         }
     };
+
+    const update = async (dataArticleReview) => {
+        alert("Actualizar comentario");
+        return;
+        console.log(dataLasCartItemUserOfArticle);
+        console.log(dataCartItemOption);
+        // return;
+
+        const loadingToast = toast.loading("Publicando opinión...");
+
+        const { resStatus, resData } = await useCreateArticleReview(idUser, idArticulo, dataArticleReview);
+        const idReview = resData.data.id;
+        console.log(resStatus);
+
+        console.log(dataArticleReview.images);
+
+        const images = [];
+        dataArticleReview.images.forEach((image) => {
+            images.push({ imageFile: image.file, folder: "reviews", fileName: dataArticleReview.title });
+        });
+
+        console.log(images);
+        let resImages = true;
+        if (images.length > 0) {
+            const imagesUrl = await uploadImages(images);
+            console.log(imagesUrl);
+
+            resImages = await useCreateArticleReviewImage(idReview, imagesUrl);
+            console.log(resImages);
+        }
+
+        const resOptions = await useCreateArticleReviewOption(idReview, dataCartItemOption);
+        console.log(resOptions);
+
+        // TODO: MANDAR NOTIFICIONES PARE COMENTARIO
+
+        if (resStatus == 201 && resImages && resOptions) {
+            // toast.success("Hemos notificados a los administradores de tu opinion, si lo aprueban se publicara automaticamente", {
+            //     id: loadingToast,
+            // });
+            toast.success("Tu opinio ha sido publicada correctamente", {
+                id: loadingToast,
+            });
+            router.replace(`/articulos/${idArticulo}`);
+        } else {
+            toast.error("Error al crear opinión", {
+                id: loadingToast,
+            });
+        }
+    };
+
+    const onSubmit = async (dataArticleReview) => {
+        console.log(articleReviewUser);
+        if (articleReviewUser) create(dataArticleReview);
+        else update(dataArticleReview);
+    };
+
+    useEffect(() => {
+        console.log(errors);
+    }, [errors]);
 
     const [stars, setStars] = useState(0);
 

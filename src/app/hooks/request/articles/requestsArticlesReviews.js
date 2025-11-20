@@ -15,8 +15,10 @@ import {
     getReviewArticle,
     changeReviewStatus,
     getRequestsReviewsByShop,
+    getReviewArticleUser,
 } from "@/app/request/articles/requestsArticlesReviews";
 import { getLasCartItemUserOfArticle } from "@/app/request/carts/requestsCarts";
+import { isUUID } from "../../app/app";
 
 export const useCreateArticleReview = async (idUser, idArticle, articleReview) => {
     const articleReviewObj = {
@@ -93,14 +95,18 @@ export const useGetLasCartItemUserOfArticle = (idUser, idArticle) =>
 export const useGetArticleReviews = (idArticle) =>
     useQuery({
         queryKey: [`article-reviews-${idArticle}`],
-        staleTime: Infinity,
+        // staleTime: Infinity,
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 5 * 60 * 1000,
         queryFn: () => getArticleReviews(idArticle),
     });
 
 export const useGetArticleReviewsData = (idArticle) =>
     useQuery({
         queryKey: [`article-reviews-data-${idArticle}`],
-        staleTime: Infinity,
+        // staleTime: Infinity,
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 5 * 60 * 1000,
         enabled: !!idArticle,
         queryFn: () => getArticleReviewsData(idArticle),
     });
@@ -129,3 +135,10 @@ export const useChangeReviewStatus = async (id, status) => {
     console.log(resStatus);
     return resStatus == 200;
 };
+
+export const useGetReviewArticleUser = (userId, articleId) =>
+    useQuery({
+        queryKey: [`article-${articleId}-review-user-${userId}`],
+        enabled: isUUID(userId) && isUUID(articleId),
+        queryFn: () => getReviewArticleUser(userId, articleId),
+    });
