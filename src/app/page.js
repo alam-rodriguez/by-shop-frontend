@@ -33,6 +33,8 @@ import Divider from "./components/home/Divider";
 import { useGetAdvertisementsForApp } from "./hooks/request/advertisements/RequestsAdvertisements";
 import HomeAdvertisements from "./components/advertisements/HomeAdvertisements";
 import { useGetHomeCategoriesForApp } from "./hooks/request/categories/requestsHomeCategories";
+import Skeleton from "./components/skeleton/Skeleton";
+import Home from "./components/skeleton/Home";
 
 const page = () => {
     const router = useRouter();
@@ -70,7 +72,7 @@ const page = () => {
         isLoadingAdvertisements ||
         isLoadingHomeCategories
     )
-        return <LoadingParagraph />;
+        return <Home />;
 
     return (
         <div className="font-sans">

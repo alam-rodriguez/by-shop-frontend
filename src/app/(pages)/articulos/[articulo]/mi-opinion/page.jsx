@@ -86,7 +86,6 @@ const page = () => {
 
     useEffect(() => {
         if (isLoadingArticleReviewUser || !articleReviewUser) return;
-        console.error(articleReviewUser);
         setStars(articleReviewUser.rating);
         reset(articleReviewUser);
     }, [isLoadingArticleReviewUser, articleReviewUser]);

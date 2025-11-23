@@ -17,6 +17,12 @@ import Script from "next/script";
 export default function ClientLayout({ children }) {
     const { useGetUserInformation, useGetUserCurrencyOrMainCurrency } = useRequestsUsers();
 
+    useEffect(() => {
+        if ("scrollRestoration" in history) {
+            history.scrollRestoration = "auto";
+        }
+    }, []);
+
     useLayoutEffect(() => {
         useGetUserInformation();
         useGetUserCurrencyOrMainCurrency();
