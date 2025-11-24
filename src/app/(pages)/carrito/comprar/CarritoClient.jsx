@@ -85,6 +85,7 @@ const CarritoClient = () => {
             return;
         }
 
+        setBlockUI(true);
         const res = await api.post(`payments/paypal/capture-order/${token}`);
         const data = res.data;
 
@@ -275,6 +276,7 @@ const CarritoClient = () => {
                 toast.success("Compra realizada", { id: loadingToast });
             else toast.error("Error al realizar la compra", { id: loadingToast });
             router.replace("/usuario/pedidos");
+            setBlockUI(false);
         } else {
             toast.error("Error al realizar la compra");
             // router.replace("/carrito/comprar");
@@ -317,7 +319,7 @@ const CarritoClient = () => {
     //     console.error(wantUseAddress);
     // }, [wantUseAddress]);
 
-    const { appName, payMethods } = appSettings();
+    const { appName, payMethods, setBlockUI } = appSettings();
     // const { appName, currencies, payMethods } = appSettings();
     const {
         totalSelectedArticles,
@@ -1012,6 +1014,8 @@ const CarritoClient = () => {
     // };
 
     const handleClickPay = async (wasPayed = false) => {
+        setBlockUI(true);
+        const loadingToast = toast.loading("Realizando compra...");
         // const res = showPriceWithCurrency(
         //     currencySelected,
         //     calculateTotalWithPaypalFee(
@@ -1109,9 +1113,11 @@ const CarritoClient = () => {
 
         if (goToPayWithPaypal && !comeFromPaypalAndPayed) {
             if (!paypalSupportedCurrencies.includes(currencySelected.iso_code)) {
-                toast.error("Esta moneda no es soportada por paypal, eliga otra.");
+                toast.error("Esta moneda no es soportada por paypal, eliga otra.", { id: loadingToast });
                 return;
             }
+
+            toast.loading("Redireccioncando a paypal", { id: loadingToast });
             // console.error("Crear orden");
 
             // console.log(data);
@@ -1137,8 +1143,6 @@ const CarritoClient = () => {
             toast.info("Es obligatorio subir una imagen");
             return;
         }
-
-        const loadingToast = toast.loading("Realizando compra...");
 
         if (payMethodSelected.require_image) {
             const resImage = await uploadImage(image, "folder", "nombre.png");
@@ -1196,6 +1200,7 @@ const CarritoClient = () => {
             toast.success("Compra realizada", { id: loadingToast });
         else toast.error("Error al realizar la compra", { id: loadingToast });
         router.push("/usuario/pedidos");
+        setBlockUI(false);
     };
 
     const setUserAddressPreferred = async (address) => {

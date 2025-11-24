@@ -7,6 +7,8 @@ import { create } from "zustand";
 // 4 = departamento => los departamentos seran para categorias directas.
 
 const appSettings = create((set) => ({
+    blockUI: false,
+    setBlockUI: (value) => set(() => ({ blockUI: value })),
     appName: "Amazon",
     mainCurrency: {
         symbol: "$",

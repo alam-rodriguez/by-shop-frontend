@@ -13,8 +13,11 @@ import RegisterServiceWorker from "./components/RegisterServiceWorker";
 import { pageview, GA_ID } from "./gtag";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
+import appSettings from "./zustand/app/zusApp";
 
 export default function ClientLayout({ children }) {
+    const { blockUI } = appSettings();
+
     const { useGetUserInformation, useGetUserCurrencyOrMainCurrency } = useRequestsUsers();
 
     useEffect(() => {
@@ -41,9 +44,11 @@ export default function ClientLayout({ children }) {
             <RegisterServiceWorker />
             <Toaster />
             <QueryClientProvider client={queryClient}>
-                <Header />
-                {children}
-                <Footer />
+                <div className={blockUI ? "pointer-events-none" : ""}>
+                    <Header />
+                    {children}
+                    <Footer />
+                </div>
             </QueryClientProvider>
             {/* Google Analytics */}
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
