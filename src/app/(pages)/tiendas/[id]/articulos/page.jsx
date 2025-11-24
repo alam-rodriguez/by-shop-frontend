@@ -14,6 +14,9 @@ import { useGetArticlesByIdShop } from "@/app/hooks/request/articles/requestsArt
 import ArticleForCategory from "@/app/components/articles/ArticleForCategory";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import ImageA from "@/app/components/others/ImageA";
+import Skeleton from "@/app/components/skeleton/Skeleton";
+import Spacer from "@/app/components/home/Spacer";
+import ArticlesShop from "@/app/components/skeleton/ArticlesShop";
 
 const page = () => {
     const { id: idShop } = useParams();
@@ -21,7 +24,7 @@ const page = () => {
     const { isLoading, data } = useGetArticlesByIdShop(idShop);
     const { data: shopData, isLoading: isLoadingShop } = useGetShopById(idShop);
 
-    if (isLoading || isLoadingShop) return <LoadingParagraph />;
+    if (isLoading || isLoadingShop) return <ArticlesShop />;
 
     return (
         <>

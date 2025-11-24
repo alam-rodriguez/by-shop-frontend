@@ -221,6 +221,11 @@ export const showPrice = (price) => {
 // };
 
 export const showPriceWithCurrencyUser = (amount, fromCurrency, toCurrency, format = true) => {
+    console.log(amount);
+    console.log(fromCurrency);
+    console.log(toCurrency);
+    console.log(format);
+
     const fromRate = parseFloat(fromCurrency.exchange_rate);
     const toRate = parseFloat(toCurrency.exchange_rate);
 

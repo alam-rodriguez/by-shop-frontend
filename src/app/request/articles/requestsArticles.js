@@ -329,3 +329,12 @@ export const getArticlesByIdShop = async (idShop) => {
         throw new Error("Error al obtener las categorías.");
     }
 };
+
+export const getArticlesFromHomeCategory = async (homeCategoryId) => {
+    try {
+        const res = await api.get(`/articles/get-articles-from-home-category/${homeCategoryId}`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+    }
+};

@@ -81,6 +81,8 @@ const CartItem2 = ({
         refetchCart();
     };
 
+    if (!currencySelected || !currencySelected.id) return null;
+
     return (
         <div className="flex bg-white rounded-lg p-4 gap-4 shadow">
             <div className="grid place-items-center p-1 w-1/4 bg-gray-200 rounded-md">

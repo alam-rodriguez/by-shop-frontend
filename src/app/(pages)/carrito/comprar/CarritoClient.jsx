@@ -61,6 +61,8 @@ import { getShopsForUserCart } from "@/app/request/shops/requestShops";
 import { getCurrencyById } from "@/app/request/currencies/requestsCurrencies";
 import { useSendPushNotificationsForNewsOrders } from "@/app/hooks/request/web-push-notifications/webPushNotifications";
 import api from "@/app/api/api";
+import Skeleton from "@/app/components/skeleton/Skeleton";
+import BuyCart from "@/app/components/skeleton/BuyCart";
 
 const CarritoClient = () => {
     // const { token } = useParams();
@@ -1328,9 +1330,10 @@ const CarritoClient = () => {
         setTotalPrice(currentTotalPrice);
     }, [priceArticles, shopSelectedForAddress, userAddressSelected, currencySelected, payMethodSelected, deliveryPreferenceSelected]);
 
-    if (isLoading || !hasData || isLoadingShopsForUserCart || isLoadingPaymentMethods || !currencySelected) return <LoadingParagraph />;
+    if (isLoading || !hasData || isLoadingShopsForUserCart || isLoadingPaymentMethods || !currencySelected || isLoading || dataUserIsLoadinf)
+        return <BuyCart />;
 
-    if (isLoading || dataUserIsLoadinf) return <LoadingParagraph />;
+    // if (isLoading || dataUserIsLoadinf) return <LoadingParagraph />;
 
     return (
         <div className="m-4">

@@ -30,6 +30,7 @@ import {
     changeArticleQuantity,
     getArticleOfferByIdCartAndIdOffer,
     getArticlesByIdShop,
+    getArticlesFromHomeCategory,
 } from "@/app/request/articles/requestsArticles";
 
 import { createArticleHighlightedParagraph, updateArticleHighlightedParagraph } from "@/app/request/articles/requestsArticlesHighlightedParagraphs";
@@ -144,6 +145,7 @@ export const useGetArticles2 = (type, id) => {
             if (type == "category-group") return getArticlesOfGroupCategory(id);
             if (type == "direct-category") return getArticlesFromDirectCategory(id);
             if (type == "general-category") return getArticlesFromGeneralCategory(id);
+            if (type == "home-category") return getArticlesFromHomeCategory(id);
         },
     });
 };

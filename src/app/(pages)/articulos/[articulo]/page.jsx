@@ -50,6 +50,8 @@ import ImageA from "@/app/components/others/ImageA";
 import { Icon } from "@iconify/react";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import SimilarArticle from "@/app/components/articles/SimilarArticle";
+import Skeleton from "@/app/components/skeleton/Skeleton";
+import Article from "@/app/components/skeleton/Article";
 
 const page = ({ params }) => {
     const { articulo: id } = useParams();
@@ -391,7 +393,7 @@ const page = ({ params }) => {
     //     };
     // }, []);
 
-    if (isLoading || (idArticulo == null && articleSelected == null) || isLoadingArticlesCanBeInterested) return <LoadingParagraph />;
+    if (isLoading || (idArticulo == null && articleSelected == null) || isLoadingArticlesCanBeInterested) return <Article />;
 
     return (
         <div>

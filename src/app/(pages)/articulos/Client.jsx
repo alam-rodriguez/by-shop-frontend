@@ -21,6 +21,9 @@ import { showText } from "@/app/hooks/app/app";
 import Link from "next/link";
 import { useGetCategoryById } from "@/app/hooks/request/categories/requestsCategories";
 import ArticleForCategory from "@/app/components/articles/ArticleForCategory";
+import Skeleton from "@/app/components/skeleton/Skeleton";
+import Spacer from "@/app/components/home/Spacer";
+import Articles from "@/app/components/skeleton/Articles";
 
 const Client = () => {
     const { useGetArticlesOfGroupCategory } = useRequestsArticles();
@@ -31,11 +34,28 @@ const Client = () => {
     const categoryGroup = searchParams.get("grupo-categorias");
     const idCategoriaDirecta = searchParams.get("categoria-directa");
     const idCategoriaGeneral = searchParams.get("categoria-general");
+    const homeCategoryId = searchParams.get("categoria-inicio");
 
     console.log(categoryGroup);
 
-    const type = categoryGroup ? "category-group" : idCategoriaDirecta ? "direct-category" : idCategoriaGeneral ? "general-category" : "";
-    const id = categoryGroup ? categoryGroup : idCategoriaDirecta ? idCategoriaDirecta : idCategoriaGeneral ? idCategoriaGeneral : "";
+    const type = categoryGroup
+        ? "category-group"
+        : idCategoriaDirecta
+        ? "direct-category"
+        : idCategoriaGeneral
+        ? "general-category"
+        : homeCategoryId
+        ? "home-category"
+        : "";
+    const id = categoryGroup
+        ? categoryGroup
+        : idCategoriaDirecta
+        ? idCategoriaDirecta
+        : idCategoriaGeneral
+        ? idCategoriaGeneral
+        : homeCategoryId
+        ? homeCategoryId
+        : "";
 
     // console.log(type);
 
@@ -60,7 +80,7 @@ const Client = () => {
         console.log(articlesFromDirectCategory);
     }, [articlesFromDirectCategory]);
 
-    if (isLoading) return <LoadingParagraph />;
+    if (isLoading) return <Articles />;
     return (
         <div className="m-4 flex justify-between flex-wrap gap-5">
             {!isLoadingCategory && (

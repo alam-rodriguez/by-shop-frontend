@@ -42,6 +42,7 @@ const Footer = () => {
         pathname == "/articulos/filtros" ||
         pathname.startsWith("/admin") ||
         pathname == "/usuario/sesion" ||
+        pathname == "/carrito/comprar" ||
         pathname.endsWith("/mi-opinion")
     )
         return null;

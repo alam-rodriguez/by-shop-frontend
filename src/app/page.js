@@ -64,6 +64,8 @@ const page = () => {
 
     const { data: homeCategories, isLoading: isLoadingHomeCategories } = useGetHomeCategoriesForApp();
 
+    const handleClickSeAllHomeCategory = (homeCatergoryId) => router.push(`/articulos?categoria-inicio=${homeCatergoryId}`);
+
     if (
         isLoadingDirects ||
         isLoadingArticlesFromGeneralCategories ||
@@ -199,7 +201,9 @@ const page = () => {
                         <div key={category.id}>
                             <div className="flex justify-between items-end">
                                 <p className="font-bold text-lg">{category.name}</p>
-                                <p className="text-red-700 text-xs">Ver Todos</p>
+                                <p className="text-red-700 text-xs" onClick={() => handleClickSeAllHomeCategory(category.id)}>
+                                    Ver Todos
+                                </p>
                             </div>
                             <Spacer space={10} />
                             <div className="flex justify-between flex-wrap gap-3">
