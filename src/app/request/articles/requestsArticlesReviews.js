@@ -10,6 +10,16 @@ export const createArticleReview = async (articleReview) => {
     }
 };
 
+export const updateArticleReview = async (articleReview) => {
+    try {
+        const res = await api.put(`/articles/reviews/${articleReview.id}`, articleReview);
+        return { status: res.status, data: res.data };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al crear la opinión.");
+    }
+};
+
 export const createArticleReviewImage = async (articleReviewImage) => {
     try {
         const res = await api.post(`/articles/reviews-images`, articleReviewImage);

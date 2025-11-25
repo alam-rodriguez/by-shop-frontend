@@ -35,10 +35,12 @@ import {
     useGetLasCartItemUserOfArticle,
     useCreateArticleReviewOption,
     useGetReviewArticleUser,
+    useUpdateArticleReview,
 } from "@/app/hooks/request/articles/requestsArticlesReviews";
 import useUploadThing from "@/app/hooks/upload-thing/useUploadThing";
 import { useGetCartItemOption } from "@/app/hooks/request/carts/requestsCarts";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
+// import { a } from "framer-motion/dist/types.d-Cjd591yU";
 
 const page = () => {
     const router = useRouter();
@@ -86,14 +88,26 @@ const page = () => {
 
     useEffect(() => {
         if (isLoadingArticleReviewUser || !articleReviewUser) return;
+        console.log(articleReviewUser);
         setStars(articleReviewUser.rating);
         reset(articleReviewUser);
+        // setValue("images", null);
+        // console.log(articleReviewUser);
+        // console.log(articleReviewUser.images);
+        // replace(articleReviewUser.images);
+        // articleReviewUser.images.map((image) => {
+        //     if (image) append(image);
+        // });
     }, [isLoadingArticleReviewUser, articleReviewUser]);
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append, remove, replace } = useFieldArray({
         control,
         name: "images",
     });
+
+    useEffect(() => {
+        console.log(fields);
+    }, [fields]);
 
     const create = async (dataArticleReview) => {
         console.log(dataLasCartItemUserOfArticle);
@@ -144,16 +158,19 @@ const page = () => {
     };
 
     const update = async (dataArticleReview) => {
-        alert("Actualizar comentario");
-        return;
-        console.log(dataLasCartItemUserOfArticle);
-        console.log(dataCartItemOption);
+        // alert("Actualizar comentario");
+        // return;
+        // console.log(dataLasCartItemUserOfArticle);
+        // console.log(dataCartItemOption);
+
+        // console.log(articleReviewUser);
+        // console.log(dataArticleReview);
         // return;
 
-        const loadingToast = toast.loading("Publicando opinión...");
+        const loadingToast = toast.loading("Actualizando opinión...");
 
-        const { resStatus, resData } = await useCreateArticleReview(idUser, idArticulo, dataArticleReview);
-        const idReview = resData.data.id;
+        const resStatus = await useUpdateArticleReview(dataArticleReview);
+        const idReview = articleReviewUser.id;
         console.log(resStatus);
 
         console.log(dataArticleReview.images);
@@ -162,8 +179,9 @@ const page = () => {
         dataArticleReview.images.forEach((image) => {
             images.push({ imageFile: image.file, folder: "reviews", fileName: dataArticleReview.title });
         });
-
         console.log(images);
+
+        // console.log(images);
         let resImages = true;
         if (images.length > 0) {
             const imagesUrl = await uploadImages(images);
@@ -173,21 +191,13 @@ const page = () => {
             console.log(resImages);
         }
 
-        const resOptions = await useCreateArticleReviewOption(idReview, dataCartItemOption);
-        console.log(resOptions);
-
-        // TODO: MANDAR NOTIFICIONES PARE COMENTARIO
-
-        if (resStatus == 201 && resImages && resOptions) {
-            // toast.success("Hemos notificados a los administradores de tu opinion, si lo aprueban se publicara automaticamente", {
-            //     id: loadingToast,
-            // });
-            toast.success("Tu opinio ha sido publicada correctamente", {
+        if (resStatus && resImages) {
+            toast.success("Tu opinio ha sido actualizada correctamente", {
                 id: loadingToast,
             });
             router.replace(`/articulos/${idArticulo}`);
         } else {
-            toast.error("Error al crear opinión", {
+            toast.error("Error al actualizar opinión", {
                 id: loadingToast,
             });
         }
@@ -195,7 +205,7 @@ const page = () => {
 
     const onSubmit = async (dataArticleReview) => {
         console.log(articleReviewUser);
-        if (articleReviewUser) create(dataArticleReview);
+        if (!articleReviewUser) create(dataArticleReview);
         else update(dataArticleReview);
     };
 
@@ -287,7 +297,11 @@ const page = () => {
                         (file, index) =>
                             file.file && (
                                 <div className="w-20 min-w-20 h-full relative rounded-md overflow-hidden" key={index}>
-                                    <img src={URL.createObjectURL(file.file)} alt="Imagen subida" className="w-full h-full object-cover" />
+                                    <img
+                                        src={typeof file == "string" ? file : URL.createObjectURL(file.file)}
+                                        alt="Imagen subida"
+                                        className="w-full h-full object-cover"
+                                    />
                                     <Icon
                                         className="absolute top-0 right-0 text-gray-500"
                                         icon="carbon:close-filled"
@@ -309,9 +323,9 @@ const page = () => {
             <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
 
             <div className="flex gap-2 mt-5 flex-col">
-                <p>
+                {/* <p className="mb-0">
                     <span className="font-semibold">Ponle titulo a tu opinión</span> (obligatorio)
-                </p>
+                </p> */}
                 <Input
                     register={register}
                     errors={errors}
@@ -320,14 +334,19 @@ const page = () => {
                     inputClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     placeholder=""
+                    label={
+                        <>
+                            <span className="font-semibold">Ponle título a tu opinión</span> (obligatorio)
+                        </>
+                    }
                 />
                 {/* <input type="text" className="" placeholder=""></input> */}
             </div>
 
             <div className="flex gap-2 mt-5 flex-col">
-                <p>
+                {/* <p>
                     <span className="font-semibold">Cual es tu nombre publico?</span> (obligatorio)
-                </p>
+                </p> */}
                 <Input
                     register={register}
                     errors={errors}
@@ -336,6 +355,11 @@ const page = () => {
                     inputClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     placeholder=""
+                    label={
+                        <>
+                            <span className="font-semibold">Cual es tu nombre publico?</span> (obligatorio)
+                        </>
+                    }
                 />
                 {/* <input type="text" className="border-2 border-gray-300 rounded-md p-2" placeholder=""></input> */}
             </div>

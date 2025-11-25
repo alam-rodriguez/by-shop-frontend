@@ -14,13 +14,22 @@ import {
     updateOffer,
     deleteOfferCategory,
     deleteOfferArticle,
+    getOffersByShopId,
 } from "@/app/request/offers/requestsOffers";
+import { isUUID } from "../../app/app";
 
 export const useGetOffers = () =>
     useQuery({
         queryKey: [`offers`],
-        staleTime: Infinity,
+        // staleTime: Infinity,
         queryFn: () => getOffers(),
+    });
+
+export const useGetOffersByShopId = (shopId) =>
+    useQuery({
+        queryKey: [`offers-shop-${shopId}`],
+        enabled: isUUID(shopId),
+        queryFn: () => getOffersByShopId(shopId),
     });
 
 export const useGetOffer = (id) =>

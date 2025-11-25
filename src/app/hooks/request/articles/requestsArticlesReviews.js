@@ -16,6 +16,7 @@ import {
     changeReviewStatus,
     getRequestsReviewsByShop,
     getReviewArticleUser,
+    updateArticleReview,
 } from "@/app/request/articles/requestsArticlesReviews";
 import { getLasCartItemUserOfArticle } from "@/app/request/carts/requestsCarts";
 import { isUUID } from "../../app/app";
@@ -34,6 +35,11 @@ export const useCreateArticleReview = async (idUser, idArticle, articleReview) =
 
     const { status, data } = await createArticleReview(articleReviewObj);
     return { resStatus: status, resData: data };
+};
+
+export const useUpdateArticleReview = async (articleReview) => {
+    const { status, data } = await updateArticleReview(articleReview);
+    return status === 200;
 };
 
 // CREATE TABLE articles_reviews_images(

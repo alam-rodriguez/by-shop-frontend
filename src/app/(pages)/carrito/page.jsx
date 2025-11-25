@@ -30,6 +30,7 @@ import { isUUID, showPrice, showText } from "@/app/hooks/app/app";
 import CartItem2 from "./components/CartItem2";
 import { useGetCurrencyById } from "@/app/hooks/request/currencies/requestsCurrencies";
 import useUserCartData from "./hooks/useUserCartData";
+import { toast } from "sonner";
 
 const page = () => {
     const router = useRouter();
@@ -78,6 +79,14 @@ const page = () => {
         const res = await useUpdateCartItemStatus(id, status);
         console.log(res);
         refetch();
+    };
+
+    const handleClickGotoBuyCart = () => {
+        if (articlesCart.length == 0) {
+            toast.info("Tu carrito esta vacio, agrega articulos para continuar");
+            return;
+        }
+        router.push("/carrito/comprar");
     };
 
     if (isLoadingArticlesCart || currencySelected == null) return <LoadingParagraph />;
@@ -257,7 +266,7 @@ const page = () => {
 
                 <Spacer />
 
-                <button className="bg-red-500 text-white p-3 rounded-lg w-full text-base" onClick={() => router.push("/carrito/comprar")}>
+                <button className="bg-red-500 text-white p-3 rounded-lg w-full text-base" onClick={handleClickGotoBuyCart}>
                     Comprar
                 </button>
             </div>

@@ -31,30 +31,27 @@ const page = () => {
 
     return (
         <div className="m-4">
-            <div>
-                <p className="text-center">Tiendas</p>
-                <div className="flex justify-between flex-wrap gap-y-4">
-                    {/* <BtnOption url="/admin/tiendas" text="TIENDAS" /> */}
-                    {/* <BtnOption url="/admin/marcas" text="MARCAS" /> */}
-                    {/* <BtnOption url="/admin/modelos" text="MODELOS" /> */}
-                    {/* <BtnOption url="/admin/tiendas" text="CONFIGURACION" /> */}
-                    {/* <BtnOption url="/admin/tiendas" text="GRAFICAS" /> */}
-                    {/* <BtnOption url="/admin/categorias-opciones" text="CATEGORIAS DE OPCIONES" /> */}
-                    {/* <BtnOption url="/admin/opciones" text="OPCIONES" /> */}
-                    {/* <BtnOption url="/admin/valores-opciones" text="VALORES OPCIONES" /> */}
-                    {/* <BtnOption url="/admin/metodos-de-pago" text="METODOS DE PAGO" /> */}
-                </div>
-            </div>
-            <div>
+            <BtnGroup txt="Mi Tienda" options={[{ url: `/admin/tiendas/${id_shop}`, text: "Configuracion tienda" }]} />
+            <BtnGroup
+                txt="Articulos"
+                options={[
+                    { url: "/admin/articulos", text: "Articulos" },
+                    { url: "/admin/ofertas", text: "Ofertas" },
+                    { url: "/admin/articulos/solicitudes-comentarios", text: "Solicitudes de comentarios" },
+                    { url: "/admin/articulos/solicitudes-comentarios", text: "Comentarios" },
+                ]}
+            />
+
+            {/* <div>
                 <p className="text-center">Articulos</p>
                 <div className="flex justify-between flex-wrap gap-y-4">
                     <BtnOption url="/admin/articulos" text="ARTICULOS" />
                     <BtnOption url="/admin/ofertas" text="OFERTAS" />
-                    {/* <BtnOption url="/admin/ofertas" text="OFERTAS" /> */}
+                    <BtnOption url="/admin/ofertas" text="OFERTAS" />
                     <BtnOption url="/admin/ofertas" text="OFERTAS POR ARTICULOS" />
                     <BtnOption url="/admin/articulos/solicitudes-comentarios" text="SOLICITUDES DE COMENTARIOS" />
                 </div>
-            </div>
+            </div> */}
             {/* <div>
                 <p className="text-center">Categorias</p>
                 <div className="flex justify-between flex-wrap gap-y-4">
@@ -65,13 +62,13 @@ const page = () => {
                     <BtnOption url="/admin/departamentos" text="DEPARTAMENTOS" />
                 </div>
             </div> */}
-            <div>
+            {/* <div>
                 <p className="text-center">Configuracion</p>
                 <div className="flex justify-between flex-wrap gap-y-4">
-                    {/* <BtnOption url="/admin/categorias-directas" text="DATOS DE APP" /> */}
+                   
                     <BtnOption url={`/admin/tiendas/${id_shop}`} text="Configuracion tienda" />
                 </div>
-            </div>
+            </div> */}
             <BtnGroup
                 txt="Mi tienda"
                 options={[
@@ -91,7 +88,7 @@ const page = () => {
 const BtnGroup = ({ txt, options }) => {
     return (
         <div>
-            <p className="text-center">{txt}</p>
+            <p className="text-center font-bold text-lg">{txt}</p>
             <div className="flex justify-between flex-wrap gap-y-4">
                 {options.map((option, index) => (
                     <BtnOption key={index} url={option.url} text={option.text} />

@@ -30,11 +30,13 @@ import {
     useGetLocationsCountries,
 } from "@/app/hooks/request/locations/requestsLocations";
 import dynamic from "next/dynamic";
-const useCoords = dynamic(() => import("@/app/hooks/app/useCoords"), { ssr: false });
+// const useCoords = dynamic(() => import("@/app/hooks/app/useCoords"), { ssr: false });
 
 // import useCoords from "@/app/hooks/app/useCoords";
 
 import Spacer from "@/app/components/home/Spacer";
+import { zusUser } from "@/app/zustand/user/zusUser";
+import useCoords from "@/app/hooks/app/useCoords";
 
 const page = () => {
     const { tienda: idShop } = useParams();
@@ -45,6 +47,8 @@ const page = () => {
     const { useCreateShop, useUpdateShop } = useRequestsShops();
 
     const { shopSelected } = zusAdminShops();
+
+    const { userTypeName } = zusUser();
 
     const wanCreate = Object.keys(shopSelected).length == 0 ? true : false;
 
@@ -187,7 +191,7 @@ const page = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="m-4">
-            <p className="text-center">Datos de la tienda</p>
+            <p className="text-center font-bold text-lg">Datos de la tienda</p>
             <Input
                 register={register}
                 errors={errors}
@@ -218,20 +222,23 @@ const page = () => {
                 placeholder=""
                 label="Logo de la tienda"
             />
-            <Select
-                register={register}
-                errors={errors}
-                type="number"
-                name="type"
-                items={[
-                    { id: 1, name: "Normal" },
-                    { id: 2, name: "Especia" },
-                ]}
-                selectClassName="border-2 border-gray-300 rounded-md p-2"
-                errorClassName="text-red-700"
-                optionNameForShow="name"
-                label="Tipo"
-            />
+            {(userTypeName == "DEV" || userTypeName == "SUPPORT") && (
+                <Select
+                    register={register}
+                    errors={errors}
+                    type="number"
+                    name="type"
+                    items={[
+                        { id: 1, name: "Normal" },
+                        { id: 2, name: "Especia" },
+                    ]}
+                    selectClassName="border-2 border-gray-300 rounded-md p-2"
+                    errorClassName="text-red-700"
+                    optionNameForShow="name"
+                    label="Tipo"
+                />
+            )}
+
             <Select
                 register={register}
                 errors={errors}
@@ -247,7 +254,9 @@ const page = () => {
                 label="Estado"
             />
 
-            <p className="text-center">Direccion Tienda</p>
+            <Spacer />
+            <p className="text-center font-bold text-lg">Direccion Tienda</p>
+
             <Select
                 register={register}
                 errors={errors}
@@ -371,6 +380,7 @@ const page = () => {
             <button
                 onClick={handleGetLocation}
                 disabled={loading}
+                type="button"
                 className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
             >
                 {loading ? "Obteniendo ubicación precisa..." : "📍 Obtener ubicación exacta"}

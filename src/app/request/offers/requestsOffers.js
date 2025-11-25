@@ -11,6 +11,16 @@ export const getOffers = async () => {
     }
 };
 
+export const getOffersByShopId = async (shopId) => {
+    try {
+        const response = await api.get(`/offers/shop/${shopId}`);
+        return response.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener las ofertas.");
+    }
+};
+
 export const getOffer = async (id) => {
     try {
         const response = await api.get(`/offers/${id}`);
