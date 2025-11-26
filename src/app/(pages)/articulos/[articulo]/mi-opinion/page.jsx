@@ -36,19 +36,23 @@ import {
     useCreateArticleReviewOption,
     useGetReviewArticleUser,
     useUpdateArticleReview,
+    useDeleteArticleReviewImages,
 } from "@/app/hooks/request/articles/requestsArticlesReviews";
 import useUploadThing from "@/app/hooks/upload-thing/useUploadThing";
 import { useGetCartItemOption } from "@/app/hooks/request/carts/requestsCarts";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
+import appSettings from "@/app/zustand/app/zusApp";
 // import { a } from "framer-motion/dist/types.d-Cjd591yU";
 
 const page = () => {
     const router = useRouter();
-    const { uploadImages } = useUploadThing();
+    const { uploadImages, deleteImages } = useUploadThing();
 
     const { articulo: idArticulo } = useParams();
 
     const { id: idUser } = zusUser();
+
+    const { setBlockUI } = appSettings();
 
     const { isLoading, data } = useGetArticle(idArticulo);
 
@@ -91,13 +95,12 @@ const page = () => {
         console.log(articleReviewUser);
         setStars(articleReviewUser.rating);
         reset(articleReviewUser);
-        // setValue("images", null);
-        // console.log(articleReviewUser);
-        // console.log(articleReviewUser.images);
-        // replace(articleReviewUser.images);
-        // articleReviewUser.images.map((image) => {
-        //     if (image) append(image);
-        // });
+        replace([]);
+
+        articleReviewUser.images.map((image) => {
+            if (image.image) append(image);
+            else remove();
+        });
     }, [isLoadingArticleReviewUser, articleReviewUser]);
 
     const { fields, append, remove, replace } = useFieldArray({
@@ -110,6 +113,8 @@ const page = () => {
     }, [fields]);
 
     const create = async (dataArticleReview) => {
+        setBlockUI(true);
+
         console.log(dataLasCartItemUserOfArticle);
         console.log(dataCartItemOption);
         // return;
@@ -155,9 +160,11 @@ const page = () => {
                 id: loadingToast,
             });
         }
+        setBlockUI(false);
     };
 
     const update = async (dataArticleReview) => {
+        setBlockUI(true);
         // alert("Actualizar comentario");
         // return;
         // console.log(dataLasCartItemUserOfArticle);
@@ -175,13 +182,25 @@ const page = () => {
 
         console.log(dataArticleReview.images);
 
+        console.log(articleReviewUser);
+
         const images = [];
+        const imagesForDelete = [];
+        const existingImagesId = dataArticleReview.images.map((image) => image.id);
         dataArticleReview.images.forEach((image) => {
-            images.push({ imageFile: image.file, folder: "reviews", fileName: dataArticleReview.title });
+            console.log(image);
+            if (image.file) images.push({ imageFile: image.file, folder: "reviews", fileName: dataArticleReview.title });
         });
         console.log(images);
 
-        // console.log(images);
+        articleReviewUser.images.forEach((image) => {
+            if (image.id && !existingImagesId.includes(image.id)) imagesForDelete.push(image);
+        });
+
+        console.log("------------------------");
+        console.log(imagesForDelete);
+        console.log("------------------------");
+
         let resImages = true;
         if (images.length > 0) {
             const imagesUrl = await uploadImages(images);
@@ -191,7 +210,24 @@ const page = () => {
             console.log(resImages);
         }
 
-        if (resStatus && resImages) {
+        const imagesUrlsForDelete = imagesForDelete.map((image) => image.image);
+        const imagesIdsForDelete = imagesForDelete.map((image) => image.id).join(",");
+
+        // debugger;
+
+        let resDeleteImages = true;
+        let resDeleteImagesFromDb = true;
+        if (imagesForDelete.length > 0) {
+            resDeleteImagesFromDb = await useDeleteArticleReviewImages(imagesIdsForDelete);
+            resDeleteImages = await deleteImages(imagesUrlsForDelete);
+        }
+
+        console.log(resDeleteImages);
+        // debugger;
+        console.log(resDeleteImagesFromDb);
+        // debugger;
+
+        if (resStatus && resImages && resDeleteImages && resDeleteImagesFromDb) {
             toast.success("Tu opinio ha sido actualizada correctamente", {
                 id: loadingToast,
             });
@@ -201,10 +237,12 @@ const page = () => {
                 id: loadingToast,
             });
         }
+        setBlockUI(false);
     };
 
     const onSubmit = async (dataArticleReview) => {
-        console.log(articleReviewUser);
+        // console.log(articleReviewUser);
+
         if (!articleReviewUser) create(dataArticleReview);
         else update(dataArticleReview);
     };
@@ -293,25 +331,37 @@ const page = () => {
 
             {fields.length > 0 && (
                 <div className="flex gap-4 mt-5 h-20 overflow-scroll">
-                    {fields.map(
-                        (file, index) =>
-                            file.file && (
-                                <div className="w-20 min-w-20 h-full relative rounded-md overflow-hidden" key={index}>
-                                    <img
-                                        src={typeof file == "string" ? file : URL.createObjectURL(file.file)}
-                                        alt="Imagen subida"
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <Icon
-                                        className="absolute top-0 right-0 text-gray-500"
-                                        icon="carbon:close-filled"
-                                        width="32"
-                                        height="32"
-                                        onClick={() => remove(index)}
-                                    />
-                                </div>
-                            )
-                    )}
+                    {fields.map((file, index) => (
+                        <div className="w-20 min-w-20 h-full relative rounded-md overflow-hidden" key={index}>
+                            <img
+                                src={file.file ? URL.createObjectURL(file.file) : file.image}
+                                alt="Imagen subida"
+                                className="w-full h-full object-cover"
+                            />
+                            <Icon
+                                className="absolute top-0 right-0 text-gray-500"
+                                icon="carbon:close-filled"
+                                width="32"
+                                height="32"
+                                onClick={() => remove(index)}
+                            />
+                        </div>
+                    ))}
+                    {/* file.file ? (
+                            
+                        ) : (
+                            <div className="w-20 min-w-20 h-full relative rounded-md overflow-hidden" key={index}>
+                                <img src={file.image} alt="Imagen subida" className="w-full h-full object-cover" />
+                                <Icon
+                                    className="absolute top-0 right-0 text-gray-500"
+                                    icon="carbon:close-filled"
+                                    width="32"
+                                    height="32"
+                                    onClick={() => remove(index)}
+                                />
+                            </div>
+                        )
+                    )} */}
                     <div
                         className="bg-gray-100 rounded-md border-2 border-gray-300 grid place-items-center h-full w-20 min-w-20"
                         onClick={handleClick}

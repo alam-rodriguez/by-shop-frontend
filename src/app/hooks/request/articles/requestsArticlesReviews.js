@@ -17,6 +17,8 @@ import {
     getRequestsReviewsByShop,
     getReviewArticleUser,
     updateArticleReview,
+    deleteArticleReview,
+    deleteArticleReviewImages,
 } from "@/app/request/articles/requestsArticlesReviews";
 import { getLasCartItemUserOfArticle } from "@/app/request/carts/requestsCarts";
 import { isUUID } from "../../app/app";
@@ -42,6 +44,11 @@ export const useUpdateArticleReview = async (articleReview) => {
     return status === 200;
 };
 
+export const useDeleteArticleReview = async (ids) => {
+    const { status, data } = await deleteArticleReview(ids);
+    return status === 200;
+};
+
 // CREATE TABLE articles_reviews_images(
 //     id char(36) NOT NULL PRIMARY KEY,
 //     id_review char(36) NOT NULL,
@@ -63,6 +70,11 @@ export const useCreateArticleReviewImage = async (idReview, images) => {
 
     const results = await Promise.all(promises);
     return results.every((status) => status === 201);
+};
+
+export const useDeleteArticleReviewImages = async (ids) => {
+    const { data, status } = await deleteArticleReviewImages(ids);
+    return status === 200;
 };
 
 // CREATE TABLE articles_reviews_options(

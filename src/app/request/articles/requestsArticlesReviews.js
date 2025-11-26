@@ -30,6 +30,16 @@ export const createArticleReviewImage = async (articleReviewImage) => {
     }
 };
 
+export const deleteArticleReviewImages = async (ids) => {
+    try {
+        const res = await api.delete(`/articles/reviews-images/${ids}`);
+        return { status: res.status, data: res.data };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al crear la opinión.");
+    }
+};
+
 export const createArticleReviewOption = async (articleReviewOption) => {
     try {
         const res = await api.post(`/articles/reviews-article-options`, articleReviewOption);

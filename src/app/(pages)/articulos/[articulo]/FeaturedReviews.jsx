@@ -13,14 +13,15 @@ import Review from "./Review";
 
 // Hooks
 import useApp from "@/app/hooks/app/useApp";
-import { useGetArticleReviewsData } from "@/app/hooks/request/articles/requestsArticlesReviews";
+import { useGetArticleReviews, useGetArticleReviewsData } from "@/app/hooks/request/articles/requestsArticlesReviews";
 
 const FeaturedReviews = ({ idArticle, reviews = [] }) => {
     const router = useRouter();
 
     const { data, isLoading } = useGetArticleReviewsData(idArticle);
+    const { data: articleReviews, isLoading: isLoadingArticleReviews } = useGetArticleReviews(idArticle);
 
-    if (isLoading) return null;
+    if (isLoading || isLoadingArticleReviews) return null;
 
     return (
         <>
@@ -43,7 +44,7 @@ const FeaturedReviews = ({ idArticle, reviews = [] }) => {
                         <p className="text-lg font-semibold mb-10">Opiniones destacadas</p>
 
                         <div className="flex flex-col gap-10">
-                            {reviews.map((review) => (
+                            {articleReviews.map((review) => (
                                 <Review
                                     key={review.id}
                                     clientName={review.user_public_name}
