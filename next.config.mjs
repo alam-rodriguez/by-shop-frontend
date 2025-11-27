@@ -85,6 +85,11 @@ const nextConfig = {
                 hostname: "lh3.googleusercontent.com",
                 pathname: "/**",
             },
+            {
+                protocol: "https",
+                hostname: "uppic.originoo.com",
+                pathname: "/**",
+            },
         ],
     },
     eslint: {

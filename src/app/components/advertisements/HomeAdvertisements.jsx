@@ -5,22 +5,33 @@ import ImageA from "../others/ImageA";
 import { Icon } from "@iconify/react";
 import { useGetAdvertisementsForApp } from "@/app/hooks/request/advertisements/RequestsAdvertisements";
 import { useRouter } from "next/navigation";
+import useCarouselStore from "@/app/zustand/app/zusAdvertisements";
 
 const HomeAdvertisements = () => {
     const router = useRouter();
 
+    const { startCarousel } = useCarouselStore();
+
     const { data: advertisements = [], isLoading: isLoadingAdvertisements } = useGetAdvertisementsForApp();
-    const [currentIndex, setCurrentIndex] = useState(0);
+    // const [currentIndex, setCurrentIndex] = useState(0);
+
+    // useEffect(() => {
+    //     if (isLoadingAdvertisements || advertisements.length === 0) return;
+
+    //     const interval = setInterval(() => {
+    //         setCurrentIndex((prevIndex) => (prevIndex + 1 >= advertisements.length ? 0 : prevIndex + 1));
+    //     }, 5000); // 5 minutos
+
+    //     return () => clearInterval(interval);
+    // }, [advertisements, isLoadingAdvertisements]);
 
     useEffect(() => {
-        if (isLoadingAdvertisements || advertisements.length === 0) return;
+        if (!isLoadingAdvertisements && advertisements.length > 0) {
+            startCarousel(advertisements.length);
+        }
+    }, [isLoadingAdvertisements, advertisements.length]);
 
-        const interval = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1 >= advertisements.length ? 0 : prevIndex + 1));
-        }, 5000); // 5 minutos
-
-        return () => clearInterval(interval);
-    }, [advertisements, isLoadingAdvertisements]);
+    const currentIndex = useCarouselStore((state) => state.currentIndex);
 
     if (isLoadingAdvertisements || advertisements.length === 0) return null;
 

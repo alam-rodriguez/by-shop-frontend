@@ -7,14 +7,19 @@ import Stars from "@/app/components/app/articles/Stars";
 // Hooks
 import useApp from "@/app/hooks/app/useApp";
 import ImageZoom from "@/app/components/others/ImageZoom";
+import ImageA from "@/app/components/others/ImageA";
 
-const Review = ({ clientName, stars, reviewTitle, reviewContent, reviewDate, options, images, utilCount, status }) => {
+const Review = ({ clientName, clientPicture, stars, reviewTitle, reviewContent, reviewDate, options, images, utilCount, status }) => {
     const { getDateInSpanish } = useApp();
 
     return (
         <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
-                <img className="w-8 h-8" src="https://uppic.originoo.com/11/2016/08/15/p_81f8lritwvs7yly7i7hcxzasu9ow3sdd.png!/fw/400" alt="" />
+                <ImageA
+                    className="w-8 h-8 rounded-full object-cover"
+                    src={clientPicture ? clientPicture : "https://uppic.originoo.com/11/2016/08/15/p_81f8lritwvs7yly7i7hcxzasu9ow3sdd.png!/fw/400"}
+                    alt=""
+                />
                 <p>{clientName}</p>
             </div>
             <div className="flex items-center gap-3">

@@ -48,6 +48,7 @@ const FeaturedReviews = ({ idArticle, reviews = [] }) => {
                                 <Review
                                     key={review.id}
                                     clientName={review.user_public_name}
+                                    clientPicture={review.user_picture}
                                     stars={review.rating}
                                     reviewTitle={review.title}
                                     reviewContent={review.comment}
