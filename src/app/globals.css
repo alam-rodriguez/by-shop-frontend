@@ -233,3 +233,7 @@ body {
   inset: 0 !important;
   z-index: 9999 !important;
 }
+
+html, body {
+  -webkit-touch-callout: none; /* previene tap prolongado */
+}

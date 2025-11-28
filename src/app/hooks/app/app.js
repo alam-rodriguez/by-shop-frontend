@@ -220,7 +220,7 @@ export const showPrice = (price) => {
 //     );
 // };
 
-export const showPriceWithCurrencyUser = (amount, fromCurrency, toCurrency, format = true) => {
+export const showPriceWithCurrencyUser = (amount, fromCurrency, toCurrency, format = true, formatOptions = {}) => {
     console.log(amount);
     console.log(fromCurrency);
     console.log(toCurrency);
@@ -238,12 +238,15 @@ export const showPriceWithCurrencyUser = (amount, fromCurrency, toCurrency, form
     // return showPriceWithCurrency(toCurrency, newAmount, false);
     // const convertedPrice = makeCalc ? calcPriceCurrency(currency, price) : price; // debe devolver un número
 
+    const currencyDisplay = formatOptions.currencyDisplay ? formatOptions.currencyDisplay : "code";
+    const style = formatOptions.style === null ? undefined : formatOptions.style === undefined ? "currency" : formatOptions.style;
+
     if (!format) return newAmount;
     else
         return new Intl.NumberFormat("en-US", {
-            style: "currency",
+            style: style,
             currency: toCurrency.iso_code,
-            currencyDisplay: "code", // "symbol" | "code" | "name"
+            currencyDisplay: currencyDisplay, // "symbol" | "code" | "name"
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         }).format(newAmount);

@@ -5,15 +5,18 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 // Hooks
-import { showText } from "@/app/hooks/app/app";
+import { showPriceWithCurrencyUser, showText } from "@/app/hooks/app/app";
 import { useGetArticleOffer } from "@/app/hooks/request/articles/requestsArticles";
 
 // Components
 import ImageA from "../others/ImageA";
+import { zusUser } from "@/app/zustand/user/zusUser";
 
-const ArticleForCategory = ({ id, image, price, name }) => {
+const ArticleForCategory = ({ id, image, price, name, articleCurrency }) => {
     const [hasOffer, setHasOffer] = useState(false);
     const [finalPrice, setFinalPrice] = useState(price);
+
+    const { currencySelected: currencyUser } = zusUser();
 
     const { data: offerArticle, isLoading: isLoadingOfferArticle } = useGetArticleOffer(id);
 
@@ -41,6 +44,9 @@ const ArticleForCategory = ({ id, image, price, name }) => {
     //         </div>
     //     </Link>
     // );
+
+    if (!currencyUser) return <></>;
+
     return (
         <Link key={id} href={`/articulos/${id}`} className="h-60" style={{ width: "calc(50% - 10px)" }}>
             <div className="h-4/5 relative">
@@ -58,8 +64,16 @@ const ArticleForCategory = ({ id, image, price, name }) => {
             </div>
             <div className="h-1/5">
                 <div className="flex gap-2">
-                    <p className="text-sm font-bold">${finalPrice.toString().split(".")[0]}.00</p>
-                    {hasOffer && <p className="text-sm font-bold line-through text-gray-500">${price.toString().split(".")[0]}.00</p>}
+                    {/* <p className="text-sm font-bold">${finalPrice.toString().split(".")[0]}.00</p> */}
+                    <p className="text-sm font-bold">
+                        ${showPriceWithCurrencyUser(finalPrice, articleCurrency, currencyUser, true, { style: null }).toString().split(".")[0]}
+                    </p>
+                    {/* {hasOffer && <p className="text-sm font-bold line-through text-gray-500">${price.toString().split(".")[0]}.00</p>} */}
+                    {hasOffer && (
+                        <p className="text-sm font-bold line-through text-gray-500">
+                            ${showPriceWithCurrencyUser(price, articleCurrency, currencyUser, true, { style: null }).toString().split(".")[0]}
+                        </p>
+                    )}
                 </div>
                 <p className="text-gray-500 text-xs">{showText(name, 18)}</p>
             </div>

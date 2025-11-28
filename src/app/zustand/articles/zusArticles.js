@@ -25,6 +25,7 @@ export const zusArticles = create((set) => ({
     setOffer: (offer) => set({ offer: offer }),
     hasOffer: false,
     price: 0,
+    priceWithoutOffer: 0,
     setPrice: () =>
         set((state) => {
             let newPrice = state.articleSelected.price ? parseFloat(state.articleSelected.price) : 0;
@@ -32,10 +33,11 @@ export const zusArticles = create((set) => ({
             Object.values(state.optionsSelected).forEach((optionPrice) => {
                 newPrice += Number(optionPrice.price);
             });
+            const priceWithoutOffer = newPrice * state.quantity;
             newPrice *= state.quantity;
             const hasOffer = percent_discount > 0;
             if (percent_discount > 0) newPrice = newPrice * (1 - percent_discount / 100);
-            return { price: newPrice, hasOffer: hasOffer };
+            return { price: newPrice, hasOffer: hasOffer, priceWithoutOffer };
         }),
     resetArticleSeleceted: () => set({ articleSelected: {}, optionsSelected: {}, quantity: 1, price: 0, offer: {}, hasOffer: false }),
     // articleSelected: null,

@@ -64,9 +64,21 @@ const useUserCartData = () => {
 
         articlesCart.forEach((article) => {
             const currencyArticle = { iso_code: article.iso_code, exchange_rate: article.exchange_rate };
-            const articlePrice = (parseFloat(article.price) + parseFloat(article.price_options)) * Number(article.quantity);
+            // const offerDiscount = Number(article?.offer?.percent_discount);
+            // const articlePrice =
+            //     (((parseFloat(article.price) + parseFloat(article.price_options)) * Number(article.quantity)) / 100) * (100 - offerDiscount);
+            // const articlePrice =
+            // (parseFloat(article.price) + parseFloat(article.price_options)) * Number(article.quantity) * ((100 - offerDiscount) / 100);
+
+            const basePrice = (parseFloat(article.price) + parseFloat(article.price_options)) * Number(article.quantity);
+
+            const discount = Number(article?.offer?.percent_discount || 0);
+
+            // Fórmula profesional
+            const priceWithDiscount = basePrice * (1 - discount / 100);
+
             console.log(article);
-            const articlePriceInUserCurrency = showPriceWithCurrencyUser(articlePrice, currencyArticle, currencySelected, false);
+            const articlePriceInUserCurrency = showPriceWithCurrencyUser(priceWithDiscount, currencyArticle, currencySelected, false);
             currentPrice += articlePriceInUserCurrency;
         });
 

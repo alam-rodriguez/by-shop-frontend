@@ -22,7 +22,7 @@ import {
 
 // Components
 import LoadingParagraph from "./components/others/LoadingParagraph";
-import { showText } from "./hooks/app/app";
+import { showPriceWithCurrencyUser, showText } from "./hooks/app/app";
 import Departments from "./components/app/categories/Departments";
 import { useGetDepartmentsForApp } from "./hooks/request/categories/requestsDepartments";
 
@@ -39,7 +39,7 @@ import Home from "./components/skeleton/Home";
 const page = () => {
     const router = useRouter();
 
-    const { type } = zusUser();
+    const { type, currencySelected: currencyUser } = zusUser();
 
     const { data: directsCategories, isLoading: isLoadingDirects } = useGetDirectsCategoriesForApp();
 
@@ -72,7 +72,8 @@ const page = () => {
         isLoadingDepartments ||
         isLoadingIndirects ||
         isLoadingAdvertisements ||
-        isLoadingHomeCategories
+        isLoadingHomeCategories ||
+        !currencyUser
     )
         return <Home />;
 
@@ -221,7 +222,18 @@ const page = () => {
                                             <p className="font-bold text-xs line-clamp-2">{article.description}</p>
                                             <Spacer space={5} />
                                             <div className="flex justify-between items-center">
-                                                <p className="font-bold text-red-700">${article.price.toString().split(".")[0]}</p>
+                                                {/* <p className="font-bold text-red-700">${article.price.toString().split(".")[0]}</p> */}
+                                                <p className="font-bold text-red-700">
+                                                    $
+                                                    {
+                                                        showPriceWithCurrencyUser(article.price, article.currency, currencyUser, true, {
+                                                            style: null,
+                                                        })
+                                                            .toString()
+                                                            .split(".")[0]
+                                                    }
+                                                </p>
+
                                                 <div className="bg-red-700 text-white py-2 px-3 rounded-full text-xs">
                                                     <p className="text-xs">Add to Cart</p>
                                                 </div>

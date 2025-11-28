@@ -103,7 +103,7 @@ const page = () => {
                 <Spacer space={12} />
                 <div className="flex gap-5 items-center">
                     <Icon className="size-6 text-red-700 text-base" icon="mdi:money" />
-                    <p className="font-bold text-base">Total: {showPrice(price)}</p>
+                    <p className="font-bold text-base">Total: {showPrice(price - discount)}</p>
                 </div>
                 <Spacer />
                 <div className="flex flex-col gap-6">

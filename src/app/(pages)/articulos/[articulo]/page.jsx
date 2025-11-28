@@ -52,11 +52,12 @@ import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import SimilarArticle from "@/app/components/articles/SimilarArticle";
 import Skeleton from "@/app/components/skeleton/Skeleton";
 import Article from "@/app/components/skeleton/Article";
+import { showPriceWithCurrencyUser } from "@/app/hooks/app/app";
 
 const page = ({ params }) => {
     const { articulo: id } = useParams();
 
-    const { id: id_user } = zusUser();
+    const { id: id_user, currencySelected: currencyUser } = zusUser();
 
     const { showPrice, showText } = useApp();
 
@@ -119,7 +120,7 @@ const page = ({ params }) => {
 
     const { articleSelected, setArticleSelected, resetArticleSeleceted } = zusArticles();
     const { optionsSelected, quantity, setQuantity, setOptionsSelected } = zusArticles();
-    const { price, setPrice } = zusArticles();
+    const { price, setPrice, priceWithoutOffer } = zusArticles();
     const { offer, setOffer, hasOffer } = zusArticles();
 
     useEffect(() => {
@@ -324,6 +325,15 @@ const page = ({ params }) => {
     const handleClickAddToCart = async () => {
         const loadingToast = toast.loading("Agregando articulo...");
 
+        console.log(data);
+
+        if (Number(data.quantity) == 0) {
+            toast.warning("Este producto no esta disponible actualmente", {
+                id: loadingToast,
+            });
+            return;
+        }
+
         if (id_user == "") {
             toast.warning("Debes iniciar session para agregar este articulo al carrito", {
                 id: loadingToast,
@@ -393,7 +403,7 @@ const page = ({ params }) => {
     //     };
     // }, []);
 
-    if (isLoading || (idArticulo == null && articleSelected == null) || isLoadingArticlesCanBeInterested) return <Article />;
+    if (isLoading || (idArticulo == null && articleSelected == null) || isLoadingArticlesCanBeInterested || !currencyUser) return <Article />;
 
     return (
         <div>
@@ -560,12 +570,23 @@ const page = ({ params }) => {
                 <div className="flex items-center justify-between mt-4">
                     <div className="flex flex-col gap-1 w-1/4 items-center">
                         <p className="text-xs text-gray-500">Precio total</p>
-                        <p className="text-2xl font-bold">${price.toString().split(".")[0]}</p>{" "}
+                        {/* <p className="text-2xl font-bold">${price.toString().split(".")[0]}</p>{" "} */}
+                        <p className="text-2xl font-bold">
+                            ${showPriceWithCurrencyUser(price, data.currency, currencyUser, true, { style: null }).toString().split(".")[0]}
+                        </p>
                     </div>
                     {hasOffer && (
                         <div className="flex flex-col gap-1 w-1/4 items-center">
                             <p className="text-xs text-gray-500">Sin oferta</p>
-                            <p className="text-2xl font-bold line-through text-gray-500">${data.price.toString().split(".")[0]}</p>{" "}
+                            {/* <p className="text-2xl font-bold line-through text-gray-500">${data.price.toString().split(".")[0]}</p>{" "} */}
+                            <p className="text-2xl font-bold line-through text-gray-500">
+                                $
+                                {
+                                    showPriceWithCurrencyUser(priceWithoutOffer, data.currency, currencyUser, true, { style: null })
+                                        .toString()
+                                        .split(".")[0]
+                                }
+                            </p>
                         </div>
                     )}
 
@@ -575,7 +596,8 @@ const page = ({ params }) => {
                             onClick={handleClickAddToCart}
                         >
                             <Icon icon="solar:bag-4-bold" width="24" height="24" />
-                            <span>Add to Cart</span>
+                            {/* <span>Add to Cart</span> */}
+                            <span>Agregar a Carrito</span>
                         </button>
                     </div>
                 </div>

@@ -108,7 +108,16 @@ const CartItem2 = ({
                         <p className="font-bold text-red-500 text-lg">
                             {showPriceWithCurrencyUser(finalPrice, { exchange_rate: exchangeRate, iso_code: isoCode }, currencySelected)}
                         </p>
-                        {hasOffer && <p className="font-bold text-gray-400 text-base line-through">{showPrice(articlePrice * quantity)}</p>}
+                        {/* {hasOffer && <p className="font-bold text-gray-400 text-base line-through">{showPrice(articlePrice * quantity)}</p>} */}
+                        {hasOffer && (
+                            <p className="font-bold text-gray-400 text-base line-through">
+                                {showPriceWithCurrencyUser(
+                                    articlePrice * quantity,
+                                    { exchange_rate: exchangeRate, iso_code: isoCode },
+                                    currencySelected
+                                )}
+                            </p>
+                        )}
                     </div>
                     <div className="flex items-center gap-1">
                         <Icon className="size-5 text-gray-500" icon="carbon:subtract-alt" onClick={() => handleClickChangeCount(0)} />

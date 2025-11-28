@@ -74,11 +74,11 @@ const Client = () => {
         console.log(data);
     }, [data]);
 
-    const { data: articlesFromDirectCategory, isLoading: isLoadingArticlesFromDirectCategory } = useGetArticlesFromDirectCategory(idCategoriaDirecta);
+    // const { data: articlesFromDirectCategory, isLoading: isLoadingArticlesFromDirectCategory } = useGetArticlesFromDirectCategory(idCategoriaDirecta);
 
-    useEffect(() => {
-        console.log(articlesFromDirectCategory);
-    }, [articlesFromDirectCategory]);
+    // useEffect(() => {
+    //     console.log(articlesFromDirectCategory);
+    // }, [articlesFromDirectCategory]);
 
     if (isLoading) return <Articles />;
     return (
@@ -90,7 +90,14 @@ const Client = () => {
             )}
 
             {data.map((article) => (
-                <ArticleForCategory key={article.id} id={article.id} image={article.main_image} price={article.price} name={article.name} />
+                <ArticleForCategory
+                    key={article.id}
+                    id={article.id}
+                    image={article.main_image}
+                    price={article.price}
+                    name={article.name}
+                    articleCurrency={article.currency}
+                />
             ))}
             {/* {data.map((article) => (
                 <Link key={article.id} href={`/articulos/${article.id}`} className="h-72" style={{ width: "calc(50% - 10px)" }}>
