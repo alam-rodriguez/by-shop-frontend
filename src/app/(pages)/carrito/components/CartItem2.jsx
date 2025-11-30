@@ -22,6 +22,7 @@ const CartItem2 = ({
     idCart,
     idArticle,
     quantity,
+    stock,
     image,
     articleName,
     articleDescription,
@@ -75,6 +76,8 @@ const CartItem2 = ({
 
     const handleClickChangeCount = async (type = 1) => {
         if (type === 0 && quantity <= 1) return;
+        if (quantity >= stock) return toast.error("No hay suficiente stock disponible");
+
         const newQuantity = type == 1 ? quantity + 1 : quantity - 1;
         const res = await useUpdateCartItemQuantity(idCart, newQuantity);
         refetch();

@@ -113,6 +113,7 @@ const page = () => {
                             idCart={articleCart.id}
                             idArticle={articleCart.id_article}
                             quantity={articleCart.quantity}
+                            stock={articleCart.stock}
                             image={articleCart.article_image}
                             articleName={articleCart.name}
                             articleDescription={articleCart.description}

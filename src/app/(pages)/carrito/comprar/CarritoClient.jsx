@@ -1114,6 +1114,7 @@ const CarritoClient = () => {
         if (goToPayWithPaypal && !comeFromPaypalAndPayed) {
             if (!paypalSupportedCurrencies.includes(currencySelected.iso_code)) {
                 toast.error("Esta moneda no es soportada por paypal, eliga otra.", { id: loadingToast });
+                setBlockUI(false);
                 return;
             }
 
@@ -1140,7 +1141,8 @@ const CarritoClient = () => {
         let imageUrl = null;
 
         if (payMethodSelected.require_image && !image) {
-            toast.info("Es obligatorio subir una imagen");
+            toast.info("Es obligatorio subir una imagen", { id: loadingToast });
+            setBlockUI(false);
             return;
         }
 
@@ -1417,6 +1419,7 @@ const CarritoClient = () => {
                                 name={preference.name}
                                 description={preference.description}
                                 onClick={() => setPreferenciaEntrega(preference)}
+                                isSelectedItem={false}
                             />
                             // <div key={preference.value} className="bg-white p-4 rounded-3xl" onClick={() => setPreferenciaEntrega(preference)}>
                             //     <div className="flex items-center">
@@ -1487,6 +1490,7 @@ const CarritoClient = () => {
                                     name={address.location}
                                     description={address.street}
                                     onClick={() => setUserAddressPreferred(address)}
+                                    isSelectedItem={false}
                                 />
                                 // <div key={address.id} className="bg-white p-4 rounded-3xl" onClick={() => setUserAddressPreferred(address)}>
                                 //     <div className="flex items-center">
@@ -1545,7 +1549,13 @@ const CarritoClient = () => {
                         {shopsForUserCart
                             ?.filter((shop) => shop.id != shopSelectedForAddress?.id)
                             .map((shop) => (
-                                <Item key={shop.id} name={shop.name} description={shop.description} onClick={() => setUserShopForCart(shop)} />
+                                <Item
+                                    key={shop.id}
+                                    name={shop.name}
+                                    description={shop.description}
+                                    onClick={() => setUserShopForCart(shop)}
+                                    isSelectedItem={false}
+                                />
                                 // <div key={shop.id} className="bg-white p-4 rounded-3xl" onClick={() => setUserShopForCart(shop)}>
                                 //     <div className="flex items-center">
                                 //         <div className="size-1/6">
@@ -1854,6 +1864,7 @@ const CarritoClient = () => {
                                 name={currency.name}
                                 description={currency.description}
                                 onClick={() => setCurrencySelectedForCart(currency)}
+                                isSelectedItem={false}
                             />
                             // <div key={currency.id} className="bg-white p-4 rounded-3xl" onClick={() => setCurrencySelectedForCart(currency)}>
                             //     <div className="flex items-center">
@@ -1921,6 +1932,7 @@ const CarritoClient = () => {
                                 name={paymentMethod.name}
                                 description={paymentMethod.description}
                                 onClick={() => setOrderPaymentMethod(paymentMethod)}
+                                isSelectedItem={false}
                             />
                             // <div key={paymentMethod.id} className="bg-white p-4 rounded-3xl" onClick={() => setOrderPaymentMethod(paymentMethod)}>
                             //     <div className="flex items-center">
@@ -2365,10 +2377,10 @@ const CarritoClient = () => {
 
 export default CarritoClient;
 
-const Item = ({ name, description, onClick = () => {} }) => {
+const Item = ({ name, description, onClick = () => {}, isSelectedItem = true }) => {
     return (
         <div className="bg-white p-4 rounded-3xl">
-            <div className="flex items-center">
+            <div className="flex items-center" onClick={!isSelectedItem ? onClick : undefined}>
                 <div className="size-1/6">
                     <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
                         <div className="bg-black grid place-items-center rounded-full size-full">
@@ -2380,7 +2392,7 @@ const Item = ({ name, description, onClick = () => {} }) => {
                     <p className="text-base font-bold line-clamp-1">{name}</p>
                     <p className="text-sm line-clamp-2">{description}</p>
                 </div>
-                <div className="size-1/6 grid place-items-center" onClick={onClick}>
+                <div className="size-1/6 grid place-items-center" onClick={isSelectedItem ? onClick : undefined}>
                     <Icon icon="iconamoon:edit-fill" width="24" height="24" />
                 </div>
             </div>
