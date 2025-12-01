@@ -1,16 +1,40 @@
+// Next
+import { useRouter } from "next/navigation";
+
 // Icons
 import { Icon } from "@iconify/react";
 
 // Components
 import Stars from "@/app/components/app/articles/Stars";
+import ImageA from "@/app/components/others/ImageA";
 
 // Hooks
 import useApp from "@/app/hooks/app/useApp";
 import ImageZoom from "@/app/components/others/ImageZoom";
-import ImageA from "@/app/components/others/ImageA";
 
-const Review = ({ clientName, clientPicture, stars, reviewTitle, reviewContent, reviewDate, options, images, utilCount, status }) => {
+// Zustand
+import { zusUser } from "@/app/zustand/user/zusUser";
+
+const Review = ({
+    reviewId,
+    clientName,
+    clientPicture,
+    stars,
+    reviewTitle,
+    reviewContent,
+    reviewDate,
+    options,
+    images,
+    utilCount,
+    status,
+    articleShopId,
+    showAdminOptions = false,
+}) => {
     const { getDateInSpanish } = useApp();
+
+    const { userTypeName, id_shop } = zusUser();
+
+    const router = useRouter();
 
     return (
         <div className="flex flex-col gap-1">
@@ -55,6 +79,17 @@ const Review = ({ clientName, clientPicture, stars, reviewTitle, reviewContent, 
                 </div>
                 <p className="text-gray-500 text-base">Reportar</p>
             </div>
+            {showAdminOptions &&
+                (userTypeName === "DEV" ||
+                    userTypeName === "SUPPORT" ||
+                    ((userTypeName === "ADMIN" || userTypeName === "SUDADMIN") && articleShopId === id_shop)) && (
+                    <button
+                        className="bg-red-700 text-white py-2 px-4 text-xs rounded-xl mt-2"
+                        onClick={() => router.push(`/admin/articulos/solicitudes-comentarios/${reviewId}`)}
+                    >
+                        Actualizar comentario
+                    </button>
+                )}
             {/* </div> */}
         </div>
     );

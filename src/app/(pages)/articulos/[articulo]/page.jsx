@@ -57,7 +57,7 @@ import { showPriceWithCurrencyUser } from "@/app/hooks/app/app";
 const page = ({ params }) => {
     const { articulo: id } = useParams();
 
-    const { id: id_user, currencySelected: currencyUser } = zusUser();
+    const { id: id_user, currencySelected: currencyUser, userTypeName, id_shop } = zusUser();
 
     const { showPrice, showText } = useApp();
 
@@ -567,7 +567,7 @@ const page = ({ params }) => {
 
                 <Divider h={1} />
 
-                <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center justify-between mt-4 gap-3">
                     <div className="flex flex-col gap-1 w-1/4 items-center">
                         <p className="text-xs text-gray-500">Precio total</p>
                         {/* <p className="text-2xl font-bold">${price.toString().split(".")[0]}</p>{" "} */}
@@ -590,13 +590,21 @@ const page = ({ params }) => {
                         </div>
                     )}
 
-                    <div className="w-3/4 grid place-items-center">
+                    {/* <div className="w-3/4 grid place-items-center">
                         <button
-                            className="text-white bg-red-500 rounded-full flex justify-center items-center gap-4 p-4 w-full"
+                            className="text-white bg-red-500 rounded-full flex justify-between items-center p-4 w-full"
                             onClick={handleClickAddToCart}
                         >
                             <Icon icon="solar:bag-4-bold" width="24" height="24" />
-                            {/* <span>Add to Cart</span> */}
+                            <span>Agregar a Carrito</span>
+                        </button>
+                    </div> */}
+                    <div className="w-3/4 grid place-items-center">
+                        <button
+                            className="text-white bg-red-500 rounded-full flex justify-between- justify-evenly gap-4_ items-center p-4 w-full"
+                            onClick={handleClickAddToCart}
+                        >
+                            <Icon icon="solar:bag-4-bold" className="size-6" />
                             <span>Agregar a Carrito</span>
                         </button>
                     </div>
@@ -717,6 +725,18 @@ const page = ({ params }) => {
             <Divider h={2.5} />
 
             <FeaturedReviews reviews={articleReviews} idArticle={id} />
+
+            <Divider h={2.5} />
+
+            {(userTypeName === "DEV" ||
+                userTypeName === "SUPPORT" ||
+                ((userTypeName === "ADMIN" || userTypeName === "SUDADMIN") && data.id_shop === id_shop)) && (
+                <div className="m-4">
+                    <button className="bg-red-700 text-white py-3 px-5 text-lg rounded-xl" onClick={() => router.push(`/admin/articulos/${data.id}`)}>
+                        Actualizar articulo
+                    </button>
+                </div>
+            )}
         </div>
     );
 

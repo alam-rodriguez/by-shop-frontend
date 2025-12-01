@@ -47,6 +47,7 @@ const FeaturedReviews = ({ idArticle, reviews = [] }) => {
                             {articleReviews.map((review) => (
                                 <Review
                                     key={review.id}
+                                    reviewId={review.id}
                                     clientName={review.user_public_name}
                                     clientPicture={review.user_picture}
                                     stars={review.rating}
@@ -57,6 +58,8 @@ const FeaturedReviews = ({ idArticle, reviews = [] }) => {
                                     images={review.images}
                                     utilCount={review.utilCount}
                                     status={review.status}
+                                    showAdminOptions={true}
+                                    articleShopId={data.id}
                                 />
                             ))}
                         </div>
