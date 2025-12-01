@@ -36,7 +36,8 @@ const page = () => {
     const router = useRouter();
 
     const { id, type, firstName, currencySelected, idCurrency: idCurrencyUser } = zusUser();
-    const { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart, refetchArticlesCart } = useUserCartData(id);
+    const { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart, refetchArticlesCart, articlesCartCannotBuy } =
+        useUserCartData(id);
 
     const { appName } = appSettings();
     const { totalSelectedArticles, totalSelectedPrice, setTotalSelectedArticles } = zusCart();
@@ -270,6 +271,40 @@ const page = () => {
                 <button className="bg-red-500 text-white p-3 rounded-lg w-full text-base" onClick={handleClickGotoBuyCart}>
                     Comprar
                 </button>
+
+                {articlesCartCannotBuy && articlesCartCannotBuy.length > 0 && (
+                    <>
+                        <Spacer space={48} />
+
+                        <div className="flex gap-5 items-center">
+                            <Icon className="size-6 text-red-700 text-base" icon="mdi:cart" />
+                            <p className="font-bold text-base">Articulos de tu carrito sin existencia</p>
+                        </div>
+
+                        <Spacer />
+
+                        <div className="flex flex-col gap-6">
+                            {articlesCartCannotBuy.map((articleCart) => (
+                                <CartItem2
+                                    key={articleCart.id}
+                                    idCart={articleCart.id}
+                                    idArticle={articleCart.id_article}
+                                    quantity={articleCart.quantity}
+                                    stock={articleCart.stock}
+                                    image={articleCart.article_image}
+                                    articleName={articleCart.name}
+                                    articleDescription={articleCart.description}
+                                    articlePrice={parseFloat(articleCart.price) + parseFloat(articleCart.price_options)}
+                                    articleOptions={articleCart.options}
+                                    articleValues={articleCart.values}
+                                    exchangeRate={articleCart.exchange_rate}
+                                    isoCode={articleCart.iso_code}
+                                    refetch={refetchArticlesCart}
+                                />
+                            ))}
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import { isUUID, showPriceWithCurrencyUser } from "@/app/hooks/app/app";
-import { useGetCartUser } from "@/app/hooks/request/carts/requestsCarts";
+import { useGetCartUser, useGetCartUserCannotBuy } from "@/app/hooks/request/carts/requestsCarts";
 import { useGetCurrenciesForCustomers } from "@/app/hooks/request/currencies/requestsCurrencies";
 import { zusCart } from "@/app/zustand/user/zusCart";
 import { zusUser } from "@/app/zustand/user/zusUser";
@@ -9,6 +9,12 @@ const useUserCartData = () => {
     const { id: idUser, hasData, idCurrency: idCurrencyUser } = zusUser();
 
     const { data: articlesCart, isLoading: isLoadingArticlesCart, refetch: refetchArticlesCart } = useGetCartUser(idUser);
+
+    const { data: articlesCartCannotBuy } = useGetCartUserCannotBuy(idUser);
+
+    // useEffect(() => {
+    //     console.error(articlesCartCannotBuy);
+    // }, [articlesCartCannotBuy]);
 
     const {
         price,
@@ -114,7 +120,7 @@ const useUserCartData = () => {
         // setTotalPrice(currentTotalPrice);
     }, [shopSelectedForAddress, userAddressSelected, currencySelected, payMethodSelected, deliveryPreferenceSelected, articlesCart]);
 
-    return { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart, refetchArticlesCart };
+    return { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart, refetchArticlesCart, articlesCartCannotBuy };
 };
 
 export default useUserCartData;

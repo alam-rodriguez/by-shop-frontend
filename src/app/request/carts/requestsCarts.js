@@ -50,6 +50,16 @@ export const getCartUser = async (id) => {
     }
 };
 
+export const getCartUserCannotBuy = async (id) => {
+    try {
+        const res = await axios.get(`${url}/carts/${id}/cannot-buy`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener las categorías.");
+    }
+};
+
 export const updateCartItemStatus = async (id, cartStatus) => {
     console.log(cartStatus);
     try {

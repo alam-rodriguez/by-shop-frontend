@@ -7,6 +7,7 @@ import {
     getCartItemOption,
     getCartUser,
     getCartUserBought,
+    getCartUserCannotBuy,
     getCartUserReadyToBuy,
     getCartUserSavedForLater,
     getOrderById,
@@ -107,6 +108,14 @@ export const useGetCartUser = (id) =>
         queryKey: [`cart-user-${id}`],
         // staleTime: Infinity,
         queryFn: () => getCartUser(id),
+    });
+
+export const useGetCartUserCannotBuy = (id) =>
+    useQuery({
+        enabled: !!id,
+        queryKey: [`cart-user-${id}-cannot-buy`],
+        // staleTime: Infinity,
+        queryFn: () => getCartUserCannotBuy(id),
     });
 
 export const useUpdateCartItemStatus = async (id, status) => {
