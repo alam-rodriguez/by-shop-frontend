@@ -22,7 +22,7 @@ import {
 
 // Components
 import LoadingParagraph from "./components/others/LoadingParagraph";
-import { showPriceWithCurrencyUser, showText } from "./hooks/app/app";
+import { isUUID, showPriceWithCurrencyUser, showText } from "./hooks/app/app";
 import Departments from "./components/app/categories/Departments";
 import { useGetDepartmentsForApp } from "./hooks/request/categories/requestsDepartments";
 
@@ -39,7 +39,7 @@ import Home from "./components/skeleton/Home";
 const page = () => {
     const router = useRouter();
 
-    const { type, currencySelected: currencyUser } = zusUser();
+    const { type, currencySelected: currencyUser, userTypeName, shop_id: shopId } = zusUser();
 
     const { data: directsCategories, isLoading: isLoadingDirects } = useGetDirectsCategoriesForApp();
 
@@ -368,11 +368,11 @@ const page = () => {
                 {/* <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/dev")}>
                     admin dev
                 </button> */}
-                {(type == 2 || type == 3) && (
+                {/* {(type == 2 || type == 3) && (
                     <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin")}>
                         Configuracion tienda
                     </button>
-                )}
+                )} */}
 
                 {(type == 4 || type == 5) && (
                     <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/support")}>
@@ -385,6 +385,22 @@ const page = () => {
                         admin dev
                     </button>
                 )}
+                {/* {(userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP") && !isUUID(id_shop) && (
+                    <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/tiendas/0")}>
+                        Registrar tienda
+                    </button>
+                )} */}
+                {userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP" ? (
+                    isUUID(shopId) ? (
+                        <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin")}>
+                            Configuracion tienda
+                        </button>
+                    ) : (
+                        <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/tiendas/0")}>
+                            Registrar tienda
+                        </button>
+                    )
+                ) : null}
 
                 {/* <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl">admin</button> */}
                 {/* <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl">admin</button> */}

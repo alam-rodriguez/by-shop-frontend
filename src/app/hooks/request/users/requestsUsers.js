@@ -26,6 +26,7 @@ import {
     registerUser,
     setShopAdmin,
     setShopSubAdmin,
+    setUserShop,
     userEmailIsVerified,
     userExist,
 } from "@/app/request/users/requestsUsers";
@@ -121,6 +122,8 @@ export const useRequestsUsers = () => {
                 password: "",
                 direction: {},
                 want_use_address: false,
+                shop_id: null,
+                id_shop: null,
             });
     };
 
@@ -180,6 +183,11 @@ export const useChangeUserCanBuy = async (id, canBuy) => {
     const { message, status } = await changeUserCanBuy(id, canBuy);
     if (status == 200) return true;
     return false;
+};
+
+export const useSetUserShop = async (id, shopId) => {
+    const { message, status } = await setUserShop(id, shopId);
+    return status == 200;
 };
 
 export const useSetShopAdmin = async (idUser, email_user, id_shop) => {

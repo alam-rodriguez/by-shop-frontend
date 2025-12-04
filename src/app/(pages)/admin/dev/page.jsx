@@ -28,6 +28,8 @@ const page = () => {
                 txt="Tiendas"
                 options={[
                     { url: "/admin/tiendas", text: "TIENDAS" },
+                    { url: "/admin/planes-tiendas", text: "PLANES TIENDAS" },
+                    { url: "/admin/tiendas/codigos", text: "CODIGOS TIENDAS" },
                     { url: "/admin/marcas", text: "MARCAS" },
                     { url: "/admin/modelos", text: "MODELOS" },
                     { url: "/admin/tiendas", text: "CONFIGURACION" },

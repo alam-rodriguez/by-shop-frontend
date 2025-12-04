@@ -11,7 +11,7 @@ import Link from "next/link";
 import { zusUser } from "@/app/zustand/user/zusUser";
 
 const page = () => {
-    const { id_shop, name_shop } = zusUser();
+    const { id_shop, name_shop, shop_id: shopId } = zusUser();
 
     const { shops, shopsStatus } = zusAdminShops();
 
@@ -31,7 +31,7 @@ const page = () => {
 
     return (
         <div className="m-4">
-            <BtnGroup txt="Mi Tienda" options={[{ url: `/admin/tiendas/${id_shop}`, text: "Configuracion tienda" }]} />
+            <BtnGroup txt="Mi Tienda" options={[{ url: `/admin/tiendas/${shopId}`, text: "Configuracion tienda" }]} />
             <BtnGroup
                 txt="Articulos"
                 options={[

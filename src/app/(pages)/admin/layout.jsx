@@ -14,12 +14,12 @@ export default function DashboardLayout({ children }) {
 
     const { useGetUserShopData } = useResquestsUsers();
 
-    useEffect(() => {
-        if (id == "" || (type != 2 && type != 3)) return;
-        // console.warn(type);
-        // console.warn(id);
-        useGetUserShopData(email);
-    }, [id]);
+    // useEffect(() => {
+    //     if (id == "" || (type != 2 && type != 3)) return;
+    //     // console.warn(type);
+    //     // console.warn(id);
+    //     useGetUserShopData(email);
+    // }, [id]);
 
     return <>{children}</>;
 }

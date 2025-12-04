@@ -16,7 +16,8 @@ const createShopSchema = (isRequired) => {
             .default(() => uuidv4()),
         name: z.string().min(4).max(255),
         description: z.string().min(4).max(255),
-        type: z.number(),
+        type: z.number().default(0),
+        plan_id: z.string().uuid().optional().nullable().default(null),
         status: z.number().default(1),
         logo: z.union([
             z.custom(
@@ -84,6 +85,7 @@ const createShopSchema = (isRequired) => {
             .min(-180, "La longitud mínima es -180.")
             .max(180, "La longitud máxima es 180."),
         district_id: z.string().uuid().optional().nullable().default(null),
+        access_code: z.string().min(4).max(100).optional().nullable().default(null),
         // logo: isRequired
         //     ? z
         //           .any()

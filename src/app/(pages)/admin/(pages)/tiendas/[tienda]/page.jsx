@@ -37,6 +37,10 @@ import dynamic from "next/dynamic";
 import Spacer from "@/app/components/home/Spacer";
 import { zusUser } from "@/app/zustand/user/zusUser";
 import useCoords from "@/app/hooks/app/useCoords";
+import { useGetShopsPlans } from "@/app/hooks/request/shops/requestsShopsPlans";
+import { useGetShopCodeData, useSetUsedShopCode } from "@/app/hooks/request/shops/requestsShopsCodes";
+import { useRouter } from "next/navigation";
+import { useSetShopAdmin, useSetShopSubAdmin, useSetUserShop } from "@/app/hooks/request/users/requestsUsers";
 
 const page = () => {
     const { tienda: idShop } = useParams();
@@ -48,13 +52,15 @@ const page = () => {
 
     const { shopSelected } = zusAdminShops();
 
-    const { userTypeName } = zusUser();
+    const { userTypeName, id: userId, email: userEmail } = zusUser();
 
     const wanCreate = Object.keys(shopSelected).length == 0 ? true : false;
 
     const [schemaIsRequired, setSchemaIsRequired] = useState(wanCreate);
 
     const { coords, error, loading, accuracy, handleGetLocation } = useCoords();
+
+    const router = useRouter();
 
     useEffect(() => {
         console.log(shopSelected);
@@ -83,6 +89,7 @@ const page = () => {
     const { data: provincesByCountry } = useGetLocationProvincesByCountry(watch("country_id"));
     const { data: municipalitiesByProvince } = useGetLocationMunicipalitiesByprovince(watch("province_id"));
     const { data: neighborhoodsByMunicipality } = useGetLocationNeighborhoodsByMunicipality(watch("municipality_id"));
+    const { data: shopsPlans } = useGetShopsPlans();
 
     useEffect(() => {
         console.log(provincesByCountry);
@@ -137,16 +144,46 @@ const page = () => {
     const create = async (data) => {
         const loadingToast = toast.loading("Creando tienda...");
 
+        let resSetUsedCode = true;
+        let resUserShop = true;
+
+        if (userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP") {
+            if (!data.access_code || data.access_code.length === 0)
+                return toast.error("Debes ingresar un codio para registrar una tienda", {
+                    id: loadingToast,
+                });
+
+            console.log(data.access_code);
+            const { exists, data: shopCodeData, status, message } = await useGetShopCodeData(data.access_code);
+            if (!exists)
+                return toast.error("Este codigo no es valido", {
+                    id: loadingToast,
+                });
+            data.plan_id = shopCodeData.id;
+            resSetUsedCode = await useSetUsedShopCode(shopCodeData.shop_code_id, data.id);
+            // useSetUserShop;
+            resUserShop = useSetUserShop(userId, data.id);
+            // else useSetShopSubAdmin();
+            // if (userTypeName == "ADMIN-SHOP") useSetShopAdmin(userId, userEmail, data.id);
+            // else useSetShopSubAdmin();
+            // TODO: ESTABLECER EL ADMINISTRADR DE TIENDA
+            // useSetShopAdmin;
+            // useSetShopSubAdmin;
+        }
+
+        console.log(data);
+
         const resImage = await uploadImages([{ imageFile: data.logo, folder: "shops", fileName: data.name }]);
         data.logo = resImage[0].ufsUrl;
 
         const res = await useCreateShop(data);
 
-        if (res)
+        if (res && resSetUsedCode && resUserShop) {
             toast.success("Tienda creado correctamente", {
                 id: loadingToast,
             });
-        else
+            router.replace(`/admin/tiendas/${data.id}`);
+        } else
             toast.error("Error al crear tienda", {
                 id: loadingToast,
             });
@@ -186,6 +223,10 @@ const page = () => {
         if (wantCreate) create(data);
         else edit(data);
     };
+
+    useEffect(() => {
+        console.warn(errors);
+    }, [errors]);
 
     if (isLoading) return <LoadingParagraph />;
 
@@ -238,7 +279,6 @@ const page = () => {
                     label="Tipo"
                 />
             )}
-
             <Select
                 register={register}
                 errors={errors}
@@ -253,10 +293,38 @@ const page = () => {
                 optionNameForShow="name"
                 label="Estado"
             />
+            {(userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP") && idShop == 0 ? (
+                <>
+                    <Spacer />
+                    <p className="text-center font-bold text-lg">Codigo de acceso</p>
+
+                    <Input
+                        register={register}
+                        errors={errors}
+                        type="text"
+                        name="access_code"
+                        inputClassName="border-2 border-gray-300 rounded-md p-2"
+                        errorClassName="text-red-700"
+                        placeholder=""
+                        label="Codigo de acceso para registrar tienda"
+                    />
+                </>
+            ) : (
+                <Select
+                    register={register}
+                    errors={errors}
+                    type="text"
+                    name="plan_id"
+                    items={shopsPlans ?? []}
+                    selectClassName="border-2 border-gray-300 rounded-md p-2"
+                    errorClassName="text-red-700"
+                    optionNameForShow="name"
+                    label="Plan"
+                />
+            )}
 
             <Spacer />
             <p className="text-center font-bold text-lg">Direccion Tienda</p>
-
             <Select
                 register={register}
                 errors={errors}
@@ -400,9 +468,7 @@ const page = () => {
                     </a>
                 </div>
             )} */}
-
             {error && <p className="text-red-500">{error}</p>}
-
             <ButtonGrayDown>{wantCreate ? "Crear" : "Editar"} Tienda</ButtonGrayDown>
         </form>
     );

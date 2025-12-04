@@ -176,6 +176,16 @@ export const changeUserCanBuy = async (id, canBuy) => {
     }
 };
 
+export const setUserShop = async (id, shop_id) => {
+    try {
+        const res = await api.patch(`/users/set-shop/${id}`, { shop_id });
+        return { message: res.data.message, status: res.status };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener las categorías.");
+    }
+};
+
 export const setShopAdmin = async (shopAdmin) => {
     try {
         const res = await api.post(`/users/set-shop-admin`, shopAdmin);
