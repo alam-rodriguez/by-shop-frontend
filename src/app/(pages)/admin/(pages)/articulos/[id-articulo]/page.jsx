@@ -41,6 +41,7 @@ import {
     getDataSelectMultiForAddAndDelete2,
     getDataSelectMultiForAddAndDeleteImages,
     getDefaultsValuesForSelectMulti,
+    isUUID,
 } from "@/app/hooks/app/app";
 import { useGetGeneralCategories, useGetGeneralCategoriesOfArticle } from "@/app/hooks/request/categories/requestsCategories";
 import { toast } from "sonner";
@@ -147,7 +148,8 @@ const page = () => {
     // }, [id_shop]);
 
     useEffect(() => {
-        if (id_shop == "") return;
+        if (!isUUID(id_shop)) return;
+        // if () return;
         setValue("id_shop", id_shop);
     }, [id_shop, setValue]);
 

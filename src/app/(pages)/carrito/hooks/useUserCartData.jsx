@@ -10,7 +10,7 @@ const useUserCartData = () => {
 
     const { data: articlesCart, isLoading: isLoadingArticlesCart, refetch: refetchArticlesCart } = useGetCartUser(idUser);
 
-    const { data: articlesCartCannotBuy } = useGetCartUserCannotBuy(idUser);
+    const { data: articlesCartCannotBuy, refetch: refetchArticlesCartCannotBuy } = useGetCartUserCannotBuy(idUser);
 
     // useEffect(() => {
     //     console.error(articlesCartCannotBuy);
@@ -120,7 +120,18 @@ const useUserCartData = () => {
         // setTotalPrice(currentTotalPrice);
     }, [shopSelectedForAddress, userAddressSelected, currencySelected, payMethodSelected, deliveryPreferenceSelected, articlesCart]);
 
-    return { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart, refetchArticlesCart, articlesCartCannotBuy };
+    return {
+        price,
+        discount,
+        paypalFee,
+        deliveryPrice,
+        totalPrice,
+        articlesCart,
+        isLoadingArticlesCart,
+        refetchArticlesCart,
+        articlesCartCannotBuy,
+        refetchArticlesCartCannotBuy,
+    };
 };
 
 export default useUserCartData;

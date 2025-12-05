@@ -730,7 +730,7 @@ const page = ({ params }) => {
 
             {(userTypeName === "DEV" ||
                 userTypeName === "SUPPORT" ||
-                ((userTypeName === "ADMIN" || userTypeName === "SUDADMIN") && data.id_shop === id_shop)) && (
+                ((userTypeName === "ADMIN-SHOP" || userTypeName === "SUB-ADMIN-SHOP") && data.id_shop === id_shop)) && (
                 <div className="m-4">
                     <button className="bg-red-700 text-white py-3 px-5 text-lg rounded-xl" onClick={() => router.push(`/admin/articulos/${data.id}`)}>
                         Actualizar articulo

@@ -36,8 +36,18 @@ const page = () => {
     const router = useRouter();
 
     const { id, type, firstName, currencySelected, idCurrency: idCurrencyUser } = zusUser();
-    const { price, discount, paypalFee, deliveryPrice, totalPrice, articlesCart, isLoadingArticlesCart, refetchArticlesCart, articlesCartCannotBuy } =
-        useUserCartData(id);
+    const {
+        price,
+        discount,
+        paypalFee,
+        deliveryPrice,
+        totalPrice,
+        articlesCart,
+        isLoadingArticlesCart,
+        refetchArticlesCart,
+        articlesCartCannotBuy,
+        refetchArticlesCartCannotBuy,
+    } = useUserCartData(id);
 
     const { appName } = appSettings();
     const { totalSelectedArticles, totalSelectedPrice, setTotalSelectedArticles } = zusCart();
@@ -299,7 +309,7 @@ const page = () => {
                                     articleValues={articleCart.values}
                                     exchangeRate={articleCart.exchange_rate}
                                     isoCode={articleCart.iso_code}
-                                    refetch={refetchArticlesCart}
+                                    refetch={refetchArticlesCartCannotBuy}
                                 />
                             ))}
                         </div>

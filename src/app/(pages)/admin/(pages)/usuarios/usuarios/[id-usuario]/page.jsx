@@ -21,6 +21,7 @@ import {
     useGetUserById,
     useSetShopAdmin,
     useSetShopSubAdmin,
+    useSetUserShop,
 } from "@/app/hooks/request/users/requestsUsers";
 import { useGetShops } from "@/app/hooks/request/shops/requestsShops";
 
@@ -109,7 +110,80 @@ const page = () => {
             });
     };
 
-    const makeShopAdmin = async () => {
+    // const makeShopAdmin = async () => {
+    //     if (!showSelectShops) {
+    //         setShowSelectShops(true);
+    //         return;
+    //     }
+    //     const loadingToast = toast.loading("Cambiando usario a administrador...");
+
+    //     const idUser = user.id;
+    //     const emailUser = user.email;
+    //     const idShopSelected = watch("id_shop");
+
+    //     console.log(idUser);
+    //     console.log(emailUser);
+    //     console.log(idShopSelected);
+
+    //     // console.log(idShopSelected);
+
+    //     const { message, status } = await useSetShopAdmin(idUser, emailUser, idShopSelected);
+    //     const res = await useChangeUserType(idUser, 2);
+    //     console.log(status);
+    //     console.log(message);
+
+    //     if (status == 200 && res)
+    //         toast.success("Usuario cambiado a adminstrador", {
+    //             id: loadingToast,
+    //         });
+    //     else if (status == 400)
+    //         toast.error(message, {
+    //             id: loadingToast,
+    //         });
+    // };
+
+    // const makeShopSubAdmin = async () => {
+    //     if (!showSelectShops) {
+    //         setShowSelectShops(true);
+    //         return;
+    //     }
+    //     const loadingToast = toast.loading("Cambiando usario a sub administrador...");
+
+    //     const idUser = user.id;
+    //     const emailUser = user.email;
+    //     const idShopSelected = watch("id_shop");
+
+    //     const { message, status } = await useSetShopSubAdmin(emailUser, idShopSelected);
+    //     const res = await useChangeUserType(idUser, 2);
+
+    //     if (status == 200 && res)
+    //         toast.success("Usuario cambiado a sub adminstrador", {
+    //             id: loadingToast,
+    //         });
+    //     else if (status == 400)
+    //         toast.error(message, {
+    //             id: loadingToast,
+    //         });
+    // };
+
+    // const makeSupport = async () => {
+    //     const loadingToast = toast.loading("Cambiando usario a soporte...");
+
+    //     const idUser = user.id;
+
+    //     const res = await useChangeUserType(idUser, 4);
+
+    //     if (res)
+    //         toast.success("Usuario cambiado a soporte", {
+    //             id: loadingToast,
+    //         });
+    //     else
+    //         toast.error("Error al cambiar el usuario a soporte", {
+    //             id: loadingToast,
+    //         });
+    // };
+
+    const setUserShop = async () => {
         if (!showSelectShops) {
             setShowSelectShops(true);
             return;
@@ -126,58 +200,18 @@ const page = () => {
 
         // console.log(idShopSelected);
 
-        const { message, status } = await useSetShopAdmin(idUser, emailUser, idShopSelected);
-        const res = await useChangeUserType(idUser, 2);
-        console.log(status);
-        console.log(message);
+        // const { message, status } = await useSetShopAdmin(idUser, emailUser, idShopSelected);
+        const resUserShop = await useSetUserShop(idUser, idShopSelected);
+        const resChangeUserShop = await useChangeUserType(idUser, 2);
+        // console.log(status);
+        // console.log(message);
 
-        if (status == 200 && res)
+        if (resUserShop && resChangeUserShop)
             toast.success("Usuario cambiado a adminstrador", {
                 id: loadingToast,
             });
-        else if (status == 400)
-            toast.error(message, {
-                id: loadingToast,
-            });
-    };
-
-    const makeShopSubAdmin = async () => {
-        if (!showSelectShops) {
-            setShowSelectShops(true);
-            return;
-        }
-        const loadingToast = toast.loading("Cambiando usario a sub administrador...");
-
-        const idUser = user.id;
-        const emailUser = user.email;
-        const idShopSelected = watch("id_shop");
-
-        const { message, status } = await useSetShopSubAdmin(emailUser, idShopSelected);
-        const res = await useChangeUserType(idUser, 2);
-
-        if (status == 200 && res)
-            toast.success("Usuario cambiado a sub adminstrador", {
-                id: loadingToast,
-            });
-        else if (status == 400)
-            toast.error(message, {
-                id: loadingToast,
-            });
-    };
-
-    const makeSupport = async () => {
-        const loadingToast = toast.loading("Cambiando usario a soporte...");
-
-        const idUser = user.id;
-
-        const res = await useChangeUserType(idUser, 4);
-
-        if (res)
-            toast.success("Usuario cambiado a soporte", {
-                id: loadingToast,
-            });
         else
-            toast.error("Error al cambiar el usuario a soporte", {
+            toast.error("Error", {
                 id: loadingToast,
             });
     };
@@ -236,15 +270,19 @@ const page = () => {
                 <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeCantBuy}>
                     Marcar no puede comprar
                 </button>
-                <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeShopAdmin}>
+                <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={setUserShop}>
+                    Asignar tienda a usuario
+                </button>
+
+                {/* <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeShopAdmin}>
                     Marcar como Administrador de tienda
-                </button>
-                <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeShopSubAdmin}>
+                </button> */}
+                {/* <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeShopSubAdmin}>
                     Marcar como SubAdministrador de tienda
-                </button>
-                <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeSupport}>
+                </button> */}
+                {/* <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeSupport}>
                     Marcar como Soporte
-                </button>
+                </button> */}
             </div>
             <div>
                 {showSelectShops && (
