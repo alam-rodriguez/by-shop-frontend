@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "online.byshop.twa",
+      "sha256_cert_fingerprints": [
+        "9D:07:71:40:03:DD:BB:06:76:38:06:5E:97:E2:36:11:F9:73:B2:7A:C6:D4:AE:E3:B1:C3:37:9E:80:68:DD:E3"
+      ]
+    }
+  }
+]

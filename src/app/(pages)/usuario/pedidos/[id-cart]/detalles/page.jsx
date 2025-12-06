@@ -272,8 +272,55 @@ const page = () => {
             )}
 
             <Spacer />
+            <div>
+                <div className="flex_justify-between_ grid grid-cols-7 w-full items-end">
+                    <div className="flex flex-col items-center">
+                        <Icon icon="mingcute:box-3-line" className="text-4xl" />
+                        {/* <Icon icon="mingcute:box-3-line" className="text-xs" /> */}
+                        <Icon icon="lets-icons:check-round-fill" className="text-base" />
+                    </div>
+                    <div className="flex gap-1 mb-2">
+                        <div className={`flex-1 bg-black`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-black`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-black`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-black`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-black`} style={{ height: 0.1 }}></div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <Icon icon="mingcute:box-3-line" className="text-4xl" />
+                        <Icon icon="lets-icons:check-round-fill" className="text-base" />
+                    </div>
+                    <div className="flex gap-1">
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <Icon icon="mingcute:box-3-line" className="text-4xl text-gray-500" />
+                        <Icon icon="lets-icons:check-round-fill" className="text-base text-gray-500" />
+                    </div>
+                    <div className="flex gap-1">
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <Icon icon="mingcute:box-3-line" className="text-4xl text-gray-500" />
+                        <Icon icon="lets-icons:check-round-fill" className="text-base text-gray-500" />
+                    </div>
+                </div>
+                <Spacer space={12} />
+                <p className="text-xl font-bold text-center">Preparando orden</p>
+            </div>
+
+            <Spacer space={12} />
             <p className="text-2xl font-bold">Codigo Qr:</p>
             <Spacer space={12} />
+
             <div className="grid place-items-center">
                 {/* <QRGenerator value={window.location.href} className="w-auto h-auto" /> */}
                 <QRGenerator value={`${window.location.origin}/admin/pedidos/${dataOrder.id_order}`} className="w-auto h-auto" />
