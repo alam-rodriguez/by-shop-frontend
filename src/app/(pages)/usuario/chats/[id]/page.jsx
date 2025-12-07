@@ -2,7 +2,8 @@
 
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:4000");
+// const socket = io("http://localhost:4000");
+const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL_SOCKET);
 
 // uuid
 import { v4 as uuidv4 } from "uuid";
@@ -123,8 +124,8 @@ const page = () => {
     }, []);
 
     return (
-        <div className="relative h-screen m-4">
-            <div className="flex justify-between items-center">
+        <div className="relative h-screen- m-4- overflow-hidden">
+            <div className="flex justify-between items-center fixed top-0 left-0 w-full p-4 bg-white z-50">
                 <div className="flex gap-4 items-center">
                     <Icon icon="solar:arrow-left-linear" className="text-2xl" onClick={() => router.back()} />
                     <p>Customer Service</p>
@@ -134,8 +135,9 @@ const page = () => {
                     <Icon icon="solar:menu-dots-circle-linear" width="24" height="24" />
                 </div>
             </div>
-            <Spacer />
-            <div className="flex flex-col gap-4 overflow-scroll" style={{ height: "80%" }}>
+            {/* <Spacer /> */}
+            <div className="fixed top-0 left-0 w-full px-4 flex flex-col gap-4 overflow-scroll no-scrollbar h-screen pt-20 pb-24">
+                {/* <Spacer space={100} /> */}
                 <div className="bg-slate-400/25 rounded-xl px-2 py-1 self-center text-xs">
                     <span>Hoy</span>
                 </div>
@@ -189,8 +191,8 @@ const page = () => {
                     <span className="absolute right-2 bottom-2 text-gray-500 text-xs">09:41</span>
                 </div> */}
             </div>
-            <Spacer />
-            <div className="absolute bottom-8 w-full flex items-center justify-between">
+            {/* <Spacer /> */}
+            <div className="absolute- bottom-8- w-full- flex items-center justify-between fixed bottom-0 left-0 w-full p-4 bg-white z-50">
                 <div className="w-10/12 border border-black rounded-lg flex justify-between items-center p-4">
                     <input
                         className="border-none outline-none bg-transparent focus:outline-none focus:ring-0 appearance-none"
