@@ -78,7 +78,7 @@ const page = () => {
         return <Home />;
 
     return (
-        <div className="font-sans">
+        <div className="font-sans mb-24">
             <div className="m-4">
                 <HomeAdvertisements />
 

@@ -12,6 +12,9 @@ import { toast } from "sonner";
 // React Hook Form
 import { useForm } from "react-hook-form";
 
+// uuid
+import { v4 as uuidv4 } from "uuid";
+
 // Hooks
 import {
     useChangeUserCanBuy,
@@ -30,6 +33,7 @@ import Spacer from "@/app/components/home/Spacer";
 import Select from "@/app/components/inputs/Select";
 import { useGetUsersTypes } from "@/app/hooks/request/users/requestsUsersTypes";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
+import { useRouter } from "next/navigation";
 
 const page = () => {
     const {
@@ -46,6 +50,8 @@ const page = () => {
     // const subadminShopsRef = useRef();
 
     const { ["id-usuario"]: idUser } = useParams();
+
+    const router = useRouter();
 
     const { data: user, isLoading, refetch } = useGetUserById(idUser);
     const { data: shops, isLoading: isLoadingShops } = useGetShops();
@@ -216,6 +222,11 @@ const page = () => {
             });
     };
 
+    const openChat = () => {
+        // router.push(`/usuario/chats/${uuidv4()}`);
+        router.push(`/usuario/chats/${user.id}`);
+    };
+
     if (isLoading || isLoadingUsersTypes) return <LoadingParagraph />;
     return (
         <div className="m-4">
@@ -272,6 +283,10 @@ const page = () => {
                 </button>
                 <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={setUserShop}>
                     Asignar tienda a usuario
+                </button>
+
+                <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={openChat}>
+                    Abrir Chat
                 </button>
 
                 {/* <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeShopAdmin}>

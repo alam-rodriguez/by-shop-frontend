@@ -169,6 +169,8 @@ const page = () => {
                 <Spacer space={25} />
                 <UserOption icon="mdi:map-marker" text="Direcciones" link="/usuario/direcciones" isButton={true} />
                 <Spacer space={25} />
+                <UserOption icon="majesticons:chats-2" text="Chats" link="/usuario/chats" isButton={true} />
+                <Spacer space={25} />
                 {/* <UserOption icon="mdi:account-lock" text="Registro y seguridad" /> */}
                 {/* <Spacer space={40} /> */}
                 <UserOption

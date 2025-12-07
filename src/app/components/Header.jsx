@@ -32,7 +32,7 @@ const Header = () => {
         }
     };
 
-    if (pathname == "/usuario/sesion") return null;
+    if (pathname == "/usuario/sesion" || pathname.startsWith("/usuario/chats")) return null;
 
     if (pathname.startsWith("/admin")) {
         return (
