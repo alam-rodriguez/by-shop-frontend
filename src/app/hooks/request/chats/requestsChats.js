@@ -8,6 +8,7 @@ import {
     createChatParticipant,
     getChatIdByParticipants,
     getChatMessages,
+    getChatOtherParticipantInfo,
     getChatsByUser,
 } from "@/app/request/chats/requestsChats";
 import { useQuery } from "@tanstack/react-query";
@@ -47,4 +48,12 @@ export const useGetChatsByUser = (userId) =>
         // staleTime: Infinity,
         enabled: isUUID(userId),
         queryFn: () => getChatsByUser(userId),
+    });
+
+export const useGetChatOtherParticipantInfo = (otherParticipantId) =>
+    useQuery({
+        queryKey: [`chat-other-participant-info-${otherParticipantId}`],
+        // staleTime: Infinity,
+        enabled: isUUID(otherParticipantId),
+        queryFn: () => getChatOtherParticipantInfo(otherParticipantId),
     });

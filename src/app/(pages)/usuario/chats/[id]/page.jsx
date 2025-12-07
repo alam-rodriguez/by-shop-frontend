@@ -15,6 +15,7 @@ import {
     useCreateChatParticipant,
     useGetChatIdByParticipants,
     useGetChatMessages,
+    useGetChatOtherParticipantInfo,
 } from "@/app/hooks/request/chats/requestsChats";
 import { zusUser } from "@/app/zustand/user/zusUser";
 import { Icon } from "@iconify/react";
@@ -83,6 +84,8 @@ const page = () => {
         });
     };
 
+    const { data: otherParticipant } = useGetChatOtherParticipantInfo(receiverId);
+
     const { data: chatMessages, refetch: refetchChatMessages } = useGetChatMessages(chatId);
 
     useEffect(() => {
@@ -125,10 +128,10 @@ const page = () => {
 
     return (
         <div className="relative h-screen- m-4- overflow-hidden">
-            <div className="flex justify-between items-center fixed top-0 left-0 w-full p-4 bg-white z-50">
+            <div className="flex justify-between items-center fixed top-0 left-0 w-full p-4 bg-white- bg-gray-100 z-50">
                 <div className="flex gap-4 items-center">
                     <Icon icon="solar:arrow-left-linear" className="text-2xl" onClick={() => router.back()} />
-                    <p>Customer Service</p>
+                    <p>{otherParticipant && otherParticipant.name}</p>
                 </div>
                 <div className="flex gap-4 items-center">
                     <Icon icon="solar:phone-outline" width="24" height="24" />
@@ -192,8 +195,8 @@ const page = () => {
                 </div> */}
             </div>
             {/* <Spacer /> */}
-            <div className="absolute- bottom-8- w-full- flex items-center justify-between fixed bottom-0 left-0 w-full p-4 bg-white z-50">
-                <div className="w-10/12 border border-black rounded-lg flex justify-between items-center p-4">
+            <div className="absolute- bottom-8- w-full- flex items-center justify-between fixed bottom-0 left-0 w-full p-4 bg-white_ bg-gray-100 z-50">
+                <div className="w-10/12 border border-black rounded-lg flex justify-between items-center p-4_ p-2">
                     <input
                         className="border-none outline-none bg-transparent focus:outline-none focus:ring-0 appearance-none"
                         type="text"

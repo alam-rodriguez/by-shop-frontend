@@ -29,7 +29,7 @@ const Client = () => {
 
     console.log(statusOrders);
 
-    const status = statusOrders == "pendiente" ? "1, 2, 3" : statusOrders == "realizado" ? "4" : statusOrders == "archivado" ? "5" : "";
+    const status = statusOrders == "pendiente" ? "1, 2, 3" : statusOrders == "realizado" ? "3" : statusOrders == "archivado" ? "5" : "";
 
     console.log(status);
 

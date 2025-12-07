@@ -2,6 +2,7 @@
 
 import Spacer from "@/app/components/home/Spacer";
 import ImageA from "@/app/components/others/ImageA";
+import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import { useGetChatsByUser } from "@/app/hooks/request/chats/requestsChats";
 import { zusUser } from "@/app/zustand/user/zusUser";
 import { Icon } from "@iconify/react";
@@ -21,6 +22,7 @@ const page = () => {
         console.log(data);
     }, [data]);
 
+    if (!data) return <LoadingParagraph text="Cargando chats..." />;
     return (
         <div className="m-4">
             <Spacer />
@@ -35,10 +37,7 @@ const page = () => {
                         <Chat key={chat.chat_id} userName={chat.other_user_name} userId={chat.other_user_id} userPicture={chat.other_user_picture} />
                     ))}
 
-                {/* <Chat />
-                <Chat />
-                <Chat />
-                <Chat /> */}
+                {data && data.length === 0 && <p className="font-bold">Lo siento, No tienes ningun chat abierto</p>}
             </div>
         </div>
     );

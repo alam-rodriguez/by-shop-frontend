@@ -59,3 +59,13 @@ export const getChatsByUser = async (userId) => {
         throw new Error("Error.");
     }
 };
+
+export const getChatOtherParticipantInfo = async (otherParticipantId) => {
+    try {
+        const res = await api.get(`/chats/participants/other-participant-info/${otherParticipantId}`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error.");
+    }
+};

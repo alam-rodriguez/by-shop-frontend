@@ -80,6 +80,14 @@ const page = () => {
                 ]}
             />
 
+            <BtnGroup
+                txt="Pagos"
+                options={[
+                    { url: "/admin/pagos?estado=pendiente", text: "PAGOS PENDIENTES" },
+                    { url: "/admin/pagos?estado=recibidos", text: "PAGOS RECIBIDOS" },
+                ]}
+            />
+
             {/* <BtnGroup txt="Usuarios" options={[{ url: "/admin/usuarios/usuarios", text: "ADMINISTRAR USUARIOS" }]} /> */}
         </div>
     );
