@@ -69,3 +69,13 @@ export const getChatOtherParticipantInfo = async (otherParticipantId) => {
         throw new Error("Error.");
     }
 };
+
+export const sendPushNotificationForNewMessage = async (otherParticipantId, payload) => {
+    try {
+        const res = await api.post(`/web-push-notification/chats/send-notification-for-new-message/${otherParticipantId}`, payload);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error.");
+    }
+};

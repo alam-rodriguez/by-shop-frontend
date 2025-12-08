@@ -10,6 +10,7 @@ import {
     getChatMessages,
     getChatOtherParticipantInfo,
     getChatsByUser,
+    sendPushNotificationForNewMessage,
 } from "@/app/request/chats/requestsChats";
 import { useQuery } from "@tanstack/react-query";
 import { isUUID } from "../../app/app";
@@ -57,3 +58,8 @@ export const useGetChatOtherParticipantInfo = (otherParticipantId) =>
         enabled: isUUID(otherParticipantId),
         queryFn: () => getChatOtherParticipantInfo(otherParticipantId),
     });
+
+export const useSendPushNotificationForNewMessage = async (otherParticipantId, payload) => {
+    const { data, status, chatId } = await sendPushNotificationForNewMessage(otherParticipantId, payload);
+    return status === 201;
+};

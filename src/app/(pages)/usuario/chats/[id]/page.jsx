@@ -16,6 +16,7 @@ import {
     useGetChatIdByParticipants,
     useGetChatMessages,
     useGetChatOtherParticipantInfo,
+    useSendPushNotificationForNewMessage,
 } from "@/app/hooks/request/chats/requestsChats";
 import { zusUser } from "@/app/zustand/user/zusUser";
 import { Icon } from "@iconify/react";
@@ -72,7 +73,21 @@ const page = () => {
 
         const resChatMessage = await useCreateChatMessage(idChat, userId, text);
 
-        if (resChat && resParticipantSender && resParticipantReceiver && resChatMessage) console.log("Mensage Enviado");
+        // const payloadPushNotification = {
+        //     title: "Nuevo Mensaje",
+        //     body: text,
+        //     url: "",
+        // };
+
+        const payloadPushNotification = {
+            title: otherParticipant.name,
+            body: text,
+            url: `/usuario/chats/${receiverId}`, // Para abrir el chat directo
+        };
+
+        const resPushNotificatoin = await useSendPushNotificationForNewMessage(receiverId, payloadPushNotification);
+
+        if (resChat && resParticipantSender && resParticipantReceiver && resChatMessage && resPushNotificatoin) console.log("Mensage Enviado");
 
         await getChatIdByParticipants(userId, receiverId);
         setText("");
@@ -126,6 +141,42 @@ const page = () => {
         };
     }, []);
 
+    function formatChatDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+
+        // Resetear horas para comparar solo fechas
+        const d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const d2 = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+        const diffTime = d1 - d2;
+        const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+        // 0 = hoy
+        if (diffDays === 0) {
+            return "Hoy";
+        }
+
+        // 1 = ayer
+        if (diffDays === 1) {
+            return "Ayer";
+        }
+
+        // Si es este mismo año → "20 de julio"
+        const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+        if (date.getFullYear() === now.getFullYear()) {
+            return `${date.getDate()} de ${months[date.getMonth()]}`;
+        }
+
+        // Si es de otro año → "20/07/2023"
+        return `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`;
+    }
+
+    function isDifferentDay(date1, date2) {
+        return date1.getDate() !== date2.getDate() || date1.getMonth() !== date2.getMonth() || date1.getFullYear() !== date2.getFullYear();
+    }
+
     return (
         <div className="relative h-screen- m-4- overflow-hidden">
             <div className="flex justify-between items-center fixed top-0 left-0 w-full p-4 bg-white- bg-gray-100 z-50">
@@ -141,29 +192,51 @@ const page = () => {
             {/* <Spacer /> */}
             <div className="fixed top-0 left-0 w-full px-4 flex flex-col gap-4 overflow-scroll no-scrollbar h-screen pt-20 pb-24">
                 {/* <Spacer space={100} /> */}
-                <div className="bg-slate-400/25 rounded-xl px-2 py-1 self-center text-xs">
+                {/* <div className="bg-slate-400/25 rounded-xl px-2 py-1 self-center text-xs">
                     <span>Hoy</span>
-                </div>
+                </div> */}
                 {chatMessages &&
-                    chatMessages.map((chatMessage) => {
+                    chatMessages.map((chatMessage, index) => {
+                        const currentDate = new Date(chatMessage.created_at);
+                        const previousDate = index > 0 ? new Date(chatMessages[index - 1].created_at) : null;
+
+                        const mustShowDate = index === 0 || isDifferentDay(currentDate, previousDate);
+
                         if (userId == chatMessage.sender_id) {
                             return (
-                                <div
-                                    key={chatMessage.id}
-                                    className="relative bg-black w-4/5 text-white rounded-xl rounded-tr-none px-2 py-1 self-end text-base"
-                                >
-                                    <span>{chatMessage.message}</span>
-                                    <span className="absolute right-2 bottom-2 text-gray-500 text-xs">{chatMessage.hour}</span>
+                                <div key={chatMessage.id}>
+                                    {mustShowDate && (
+                                        <div className="grid place-content-center mb-4">
+                                            <div className="bg-slate-400/25 rounded-xl px-2 py-1 inline-block text-xs">
+                                                <span>{formatChatDate(chatMessage.created_at)}</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-end">
+                                        <div className="relative right-0 bg-black w-4/5 text-white rounded-xl rounded-tr-none px-2 py-1 self-end text-base">
+                                            <span>{chatMessage.message}</span>
+                                            <span className="absolute right-2 bottom-2 text-gray-500 text-xs ">{chatMessage.hour}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             );
                         } else {
                             return (
-                                <div
-                                    key={chatMessage.id}
-                                    className="relative bg-slate-400/25 w-4/5 rounded-xl rounded-tl-none px-2 py-1 self-start text-base"
-                                >
-                                    <span className="inline-block w-4/5">{chatMessage.message}</span>
-                                    <span className="absolute right-2 bottom-2 text-gray-500 text-xs">{chatMessage.hour}</span>
+                                <div key={chatMessage.id}>
+                                    {/* {mustShowDate && <div className="text-center text-gray-500 my-4">{formatChatDate(chatMessage.created_at)}</div>} */}
+                                    {mustShowDate && (
+                                        <div className="grid place-content-center mb-4">
+                                            <div className="bg-slate-400/25 rounded-xl px-2 py-1 inline-block text-xs">
+                                                <span>{formatChatDate(chatMessage.created_at)}</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-start">
+                                        <div className="relative bg-slate-400/25 w-4/5 rounded-xl rounded-tl-none px-2 py-1 self-start text-base">
+                                            <span className="inline-block w-4/5">{chatMessage.message}</span>
+                                            <span className="absolute right-2 bottom-2 text-gray-500 text-xs">{chatMessage.hour}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             );
                         }
