@@ -24,6 +24,8 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { isUUID } from "@/app/hooks/app/app";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const page = () => {
     // const { id: chatId } = useParams();
@@ -45,7 +47,7 @@ const page = () => {
         if (chatIdByParticipants) {
             socket.emit("joinChat", chatIdByParticipants);
             setChatId(chatIdByParticipants);
-            refetchChatMessages({ queryKey: [`chats-${chatIdByParticipants}`, chatIdByParticipants] });
+            // refetchChatMessages({ queryKey: [`chats-${chatIdByParticipants}`, chatIdByParticipants] });
         }
     };
 
@@ -56,6 +58,15 @@ const page = () => {
 
     const handleClickSendMessage = async () => {
         console.log(text);
+
+        sendMessageMutation.mutate({
+            sender_id: userId,
+            message: text,
+        });
+
+        setText("");
+
+        return;
 
         // let chatId = uuidv4();
 
@@ -90,7 +101,7 @@ const page = () => {
         if (resChat && resParticipantSender && resParticipantReceiver && resChatMessage && resPushNotificatoin) console.log("Mensage Enviado");
 
         await getChatIdByParticipants(userId, receiverId);
-        setText("");
+
         // refetchChatMessages();
         socket.emit("sendMessage", {
             chatId: idChat,
@@ -99,17 +110,84 @@ const page = () => {
         });
     };
 
+    const sendMessageToBackend = async (message) => {
+        const text = message.message;
+
+        const idChat = isUUID(chatId) ? chatId : uuidv4();
+
+        let resCreateChat = true;
+
+        if (isUUID(chatId)) {
+            const resChat = await useCreateChat(idChat);
+            const resParticipantSender = await useCreateChatParticipant(idChat, userId);
+            const resParticipantReceiver = await useCreateChatParticipant(idChat, receiverId);
+            await getChatIdByParticipants(userId, receiverId);
+
+            resCreateChat = resChat && resParticipantSender && resParticipantReceiver;
+        }
+
+        const resChatMessage = await useCreateChatMessage(idChat, userId, text);
+
+        const payloadPushNotification = {
+            title: otherParticipant.name,
+            body: text,
+            url: `/usuario/chats/${receiverId}`, // Para abrir el chat directo
+        };
+
+        if (!(resCreateChat && resChatMessage)) {
+            toast.error("Error al enviar mensaje");
+            router.prefetch();
+            return;
+        }
+
+        socket.emit("sendMessage", {
+            chatId: idChat,
+            senderId: userId,
+            message: text,
+        });
+        await useSendPushNotificationForNewMessage(receiverId, payloadPushNotification);
+    };
+
     const { data: otherParticipant } = useGetChatOtherParticipantInfo(receiverId);
 
-    const { data: chatMessages, refetch: refetchChatMessages } = useGetChatMessages(chatId);
+    // const { data: backendMessages, refetch: refetchChatMessages } = useGetChatMessages(chatId);
+
+    const { data: backendMessages = [] } = useGetChatMessages(chatId);
+
+    const [localMessages, setLocalMessages] = useState([]);
+
+    let allMessages = [...backendMessages, ...localMessages]
+        .filter((m) => m && m.created_at) // elimina undefined o mensajes sin fecha
+        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    // allMessages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    // allMessages = [...allMessages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    const sendMessageMutation = useMutation({
+        mutationFn: sendMessageToBackend,
+        onMutate: async (newMessage) => {
+            setLocalMessages((prev) => [
+                ...prev,
+                {
+                    ...newMessage,
+                    id: uuidv4(), // ID temporal
+                    created_at: new Date().toISOString(),
+                    hour: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                },
+            ]);
+        },
+    });
+
+    // const [lastMessage, setLastMessage] = useState(null);
 
     useEffect(() => {
-        console.log(chatMessages);
-    }, [chatMessages]);
+        console.log(allMessages);
+    }, [backendMessages, localMessages]);
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [chatMessages]);
+    }, [backendMessages, localMessages]);
 
     // socket.on("sendMessage", (data) => {
     //     const { chatId, message, senderId } = data;
@@ -131,7 +209,18 @@ const page = () => {
     useEffect(() => {
         const handleNewMessage = (data) => {
             console.log("Nuevo mensaje recibido:", data);
-            refetchChatMessages();
+            if (data.senderId != userId) {
+                const newMessage = {
+                    id: crypto.randomUUID(), // si el backend no envía id único
+                    chat_id: data.chatId,
+                    sender_id: data.senderId,
+                    message: data.message,
+                    created_at: new Date().toISOString(),
+                    hour: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                    isPending: false,
+                };
+                setLocalMessages((prev) => [...prev, newMessage]);
+            }
         };
 
         socket.on("newMessage", handleNewMessage);
@@ -139,7 +228,7 @@ const page = () => {
         return () => {
             socket.off("newMessage", handleNewMessage); // <-- LIMPIAR
         };
-    }, []);
+    }, [userId]);
 
     function formatChatDate(dateString) {
         const date = new Date(dateString);
@@ -195,10 +284,47 @@ const page = () => {
                 {/* <div className="bg-slate-400/25 rounded-xl px-2 py-1 self-center text-xs">
                     <span>Hoy</span>
                 </div> */}
-                {chatMessages &&
-                    chatMessages.map((chatMessage, index) => {
+                {/* {lastMessage &&
+                    (() => {
+                        const currentDate = new Date(lastMessage.created_at);
+                        const previousDate = index > 0 ? new Date(messages[index - 1].created_at) : null;
+
+                        const mustShowDate = index === 0 || isDifferentDay(currentDate, previousDate);
+
+                        const isMine = userId === lastMessage.sender_id;
+
+                        return (
+                            <div key={lastMessage.id}>
+                                {mustShowDate && (
+                                    <div className="grid place-content-center mb-4">
+                                        <div className="bg-slate-400/25 rounded-xl px-2 py-1 inline-block text-xs">
+                                            <span>{formatChatDate(lastMessage.created_at)}</span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {isMine ? (
+                                    <div className="flex justify-end">
+                                        <div className="relative bg-black w-4/5 text-white rounded-xl rounded-tr-none px-2 py-1 text-base">
+                                            <span>{lastMessage.message}</span>
+                                            <span className="absolute right-2 bottom-2 text-gray-500 text-xs">{lastMessage.hour}</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="flex justify-start">
+                                        <div className="relative bg-slate-400/25 w-4/5 rounded-xl rounded-tl-none px-2 py-1 text-base">
+                                            <span className="inline-block w-4/5">{lastMessage.message}</span>
+                                            <span className="absolute right-2 bottom-2 text-gray-500 text-xs">{lastMessage.hour}</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })()} */}
+                {allMessages &&
+                    allMessages.map((chatMessage, index) => {
                         const currentDate = new Date(chatMessage.created_at);
-                        const previousDate = index > 0 ? new Date(chatMessages[index - 1].created_at) : null;
+                        const previousDate = index > 0 ? new Date(allMessages[index - 1].created_at) : null;
 
                         const mustShowDate = index === 0 || isDifferentDay(currentDate, previousDate);
 
@@ -280,7 +406,10 @@ const page = () => {
                     <Icon icon="stash:image" className="text-2xl" />
                 </div>
                 <div className="w-2/12 flex justify-end">
-                    <div className="size-10 bg-black rounded-full grid place-content-center" onClick={handleClickSendMessage}>
+                    <div
+                        className="size-10 bg-black rounded-full grid place-content-center"
+                        onClick={text.length > 0 ? handleClickSendMessage : null}
+                    >
                         <Icon icon="famicons:send" className="text-2xl text-white" />
                     </div>
                 </div>
