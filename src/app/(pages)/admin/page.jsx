@@ -83,8 +83,8 @@ const page = () => {
             <BtnGroup
                 txt="Pagos"
                 options={[
-                    { url: "/admin/pagos?estado=pendiente", text: "PAGOS PENDIENTES" },
-                    { url: "/admin/pagos?estado=recibidos", text: "PAGOS RECIBIDOS" },
+                    { url: "/admin/pagos", text: "Periodo de pago activo" },
+                    { url: "/admin/pagos/historial", text: "Historias periodo de pagos" },
                 ]}
             />
 

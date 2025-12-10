@@ -17,7 +17,7 @@ import { zusUser } from "@/app/zustand/user/zusUser";
 // Components
 import Spacer from "@/app/components/home/Spacer";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
-import ResponsibleOrders from "./[id-pedido]/ResponsibleOrders";
+// import ResponsibleOrders from "./[id-periodo]/ResponsibleOrders";
 
 const Client = () => {
     const searchParams = useSearchParams();
@@ -35,7 +35,7 @@ const Client = () => {
 
     const router = useRouter();
 
-    const { id_shop, name_shop, type } = zusUser();
+    const { id_shop, name_shop, type, userTypeName } = zusUser();
 
     useEffect(() => {
         console.warn(type);
@@ -67,152 +67,100 @@ const Client = () => {
 
     if (isLoading) return <LoadingParagraph text="Buscando Pedidos..." />;
 
-    if (isResponsible) return <ResponsibleOrders />;
+    // if (isResponsible) return <ResponsibleOrders />;
 
     if ((type == 4 || type == 5) && data.length == 0) return <div className="font-bold m-4 text-xl">Noy hay pedidos {statusOrders}s</div>;
     else if (data.length == 0) return <div className="font-bold m-4 text-xl">Noy hay pedidos {statusOrders}s</div>;
 
+    if (userTypeName == "DEV" || userTypeName == "SUPPORT")
+        return (
+            <div className="m-4">
+                <p className="text-center mb-3 font-bold text-xl">Periodo de pago actual</p>
+
+                <div className="bg-gray-300 p-4 rounded-md">
+                    <div className="flex justify-between">
+                        <p>Inicio:</p>
+                        <p>lunes 15 de julio</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p>Fin:</p>
+                        <p>lunes 25 de julio</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p>Total de articulos vendidos:</p>
+                        <p>15</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p>Total de dinero articulo vendidos:</p>
+                        <p>15,000 pesos</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p>Comision:</p>
+                        <p>10%</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p>Comision en dinero:</p>
+                        <p>1,000 pesos</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p>Ver ordenas periodo:</p>
+                        {/* <p>1,000 pesos</p> */}
+                    </div>
+                    <div className="flex justify-between">
+                        <p>Estado periodo:</p>
+                        <p>Activo</p>
+                    </div>
+                </div>
+
+                <button className="bg-green-700 text-white w-full rounded-3xl py-3" onClick={() => router.push("/admin/pagos/0")}>
+                    Crear Periodo de pago
+                </button>
+            </div>
+        );
+
     return (
         <div className="m-4">
-            <p className="text-center mb-3 font-bold text-xl">Pedidos</p>
-            <div className="flex flex-col gap-4">
-                {type == 4 || type == 5
-                    ? data &&
-                      data.length > 0 &&
-                      data.map((order) => {
-                          let statusMessage = "";
-                          if (order.status == 1 && order.wantUseAddress) statusMessage = "Comprando...";
-                          else if (order.status == 2 && order.wantUseAddress) statusMessage = "Enviando...";
-                          else if (order.status == 3 && order.wantUseAddress) statusMessage = "Recibido";
-                          else if (order.status == 1 && !order.wantUseAddress) statusMessage = "Comprando...";
-                          else if (order.status == 2 && !order.wantUseAddress) statusMessage = "Listo para retirar";
-                          else if (order.status == 3 && !order.wantUseAddress) statusMessage = "Retirado";
-                          else if (order.status == 0) statusMessage = "Cancelado";
+            <p className="text-center mb-3 font-bold text-xl">Periodo de pago actual</p>
 
-                          let total =
-                              parseFloat(order.total) -
-                              parseFloat(order.total_discount) +
-                              parseFloat(order.paypal_fee) +
-                              parseFloat(order.delivery_cost);
-                          let articulos = 0;
-                          order.articles.forEach((article) => {
-                              // total += Number(article.total_price_with_discount) * Number(article.article_quantity);
-                              articulos += article.article_quantity;
-                          });
-
-                          return (
-                              <div key={order.id} className="bg-gray-300 p-4 rounded-md" onClick={() => handleClickOrder(order.id)}>
-                                  <p className="text-center">{order.user_name}</p>
-                                  <Spacer space={25} />
-                                  <div className="flex justify-between">
-                                      <p>metodo de pago:</p>
-                                      <p>{order.pay_method_name}</p>
-                                  </div>
-                                  <div className="flex justify-between">
-                                      <p>Preferencia de entregar:</p>
-                                      <p>{order.want_use_address == 1 ? "Domicilio" : "Tienda"}</p>
-                                  </div>
-                                  <div className="flex justify-between">
-                                      <p>Articulos comprados:</p>
-                                      <p>{articulos}</p>
-                                  </div>
-                                  {/* <div className="flex justify-between">
-                                      <p>Total del pedido:</p>
-                                      <p>{total}</p>
-                                  </div> */}
-                                  <div className="flex justify-between">
-                                      <p>Total del pedido:</p>
-                                      <p>{total}</p>
-                                  </div>
-                                  <div className="flex justify-between">
-                                      <p>Moneda:</p>
-                                      <p>{order.currency}</p>
-                                  </div>
-                                  <div className="flex justify-between">
-                                      <p>Codigo moneda:</p>
-                                      <p>{order.currency_iso_code}</p>
-                                  </div>
-                                  {order.require_image == 1 && (
-                                      <div className="flex justify-between">
-                                          <p>Comprobante de transferencia:</p>
-                                          <p>
-                                              {order.status_image == null
-                                                  ? "Indefinido"
-                                                  : order.status_image == 0
-                                                  ? "Rechazado"
-                                                  : order.status_image == 1
-                                                  ? "Aprobado"
-                                                  : ""}
-                                          </p>
-                                      </div>
-                                  )}
-
-                                  <div className="flex justify-between">
-                                      <p>Estado del pedido:</p>
-                                      <p>{showOrderStatusForClient(order.status, order.want_use_address > 0 ? true : false)}</p>
-                                  </div>
-                                  <div className="flex justify-between">
-                                      <p>Fecha de compra:</p>
-                                      <p>{order.created_at.split("T")[0].split("-").reverse().join("-")}</p>
-                                  </div>
-                              </div>
-                          );
-                      })
-                    : dataFromShop &&
-                      dataFromShop.length > 0 &&
-                      dataFromShop.map((order) => {
-                          let statusMessage = "";
-                          if (order.status == 1 && order.wantUseAddress) statusMessage = "Comprando...";
-                          else if (order.status == 2 && order.wantUseAddress) statusMessage = "Enviando...";
-                          else if (order.status == 3 && order.wantUseAddress) statusMessage = "Recibido";
-                          else if (order.status == 1 && !order.wantUseAddress) statusMessage = "Comprando...";
-                          else if (order.status == 2 && !order.wantUseAddress) statusMessage = "Listo para retirar";
-                          else if (order.status == 3 && !order.wantUseAddress) statusMessage = "Retirado";
-                          else if (order.status == 0) statusMessage = "Cancelado";
-
-                          let total = 0;
-                          let articulos = 0;
-                          order.articles.forEach((article) => {
-                              total += Number(article.total_price_with_discount) * Number(article.article_quantity);
-                              articulos += article.article_quantity;
-                          });
-
-                          return (
-                              <div key={order.id} className="bg-gray-300 p-4 rounded-md" onClick={() => handleClickOrder(order.id)}>
-                                  <p className="text-center">{order.user_name}</p>
-                                  <Spacer space={25} />
-                                  {/* <div className="flex justify-between">
-                                      <p>metodo de pago:</p>
-                                      <p>{order.pay_method_name}</p>
-                                  </div> */}
-                                  {/* <div className="flex justify-between">
-                                      <p>Articulos comprados:</p>
-                                      <p>{articulos}</p>
-                                  </div> */}
-                                  {/* <div className="flex justify-between">
-                                      <p>Total del pedido:</p>
-                                      <p>{total}</p>
-                                  </div> */}
-                                  <div className="flex justify-between">
-                                      <p>Articles de mi tienda:</p>
-                                      <p>{articulos}</p>
-                                  </div>
-                                  <div className="flex justify-between">
-                                      <p>Precio de mis articulos:</p>
-                                      <p>{total}</p>
-                                  </div>
-                                  <div className="flex justify-between">
-                                      <p>Estado del pedido:</p>
-                                      <p>{statusMessage}</p>
-                                      <p>{showOrderStatusForClient(order.status, order.want_use_address > 0 ? true : false)}</p>
-                                  </div>
-                                  <div className="flex justify-between">
-                                      <p>Fecha de compra:</p>
-                                      <p>{order.created_at.split("T")[0].split("-").reverse().join("-")}</p>
-                                  </div>
-                              </div>
-                          );
-                      })}
+            <div className="bg-gray-300 p-4 rounded-md">
+                {/* <p className="text-center">{order.user_name}</p> */}
+                {/* <Spacer space={25} /> */}
+                {/* <div className="flex justify-between">
+                    <p>metodo de pago:</p>
+                    <p>{order.pay_method_name}</p>
+                </div> */}
+                <div className="flex justify-between">
+                    <p>Inicio:</p>
+                    <p>lunes 15 de julio</p>
+                </div>
+                <div className="flex justify-between">
+                    <p>Fin:</p>
+                    <p>lunes 25 de julio</p>
+                </div>
+                <div className="flex justify-between">
+                    <p>Total de articulos vendidos:</p>
+                    <p>15</p>
+                </div>
+                <div className="flex justify-between">
+                    <p>Total de dinero articulo vendidos:</p>
+                    <p>15,000 pesos</p>
+                </div>
+                <div className="flex justify-between">
+                    <p>Comision:</p>
+                    <p>10%</p>
+                </div>
+                <div className="flex justify-between">
+                    <p>Comision en dinero:</p>
+                    <p>1,000 pesos</p>
+                </div>
+                <div className="flex justify-between">
+                    <p>Ver ordenas periodo:</p>
+                    {/* <p>1,000 pesos</p> */}
+                </div>
+                <div className="flex justify-between">
+                    <p>Estado periodo:</p>
+                    <p>Activo</p>
+                </div>
             </div>
 
             {/* <button className="bg-green-700 text-white w-full rounded-3xl py-3" onClick={() => handleClickOffer()}>

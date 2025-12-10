@@ -113,6 +113,14 @@ const page = () => {
             />
 
             <BtnGroup txt="Publicidades" options={[{ url: "/admin/publicidades", text: "Publicidades" }]} />
+
+            <BtnGroup
+                txt="Pagos"
+                options={[
+                    { url: "/admin/pagos", text: "Periodo de pago activo" },
+                    { url: "/admin/pagos/historial", text: "Historias periodo de pagos" },
+                ]}
+            />
         </div>
     );
 };
