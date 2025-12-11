@@ -9,8 +9,8 @@ const periodSchema = z.object({
         .string()
         .uuid()
         .default(() => uuidv4()),
-    start_date: z.date(),
-    end_date: z.date(),
+    start_date: z.string().date(),
+    end_date: z.string().date(),
     status: z.number().default(1),
 });
 

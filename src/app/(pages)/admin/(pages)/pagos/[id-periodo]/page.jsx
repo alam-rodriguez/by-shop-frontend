@@ -101,33 +101,12 @@ const page = () => {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)} className="m-4">
-                <Input
-                    register={register}
-                    errors={errors}
-                    type="number"
-                    name="duration"
-                    inputClassName="border-2 border-gray-300 rounded-md p-2"
-                    errorClassName="text-red-700"
-                    placeholder=""
-                    label="Duracion periodo(Dias)"
-                />
-                {/* <Input
-                    register={register}
-                    errors={errors}
-                    type="textarea"
-                    name="description"
-                    inputClassName="border-2 border-gray-300 rounded-md p-2 h-20 min-h-20 max-h-20"
-                    errorClassName="text-red-700"
-                    placeholder=""
-                    label="Descripción de la moneda"
-                /> */}
-
                 <div className="flex w-full overflow-hidden flex-wrap justify-between">
                     <Input
                         register={register}
                         errors={errors}
                         type="date"
-                        name="symbol"
+                        name="start_date"
                         inputClassName="border-2 border-gray-300 rounded-md p-2"
                         errorClassName="text-red-700"
                         placeholder=""
@@ -138,41 +117,14 @@ const page = () => {
                         register={register}
                         errors={errors}
                         type="date"
-                        name="exchange_rate"
+                        name="end_date"
                         inputClassName="border-2 border-gray-300 rounded-md p-2"
                         errorClassName="text-red-700"
                         placeholder=""
                         label="Fecha Inicio Periodo"
                         width="48%"
                     />
-                    {/* <Input
-                        register={register}
-                        errors={errors}
-                        type="text"
-                        name="iso_code"
-                        inputClassName="border-2 border-gray-300 rounded-md p-2"
-                        errorClassName="text-red-700"
-                        placeholder=""
-                        label="Codigo ISO"
-                        width="48%"
-                    /> */}
-                    {/* <Select
-                        register={register}
-                        errors={errors}
-                        type="number"
-                        name="main_currency"
-                        items={[
-                            { id: 1, name: "Si" },
-                            { id: 0, name: "No" },
-                        ]}
-                        selectClassName="border-2 border-gray-300 rounded-md p-2"
-                        errorClassName="text-red-700"
-                        optionNameForShow="name"
-                        label="Moneda principal"
-                        width="48%"
-                    /> */}
                 </div>
-
                 <Select
                     register={register}
                     errors={errors}
