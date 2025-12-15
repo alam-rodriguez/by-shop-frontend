@@ -9,3 +9,13 @@ export const createPeriod = async (period) => {
         throw new Error("Error crear la moneda.");
     }
 };
+
+export const getActivePeriod = async () => {
+    try {
+        const res = await api.get(`/periods/active`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error crear la moneda.");
+    }
+};

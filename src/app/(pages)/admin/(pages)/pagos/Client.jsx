@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 // Hooks
 import { useGetOrders, useGetOrdersFromShop } from "@/app/hooks/request/carts/requestsCarts";
-import { showOrderStatusForClient } from "@/app/hooks/app/app";
+import { showOrderStatusForClient, showPriceWithCurrency } from "@/app/hooks/app/app";
 
 // Zustand
 import { zusUser } from "@/app/zustand/user/zusUser";
@@ -17,6 +17,7 @@ import { zusUser } from "@/app/zustand/user/zusUser";
 // Components
 import Spacer from "@/app/components/home/Spacer";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
+import { useGetActivePeriod } from "@/app/hooks/request/periods/requestsPeriods";
 // import ResponsibleOrders from "./[id-periodo]/ResponsibleOrders";
 
 const Client = () => {
@@ -65,19 +66,84 @@ const Client = () => {
 
     const handleClickOrder = (idOffer = 0) => router.push(`/admin/pedidos/${idOffer}`);
 
+    const { data: activePeriod } = useGetActivePeriod();
+
+    useEffect(() => {
+        console.warn(activePeriod);
+    }, [activePeriod]);
+
     if (isLoading) return <LoadingParagraph text="Buscando Pedidos..." />;
 
     // if (isResponsible) return <ResponsibleOrders />;
 
-    if ((type == 4 || type == 5) && data.length == 0) return <div className="font-bold m-4 text-xl">Noy hay pedidos {statusOrders}s</div>;
-    else if (data.length == 0) return <div className="font-bold m-4 text-xl">Noy hay pedidos {statusOrders}s</div>;
+    // if ((type == 4 || type == 5) && data.length == 0) return <div className="font-bold m-4 text-xl">Noy hay pedidos {statusOrders}s</div>;
+    // else if (data.length == 0) return <div className="font-bold m-4 text-xl">Noy hay pedidos {statusOrders}s</div>;
 
     if (userTypeName == "DEV" || userTypeName == "SUPPORT")
         return (
             <div className="m-4">
                 <p className="text-center mb-3 font-bold text-xl">Periodo de pago actual</p>
 
-                <div className="bg-gray-300 p-4 rounded-md">
+                {activePeriod && (
+                    <div className="bg-gray-300 p-4 rounded-md">
+                        <div className="flex justify-between">
+                            <p>Inicio:</p>
+                            <p>{activePeriod.start_date.split("T")[0]}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Fin:</p>
+                            <p>{activePeriod.end_date.split("T")[0]}</p>
+                        </div>
+
+                        <div className="flex justify-between">
+                            <p>Cantidad de ordenes:</p>
+                            <p>{activePeriod.orders_count}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Total de articulos vendidos:</p>
+                            <p>{activePeriod.articles_total_quantity}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Total dinero generado:</p>
+                            <p>{showPriceWithCurrency({ iso_code: activePeriod.main_currency }, activePeriod.total_amount, false)}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Total dinero descuento:</p>
+                            <p>{showPriceWithCurrency({ iso_code: activePeriod.main_currency }, activePeriod.discount_amount, false)}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Total dinero delivery:</p>
+                            <p>{showPriceWithCurrency({ iso_code: activePeriod.main_currency }, activePeriod.delivery_amount, false)}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Total dinero comision paypal:</p>
+                            <p>{showPriceWithCurrency({ iso_code: activePeriod.main_currency }, activePeriod.paypal_fee_amount, false)}</p>
+                        </div>
+
+                        <div className="flex justify-between">
+                            <p>Total dinero restante:</p>
+                            <p>
+                                {Number(activePeriod.total_amount) +
+                                    Number(activePeriod.delivery_amount) -
+                                    Number(activePeriod.discount_amount) -
+                                    Number(activePeriod.paypal_fee_amount)}
+                            </p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Moneda:</p>
+                            <p>{activePeriod.main_currency}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Ver ordenas periodo:</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Estado periodo:</p>
+                            <p>{activePeriod.status == 1 ? "Activo" : "Inactivo"}</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* <div className="bg-gray-300 p-4 rounded-md">
                     <div className="flex justify-between">
                         <p>Inicio:</p>
                         <p>lunes 15 de julio</p>
@@ -104,13 +170,12 @@ const Client = () => {
                     </div>
                     <div className="flex justify-between">
                         <p>Ver ordenas periodo:</p>
-                        {/* <p>1,000 pesos</p> */}
                     </div>
                     <div className="flex justify-between">
                         <p>Estado periodo:</p>
                         <p>Activo</p>
                     </div>
-                </div>
+                </div> */}
 
                 <button className="bg-green-700 text-white w-full rounded-3xl py-3" onClick={() => router.push("/admin/pagos/0")}>
                     Crear Periodo de pago

@@ -27,6 +27,7 @@ import Input from "@/app/components/inputs/Input";
 import Select from "@/app/components/inputs/Select";
 import { ButtonGrayDown } from "@/app/components/others/Buttons";
 import periodSchema from "@/app/schemas/period.schema";
+import { useCreatePeriod } from "@/app/hooks/request/periods/requestsPeriods";
 
 const page = () => {
     const { ["id-periodo"]: idCurrency } = useParams();
@@ -54,17 +55,17 @@ const page = () => {
     }, [data]);
 
     const create = async (data) => {
-        const loadingToast = toast.loading("creando moneda...");
+        const loadingToast = toast.loading("Creando periodo de pago...");
 
-        const res = await useCreateCurrency(data);
-        console.log(res);
+        const response = await useCreatePeriod(data);
+        console.log(response);
 
-        if (res)
-            toast.success("Moneda creada correctamente", {
+        if (response)
+            toast.success("Perido de pago creado correctamente", {
                 id: loadingToast,
             });
         else
-            toast.error("Error al crear la moneda", {
+            toast.error("Error al crear Perido de pago", {
                 id: loadingToast,
             });
     };
@@ -87,11 +88,7 @@ const page = () => {
     const onSubmit = async (data) => {
         console.log(data);
 
-        // const canBeMain = await useCanBeMainCurrency(data.id);
-        // if (data.main_currency && !canBeMain) {
-        //     toast.error("No se puede crear 2 monedas principales");
-        //     return;
-        // }
+        create(data);
         // if (wantCreate) create(data);
         // else edit(data);
     };
