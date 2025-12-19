@@ -39,11 +39,11 @@ const Client = () => {
 
     // const isResponsible = responsabilidad == "true";
 
-    console.log(statusOrders);
+    // console.log(statusOrders);
 
-    const status = statusOrders == "pendiente" ? "1, 2, 3" : statusOrders == "realizado" ? "3" : statusOrders == "archivado" ? "5" : "";
+    // const status = statusOrders == "pendiente" ? "1, 2, 3" : statusOrders == "realizado" ? "3" : statusOrders == "archivado" ? "5" : "";
 
-    console.log(status);
+    // console.log(status);
 
     const router = useRouter();
 
@@ -53,15 +53,15 @@ const Client = () => {
         console.warn(type);
     }, [type]);
 
-    const { data, isLoading } = useGetOrders(status);
+    // const { data, isLoading } = useGetOrders(status);
 
     useEffect(() => {
         console.log(type);
     }, [type]);
 
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
+    // useEffect(() => {
+    //     console.log(data);
+    // }, [data]);
 
     // const { data: dataFromShop, isLoading: isLoadingFromShop } = useGetOrdersFromShop(id_shop, status);
 
