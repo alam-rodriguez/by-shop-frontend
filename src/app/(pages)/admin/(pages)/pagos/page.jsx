@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 import React, { useEffect, useState } from "react";
 
 // Next
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 // Hooks
 import { useGetOrders, useGetOrdersFromShop } from "@/app/hooks/request/carts/requestsCarts";
@@ -32,12 +32,12 @@ import { ButtonGrayDown } from "@/app/components/others/Buttons";
 import { toast } from "sonner";
 
 const Client = () => {
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
 
-    const statusOrders = searchParams.get("estado");
-    const responsabilidad = searchParams.get("responsabilidad");
+    // const statusOrders = searchParams.get("estado");
+    // const responsabilidad = searchParams.get("responsabilidad");
 
-    const isResponsible = responsabilidad == "true";
+    // const isResponsible = responsabilidad == "true";
 
     console.log(statusOrders);
 
