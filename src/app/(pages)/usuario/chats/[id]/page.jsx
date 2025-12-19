@@ -117,7 +117,7 @@ const page = () => {
 
         let resCreateChat = true;
 
-        if (isUUID(chatId)) {
+        if (chatId != idChat) {
             const resChat = await useCreateChat(idChat);
             const resParticipantSender = await useCreateChatParticipant(idChat, userId);
             const resParticipantReceiver = await useCreateChatParticipant(idChat, receiverId);
