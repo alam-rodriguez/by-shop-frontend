@@ -77,7 +77,7 @@ const Client = () => {
 
     const handleClickOrder = (idOffer = 0) => router.push(`/admin/pedidos/${idOffer}`);
 
-    const { data: periods } = getPeriods();
+    const { data: periods, isLoading } = getPeriods();
 
     const { data: periodsByShops } = getPeriodsByShop(id_shop);
 
