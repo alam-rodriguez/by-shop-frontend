@@ -50,6 +50,16 @@ export const fetchGetActivePeriodsForAllShops = async () => {
     }
 };
 
+export const fetchGetShopsPeriodsByPeriodId = async (periodId) => {
+    try {
+        const res = await api.get(`/periods/${periodId}/shops`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error crear la moneda.");
+    }
+};
+
 export const fetchCreatePeriodPayoutShop = async (periodPayout) => {
     try {
         const res = await api.post(`/periods/payouts/shops`, periodPayout);
@@ -73,6 +83,16 @@ export const fetchGetPeriods = async () => {
 export const fetchGetPeriodsByShop = async (shopId) => {
     try {
         const res = await api.get(`/periods/by-shop/${shopId}`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error crear la moneda.");
+    }
+};
+
+export const fetchGetPeriodById = async (id) => {
+    try {
+        const res = await api.get(`/periods/${id}`);
         return res.data.data;
     } catch (error) {
         console.log(error);

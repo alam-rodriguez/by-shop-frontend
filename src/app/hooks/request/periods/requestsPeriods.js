@@ -7,9 +7,12 @@ import {
     createPeriod,
     fetchCreatePeriodPayoutShop,
     fetchGetActivePeriodsForAllShops,
+    fetchGetPeriodById,
     fetchGetPeriods,
     fetchGetPeriodsByShop,
     fetchGetShopsActivePeriod,
+    fetchGetShopsPeriodsById,
+    fetchGetShopsPeriodsByPeriodId,
     getActivePeriod,
     getActivePeriodByShop,
 } from "@/app/request/periods/requestsPeriods";
@@ -44,6 +47,13 @@ export const getActivePeriodsForAllShops = () =>
         queryFn: () => fetchGetActivePeriodsForAllShops(),
     });
 
+export const getShopsPeriodsByPeriodId = (periodId) =>
+    useQuery({
+        queryKey: [`shops-periods-by-peroid-id-${periodId}`],
+        enabled: isUUID(periodId),
+        queryFn: () => fetchGetShopsPeriodsByPeriodId(periodId),
+    });
+
 export const createPeriodPayoutShop = async (periodId, shopId, amount, commission, currencyId) => {
     const periodPayout = {
         id: uuidv4(),
@@ -69,4 +79,11 @@ export const getPeriodsByShop = (shopId) =>
         queryKey: [`periods-by-shop-${shopId}`],
         enabled: isUUID(shopId),
         queryFn: () => fetchGetPeriodsByShop(shopId),
+    });
+
+export const getPeriodById = (id) =>
+    useQuery({
+        queryKey: [`period-by-id-${id}`],
+        enabled: isUUID(id),
+        queryFn: () => fetchGetPeriodById(id),
     });

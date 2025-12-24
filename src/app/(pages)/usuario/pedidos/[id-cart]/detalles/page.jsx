@@ -275,9 +275,11 @@ const page = () => {
             <div>
                 <div className="flex_justify-between_ grid grid-cols-7 w-full items-end">
                     <div className="flex flex-col items-center">
-                        <Icon icon="mingcute:box-3-line" className="text-4xl" />
-                        {/* <Icon icon="mingcute:box-3-line" className="text-xs" /> */}
-                        <Icon icon="lets-icons:check-round-fill" className="text-base" />
+                        <Icon icon="mingcute:box-3-line" className={`text-4xl ${dataOrder.status_order >= 1 ? "text-black" : "text-gray-400"}`} />
+                        <Icon
+                            icon="lets-icons:check-round-fill"
+                            className={`text-base ${dataOrder.status_order >= 1 ? "text-black" : "text-gray-400"}`}
+                        />
                     </div>
                     <div className="flex gap-1 mb-2">
                         <div className={`flex-1 bg-black`} style={{ height: 0.1 }}></div>
@@ -287,21 +289,13 @@ const page = () => {
                         <div className={`flex-1 bg-black`} style={{ height: 0.1 }}></div>
                     </div>
                     <div className="flex flex-col items-center">
-                        <Icon icon="mingcute:box-3-line" className="text-4xl" />
-                        <Icon icon="lets-icons:check-round-fill" className="text-base" />
+                        <Icon icon="mingcute:truck-fill" className={`text-4xl ${dataOrder.status_order >= 2 ? "text-black" : "text-gray-400"}`} />
+                        <Icon
+                            icon="lets-icons:check-round-fill"
+                            className={`text-base ${dataOrder.status_order >= 2 ? "text-black" : "text-gray-400"}`}
+                        />
                     </div>
-                    <div className="flex gap-1">
-                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
-                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
-                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
-                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
-                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <Icon icon="mingcute:box-3-line" className="text-4xl text-gray-500" />
-                        <Icon icon="lets-icons:check-round-fill" className="text-base text-gray-500" />
-                    </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 mb-2">
                         <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
                         <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
                         <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
@@ -309,12 +303,42 @@ const page = () => {
                         <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
                     </div>
                     <div className="flex flex-col items-center">
-                        <Icon icon="mingcute:box-3-line" className="text-4xl text-gray-500" />
-                        <Icon icon="lets-icons:check-round-fill" className="text-base text-gray-500" />
+                        <Icon icon="fa-solid:people-carry" className={`text-4xl ${dataOrder.status_order >= 3 ? "text-black" : "text-gray-400"}`} />
+                        <Icon
+                            icon="lets-icons:check-round-fill"
+                            className={`text-base ${dataOrder.status_order >= 3 ? "text-black" : "text-gray-400"}`}
+                        />
+                    </div>
+                    <div className="flex gap-1 mb-2">
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                        <div className={`flex-1 bg-gray-500`} style={{ height: 0.1 }}></div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <Icon icon="ix:box-open" className={`text-4xl ${dataOrder.status_order >= 4 ? "text-black" : "text-gray-400"}`} />
+                        <Icon
+                            icon="lets-icons:check-round-fill"
+                            className={`text-base ${dataOrder.status_order >= 4 ? "text-black" : "text-gray-400"}`}
+                        />
                     </div>
                 </div>
                 <Spacer space={12} />
-                <p className="text-xl font-bold text-center">Preparando orden</p>
+                <p className="text-xl font-bold text-center">
+                    {/* {dataOrder.status_order == 0
+                        ? "Pedido Cancelado"
+                        : dataOrder.status_order == 1
+                        ? "Preparando Orden"
+                        : dataOrder.status_order == 2
+                        ? "Enviando Orden"
+                        : dataOrder.status_order == 3
+                        ? "Preparando Entrega"
+                        : dataOrder.status_order > 4
+                        ? "Orden Entregada"
+                        : ""} */}
+                    {showOrderStatusForClient(dataOrder.status_order, dataOrder.want_use_address == 1)}
+                </p>
             </div>
 
             <Spacer space={12} />

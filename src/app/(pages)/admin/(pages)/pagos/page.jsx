@@ -145,7 +145,7 @@ const Client = () => {
                 {(userTypeName == "DEV" || userTypeName == "SUPPORT") &&
                     periods &&
                     periods.map((period) => (
-                        <div key={period.id} className="bg-gray-300 p-4 rounded-md">
+                        <div key={period.id} className="bg-gray-300 p-4 rounded-md" onClick={() => router.push(`/admin/pagos/periodos/${period.id}`)}>
                             <div className="flex justify-between">
                                 <p>Inicio:</p>
                                 <p>{period.start_date.split("T")[0]}</p>
