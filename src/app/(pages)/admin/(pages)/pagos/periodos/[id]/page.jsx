@@ -107,7 +107,7 @@ const page = () => {
     const handleCreateShopPayout = async (shopId, amount, commission) => {
         const loadingToast = toast.loading("Realizando pago a tienda...");
 
-        const dateEndPeriod = new Date(activePeriod.end_date);
+        const dateEndPeriod = new Date(period.end_date);
         const dateNow = new Date();
 
         if (dateEndPeriod > dateNow) {
@@ -117,7 +117,7 @@ const page = () => {
             return;
         }
 
-        const resStatus = await createPeriodPayoutShop(activePeriod.id, shopId, amount, commission, activePeriod.currency_id);
+        const resStatus = await createPeriodPayoutShop(period.id, shopId, amount, commission, period.currency_id);
         console.log(resStatus);
         if (resStatus === 201)
             toast.success("Pago registrado correctameente", {

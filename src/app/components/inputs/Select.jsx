@@ -23,6 +23,10 @@ const Select = ({
     optionByDefaultText = "",
     optionByDefaultValue = "",
     onChange = () => {},
+    valueIsJson = false,
+    filter = false,
+    filterKey = "",
+    filterValue = "",
 }) => {
     if (!isMulti)
         return (
@@ -36,7 +40,7 @@ const Select = ({
                     className={selectClassName}
                     id={name}
                     value={itemSelected}
-                    defaultValue={optionByDefaultValue}
+                    // defaultValue={optionByDefaultValue}
                     // onChange={() => onChange()}
                     onChange={(e) => {
                         register(name).onChange(e);
@@ -46,11 +50,20 @@ const Select = ({
                     <option value={optionByDefaultValue} disabled={false}>
                         {optionByDefaultText || "Seleccione una opción"}
                     </option>
-                    {items.map((item) => (
-                        <option value={item[optionKeyValue]} key={item[optionKeyValue]}>
-                            {item[optionNameForShow]}
-                        </option>
-                    ))}
+                    {filter &&
+                        items
+                            .filter((item) => item[filterKey] == filterValue)
+                            .map((item) => (
+                                <option value={!valueIsJson ? item[optionKeyValue] : JSON.stringify(item)} key={item[optionKeyValue]}>
+                                    {item[optionNameForShow]}
+                                </option>
+                            ))}
+                    {!filter &&
+                        items.map((item) => (
+                            <option value={!valueIsJson ? item[optionKeyValue] : JSON.stringify(item)} key={item[optionKeyValue]}>
+                                {item[optionNameForShow]}
+                            </option>
+                        ))}
                 </select>
                 {errors[name]?.message && <p className={errorClassName}>{errors[name]?.message}</p>}
             </div>

@@ -60,6 +60,7 @@ import ButtonGray from "@/app/components/others/ButtonGray";
 import useRequestsBrands from "@/app/hooks/request/brands/useRequestsBrands";
 import { zusAdminBrands } from "@/app/zustand/admin/brands/zusAdminbrands";
 import { useGetCurrencies } from "@/app/hooks/request/currencies/requestsCurrencies";
+import { Icon } from "@iconify/react";
 // import { Input } from "postcss";
 
 const page = () => {
@@ -234,6 +235,8 @@ const page = () => {
 
     useEffect(() => {
         if (isLoadingArticleSpecs || !articleSpecs) return;
+        console.error(articleSpecs);
+        // debugger;
         articleSpecs.forEach((articleSpec) => {
             append({
                 id: articleSpec.id,
@@ -448,21 +451,46 @@ const page = () => {
         data.main_image = imageUrl;
         console.log(imageUrl);
 
-        const resGeneralCategories = await useCreateArticleGeneralCategories(data.id, data.general_categories);
-        console.log(resGeneralCategories);
+        const resGeneralCategories = true;
+        // const resGeneralCategories = await useCreateArticleGeneralCategories(data.id, data.general_categories);
+        // console.log(resGeneralCategories);
 
-        const resBoxContents = await useCreateArticleBoxContents(data.id, data.box_content);
-        console.log(resBoxContents);
+        const resBoxContents = true;
+        // const resBoxContents = await useCreateArticleBoxContents(data.id, data.box_content);
+        // console.log(resBoxContents);
 
         const optionsImagesFile = [];
-        data.options.forEach((optionImage) => {
-            optionsImagesFile.push({ imageFile: optionImage.image, folder: "articles/options", fileName: data.name });
-        });
-        const optionsImagesForDB = [...data.options];
-        console.log(optionsImagesForDB);
-        console.log(optionsImagesFile);
-        const optionsImagesUrl = await uploadImages(optionsImagesFile);
-        console.log(optionsImagesUrl);
+        let resOptions = true;
+        console.log(data.options);
+        debugger;
+        if (data.options.length > 0) {
+            data.options.forEach((optionImage) => {
+                if (typeof data.image == "object" && optionImage.image)
+                    optionsImagesFile.push({ imageFile: optionImage.image, folder: "articles/options", fileName: data.name });
+            });
+            const optionsImagesForDB = [...data.options];
+            console.log(optionsImagesForDB);
+            console.log(optionsImagesFile);
+            const optionsImagesUrl = await uploadImages(optionsImagesFile);
+            console.log(optionsImagesUrl);
+
+            data.options.forEach((optionImage, index) => {
+                if (typeof data.image == "object" && optionImage.image) {
+                    optionsImagesForDB[index].imageUrl = optionsImagesUrl[0];
+                    optionsImagesUrl.shift();
+                }
+            });
+
+            // optionsImagesUrl.forEach((imageUrl, index) => {
+            //     optionsImagesForDB[index].imageUrl = imageUrl.ufsUrl;
+            // });
+
+            console.log(optionsImagesForDB);
+            resOptions = await useCreateArticleOption(data.id, optionsImagesForDB);
+            console.log(resOptions);
+        }
+
+        // debugger;
         // optionsImagesUrl.forEach((imageUrl, index) => {
         //     data.options.some((option, i) => {
         //         // if (optionsImagesForDB[i].imageUrl) return true;
@@ -472,14 +500,6 @@ const page = () => {
         //         }
         //     });
         // });
-
-        optionsImagesUrl.forEach((imageUrl, index) => {
-            optionsImagesForDB[index].imageUrl = imageUrl.ufsUrl;
-        });
-
-        console.log(optionsImagesForDB);
-        const resOptions = await useCreateArticleOption(data.id, optionsImagesForDB);
-        console.log(resOptions);
 
         // const options = [];
         // data.options.forEach((option) => {
@@ -497,23 +517,32 @@ const page = () => {
 
         console.log(data.images);
         const imagesFile = [];
-        data.images.forEach((fileList) => {
-            Array.from(fileList).forEach((image) => {
-                imagesFile.push({ imageFile: image, folder: "articles", fileName: data.name });
+        let resImages = true;
+        debugger;
+        if (data.images.length > 0) {
+            debugger;
+            data.images.forEach((image) => {
+                imagesFile.push({ imageFile: image.image, folder: "articles", fileName: data.name });
             });
-        });
+            // data.images.forEach((fileList) => {
+            //     Array.from(fileList).forEach((image) => {
+            //         imagesFile.push({ imageFile: image, folder: "articles", fileName: data.name });
+            //     });
+            // });
 
-        console.log(imagesFile);
-        const imagesUrl = await uploadImages(imagesFile);
-        console.log(imagesUrl);
+            console.log(imagesFile);
+            const imagesUrl = await uploadImages(imagesFile);
+            console.log(imagesUrl);
+            resImages = await usecreateArticleImages(data.id, imagesUrl);
+            console.log(resImages);
+            debugger;
+        }
 
         // const imagesUrlArray = [];
         // imagesUrl.forEach((image) => {
         //     imagesUrlArray.push(image.url);
         // });
         // console.log(imagesUrlArray);
-        const resImages = await usecreateArticleImages(data.id, imagesUrl);
-        console.log(resImages);
 
         const res = await useCreateArticle(data);
         console.log(res);
@@ -770,10 +799,18 @@ const page = () => {
     }, [categorySelected]);
 
     const handleClickAddOption = () => {
-        const optionSelected = JSON.parse(watch("id_option_selected"));
+        const option = watch("id_option_selected");
+
+        if (!option) {
+            toast.error("Debes de selecionar una opcion");
+            return;
+        }
+
+        const optionSelected = JSON.parse(option);
         console.log(optionSelected);
+        // return;
         // const idOptionSelected = watch("id_option_selected");
-        const option = watch("id_option_selected").split("||+||");
+        // const option = watch("id_option_selected").split("||+||");
         console.log(option);
         const idOption = option[0];
         const nameOption = option[1];
@@ -868,7 +905,7 @@ const page = () => {
                     optionNameForShow="name"
                     label="Categoria directa"
                 />
-                <Select
+                {/* <Select
                     register={register}
                     errors={errors}
                     type="text"
@@ -878,7 +915,7 @@ const page = () => {
                     errorClassName="text-red-700"
                     optionNameForShow="name"
                     label="Categoria indirecta"
-                />
+                /> */}
                 <Select
                     register={register}
                     errors={errors}
@@ -936,43 +973,6 @@ const page = () => {
                     optionNameForShow="name"
                     label="Estado"
                 />
-                <p className="text-center">Imagenes</p>
-                <div className="flex flex-wrap justify-between">
-                    {imagesFields.map((field, index) => (
-                        <div key={field.id} style={{ width: "48%" }}>
-                            <InputFile
-                                imgLink={field.imageUrl}
-                                control={control}
-                                errors={errors}
-                                name={`images.${index}.image`}
-                                inputClassName="border-2 border-gray-300 rounded-md p-2"
-                                errorClassName="text-red-700"
-                                placeholder=""
-                                label={`Imagen - #${index + 2}`}
-                                width="100%"
-                            />
-                            <p className="text-red-700" onClick={() => imageRemove(index)}>
-                                Borrar imagen
-                            </p>
-                        </div>
-                    ))}
-                </div>
-                <button type="button" onClick={() => imageAppend({ image: {}, id: "", imageUrl: "" })}>
-                    Agregar Nueva imagen
-                </button>
-                <Select
-                    register={register}
-                    errors={errors}
-                    type="text"
-                    name="general_categories"
-                    items={generalCategories ? generalCategories : []}
-                    selectClassName="border-2 border-gray-300 rounded-md p-2"
-                    errorClassName="text-red-700"
-                    optionNameForShow="name"
-                    label="Categorias generales"
-                    control={control}
-                    isMulti={true}
-                />
                 <Select
                     register={register}
                     errors={errors}
@@ -997,7 +997,53 @@ const page = () => {
                     placeholder="12,000"
                     label="cantidad disponible"
                 />
-                <Select
+                <p className="text-center my-2 font-bold">Imagenes</p>
+                <div className="flex flex-wrap justify-between">
+                    {imagesFields.map((field, index) => (
+                        <div key={field.id} style={{ width: "48%" }}>
+                            <InputFile
+                                imgLink={field.imageUrl}
+                                control={control}
+                                errors={errors}
+                                name={`images.${index}.image`}
+                                inputClassName="border-2 border-gray-300 rounded-md p-2"
+                                errorClassName="text-red-700"
+                                placeholder=""
+                                label={`Imagen - #${index + 2}`}
+                                width="100%"
+                            />
+                            <p className="text-red-700" onClick={() => imageRemove(index)}>
+                                Borrar imagen
+                            </p>
+                        </div>
+                    ))}
+                    <div className="flex gap-4 items-center justify-end w-full my-4">
+                        <Icon icon="mdi:image-minus-outline" className="text-4xl text-red-500" onClick={() => imageRemove(imagesFields.length - 1)} />
+                        <Icon
+                            icon="mdi:image-add"
+                            className="text-4xl text-green-500"
+                            // onClick={() => imageAppend({ image: {}, id: "", imageUrl: "" })}
+                            onClick={() => imageAppend({ image: {} })}
+                        />
+                    </div>
+                </div>
+                {/* <button type="button">Agregar Nueva imagen</button> */}
+
+                {/* <Select
+                    register={register}
+                    errors={errors}
+                    type="text"
+                    name="general_categories"
+                    items={generalCategories ? generalCategories : []}
+                    selectClassName="border-2 border-gray-300 rounded-md p-2"
+                    errorClassName="text-red-700"
+                    optionNameForShow="name"
+                    label="Categorias generales"
+                    control={control}
+                    isMulti={true}
+                /> */}
+
+                {/* <Select
                     register={register}
                     errors={errors}
                     type="text"
@@ -1007,8 +1053,8 @@ const page = () => {
                     errorClassName="text-red-700"
                     optionNameForShow="name"
                     label="Metodo de pago"
-                />
-                <Select
+                /> */}
+                {/* <Select
                     register={register}
                     errors={errors}
                     type="text"
@@ -1020,7 +1066,7 @@ const page = () => {
                     label="Contenido de la caja"
                     control={control}
                     isMulti={true}
-                />
+                /> */}
                 {/* <Select
                         register={register}
                         errors={errors}
@@ -1043,7 +1089,7 @@ const page = () => {
                         placeholder="Nombre del producto..."
                     />
                 </div> */}
-                <br />
+                {/* <br /> */}
                 {/* <Input
                     register={register}
                     errors={errors}
@@ -1053,13 +1099,13 @@ const page = () => {
                     errorClassName="text-red-700"
                     placeholder="Descripcion categoria..."
                 /> */}
-                <br />
+                {/* <br /> */}
                 {/* <div>
                     <p>Imagen principal:</p>
                     <input type="file" {...register("main_image")} onChange={() => setSchemaIsRequired(true)} />
                     {errors.main_image?.message && <p className="text-red-700">{errors.main_image?.message}</p>}
                 </div> */}
-                <br />
+                {/* <br /> */}
                 {/* <div>
                     <p>categoria directa</p>
                     <Select
@@ -1073,7 +1119,7 @@ const page = () => {
                         optionNameForShow="name"
                     />
                 </div> */}
-                <br />
+                {/* <br /> */}
                 {/* <div>
                     <p>categoria indirecta</p>
                     <Select
@@ -1087,7 +1133,7 @@ const page = () => {
                         optionNameForShow="name"
                     />
                 </div> */}
-                <br />
+                {/* <br /> */}
                 {/* <div>
                     <p>Modelo</p>
                     <Select
@@ -1101,7 +1147,7 @@ const page = () => {
                         optionNameForShow="name"
                     />
                 </div> */}
-                <br />
+                {/* <br /> */}
                 {/* <div>
                     <p>Precio del producto</p>
                     <input
@@ -1155,7 +1201,7 @@ const page = () => {
                     /> */}
                 {/* {errors.general_categories?.message && <p className="text-red-700">{errors.general_categories?.message}</p>} */}
                 {/* </div> */}
-                <br />
+                {/* <br /> */}
                 {/* <div>
                     <p>Vista</p>
                     <select {...register("view", { type: "number", setValueAs: (value) => (value === "" ? undefined : parseFloat(value)) })}>
@@ -1164,7 +1210,7 @@ const page = () => {
                     </select>
                     {errors.view?.message && <p className="text-red-700">{errors.view?.message}</p>}
                 </div> */}
-                <br />
+                {/* <br /> */}
                 {/* <div>
                     <p>Cantidad disponible</p>
                     <input
@@ -1175,7 +1221,7 @@ const page = () => {
                     <button type="button">Dismonuir</button>
                     <button type="button">Aumentar</button>
                 </div> */}
-                <br />
+                {/* <br /> */}
                 {/* <div>
                     <p>metodo de pago</p>
                     <Select
@@ -1189,7 +1235,7 @@ const page = () => {
                         optionNameForShow="name"
                     />
                 </div> */}
-                <br />
+                {/* <br /> */}
                 {/* //!todo: */}
                 {/* <Select
                     register={register}
@@ -1222,20 +1268,33 @@ const page = () => {
                     <button>Agregar contenido</button>
                     <button>eliminar contenido</button>
                 </div> */}
-                <h1 className="text-center">Opciones</h1>
-                <select {...register("id_option_selected")}>
+                {/* <h1 className="text-center">Opciones</h1> */}
+                <h1 className="text-center text-lg font-bold">Opciones</h1>
+                {/* <select {...register("id_option_selected")}>
                     {options.map((option) => (
                         // <option key={option.id} value={`${option.id}||+||${option.name}||+||${option.type}`}>
                         <option key={option.id} value={JSON.stringify(option)}>
                             {option.name}
                         </option>
                     ))}
-                </select>
-                <br />
-                <button type="button" onClick={handleClickAddOption}>
+                </select> */}
+                <Select
+                    register={register}
+                    errors={errors}
+                    type="text"
+                    name="id_option_selected"
+                    items={options}
+                    selectClassName="border-2 border-gray-300 rounded-md p-2"
+                    errorClassName="text-red-700"
+                    optionNameForShow="name"
+                    label="Opcion a agregar"
+                    valueIsJson={true}
+                />
+                {/* <br /> */}
+                {/* <button type="button" onClick={handleClickAddOption}>
                     Agregar opcion
                 </button>
-                <br />
+                <br /> */}
                 <hr />
                 <br />
                 {optionsFields.map((field, index) => (
@@ -1253,6 +1312,9 @@ const page = () => {
                             errorClassName="text-red-700"
                             optionNameForShow="value"
                             label={`Valor  ${index + 1} de la opcion ${watch("options")?.[index]?.name_option}`}
+                            filter={true}
+                            filterKey="id_option"
+                            filterValue={watch("options")?.[index]?.id_option}
                         />
 
                         {/* <select {...register(`options.${index}.id_value_option`)}>
@@ -1372,14 +1434,18 @@ const page = () => {
                 {/* if (options.some(option => option.id === 1)) {
                     console.log("Existe una opción con id 1");
                 } */}
+                <div className="flex gap-4 items-center justify-end w-full my-4">
+                    <Icon icon="lets-icons:remove" className="text-4xl text-red-500" onClick={() => optionRemove(optionsFields.length - 1)} />
+                    <Icon icon="gg:add" className="text-4xl text-green-500" onClick={handleClickAddOption} />
+                </div>
+                {/* <br /> */}
+                {/* <button type="button" onClick={handleClickAddOption}>
+                    Agregar opcion 
+                </button> */}
+                {/* <br />
                 <br />
-                <button type="button" onClick={handleClickAddOption}>
-                    Agregar opcion
-                </button>
                 <br />
-                <br />
-                <br />
-                <br />
+                <br /> */}
                 {/* {measurementsFields.map((field, index) => (
                     <div key={field.id}>
                         <select {...register(`measurements.${index}.key`)}>
@@ -1402,13 +1468,14 @@ const page = () => {
                 <button type="button" onClick={() => measurementsAppend({ key: "", value: "", type: false })}>
                     append
                 </button> */}
+                {/* <br />
                 <br />
                 <br />
-                <br />
-                <br />
+                <br /> */}
+                <h1 className="text-center text-lg font-bold">Especificaciones</h1>
                 {fields.map((field, index) => (
-                    <div className="flex" key={field.id}>
-                        <div className="flex w-1/2 gap-2">
+                    <div className="flex flex-col" key={field.id}>
+                        <div className="flex w-full gap-2">
                             <Select
                                 register={register}
                                 errors={errors}
@@ -1422,6 +1489,7 @@ const page = () => {
                                 label={<span className="text-xs">Especificacion {index + 1}</span>}
                                 width="50%"
                                 itemSelected={watch("specs")?.[index]?.id_option}
+                                // optionByDefaultValue={watch("specs")?.[index]?.id_option}
                             />
                             {/* <select {...register(`specs.${index}.key`)}>
                             {options.map((option) => (
@@ -1445,6 +1513,10 @@ const page = () => {
                                 label={<span className="text-xs">Valor {index + 1}</span>}
                                 width="50%"
                                 itemSelected={watch("specs")?.[index]?.id_value}
+                                // optionByDefaultValue={watch("specs")?.[index]?.id_value}
+                                filter={true}
+                                filterKey="id_option"
+                                filterValue={watch("specs")?.[index]?.id_option}
                             />
                             {/* <select {...register(`specs.${index}.value`)}>
                             {valuesOptions.map((valueOption) => (
@@ -1454,7 +1526,7 @@ const page = () => {
                             ))}
                         </select> */}
                         </div>
-                        <div className="flex w-1/2">
+                        <div className="flex w-full">
                             <Input
                                 register={register}
                                 errors={errors}
@@ -1464,6 +1536,7 @@ const page = () => {
                                 errorClassName="text-red-700"
                                 placeholder=""
                                 label={<p className="text-xs text-center w-full">Epecificacion</p>}
+                                checked={watch(`specs.${index}.is_spec`) == 1}
                                 // width="48%"
                             />
                             {/* <input type="checkbox" {...register(`specs.${index}.is_spec`)} /> */}
@@ -1476,6 +1549,7 @@ const page = () => {
                                 errorClassName="text-red-700"
                                 placeholder=""
                                 label={<p className="text-xs text-center w-full">Medida</p>}
+                                checked={watch(`specs.${index}.is_measurement`) == 1}
                                 // width="48%"
                             />
                             {/* <input type="checkbox" {...register(`specs.${index}.is_measurement`)} /> */}
@@ -1488,19 +1562,32 @@ const page = () => {
                                 errorClassName="text-red-700"
                                 placeholder=""
                                 label={<p className="text-xs text-center">Destacado</p>}
+                                checked={watch(`specs.${index}.is_highlight`) == 1}
                                 // width="48%"
                             />
-                            <p onClick={() => removeSpec(index)} className="text-red-700">
+                            {/* <p onClick={() => removeSpec(index)} className="text-red-700">
                                 Borrar
-                            </p>
+                            </p> */}
+                            <div className="w-full grid place-content-center">
+                                <Icon icon="mynaui:trash" className="text-2xl text-red-700" onClick={() => removeSpec(index)} />
+                            </div>
                             {/* <input type="checkbox" {...register(`specs.${index}.is_highlight`)} /> */}
                         </div>
                     </div>
                 ))}
-                <button type="button" onClick={() => append({ id: 0, id_option: "", id_value: "", is_spec: 0, is_measurement: 0, is_highlight: 0 })}>
+                <div className="flex gap-4 items-center justify-end w-full my-4">
+                    <Icon icon="lets-icons:remove" className="text-4xl text-red-500" onClick={() => removeSpec(fields.length - 1)} />
+                    <Icon
+                        icon="gg:add"
+                        className="text-4xl text-green-500"
+                        onClick={() => append({ id: 0, id_option: "", id_value: "", is_spec: 0, is_measurement: 0, is_highlight: 0 })}
+                    />
+                </div>
+                {/* <button type="button" onClick={() => append({ id: 0, id_option: "", id_value: "", is_spec: 0, is_measurement: 0, is_highlight: 0 })}>
                     append
-                </button>
+                </button> */}
                 <br />
+                <h1 className="text-center text-lg font-bold">Parrafos</h1>
                 <div className="flex flex-wrap justify-between">
                     {highlightedParagraphsfields.map((field, index) => (
                         <Input
@@ -1517,12 +1604,20 @@ const page = () => {
                         />
                     ))}
                 </div>
-                <button type="button" onClick={() => highlightedParagraphsAppend({ id: 0, paragraph: "" })}>
+                <div className="flex gap-4 items-center justify-end w-full my-4">
+                    <Icon
+                        icon="lets-icons:remove"
+                        className="text-4xl text-red-500"
+                        onClick={() => highlightedParagraphsRemove(highlightedParagraphsfields.length - 1)}
+                    />
+                    <Icon icon="gg:add" className="text-4xl text-green-500" onClick={() => highlightedParagraphsAppend({ id: 0, paragraph: "" })} />
+                </div>
+                {/* <button type="button" onClick={() => highlightedParagraphsAppend({ id: 0, paragraph: "" })}>
                     append
                 </button>
                 <button type="button" onClick={() => highlightedParagraphsRemove(highlightedParagraphsfields.length - 1)}>
                     borrar
-                </button>
+                </button> */}
                 <br />
                 <Input
                     register={register}

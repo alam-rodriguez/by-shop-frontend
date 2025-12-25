@@ -21,8 +21,9 @@ const createArticleSchema = (isRequired) => {
             name: z.string().min(4).max(255),
             description: z.string().min(4),
             id_direct_category: z.string().min(1),
-            id_indirect_category: z.string().min(1),
-            id_payment_method: z.string(),
+            // id_indirect_category: z.string().min(1),
+            id_indirect_category: z.string().nullable().default(null),
+            id_payment_method: z.string().nullable().default(null),
             // main_image: isRequired
             //     ? z
             //           .any()

@@ -10,6 +10,7 @@ const Input = ({
     labelClassName = "",
     divClassName = "flex gap-2 mt-5 flex-col",
     width = "100%",
+    checked = false,
 }) => {
     if (type !== "textarea" && type !== "checkbox" && type !== "radio")
         return (
@@ -38,6 +39,7 @@ const Input = ({
                     {...register(name, { setValueAs: (value) => (value === "" ? undefined : type === "number" ? parseFloat(value) : value) })}
                     className={inputClassName}
                     id={name}
+                    checked={checked}
                 />
                 <label htmlFor={name} className={labelClassName}>
                     {label}
