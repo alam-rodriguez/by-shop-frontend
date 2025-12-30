@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
     createPeriod,
     fetchCreatePeriodPayoutShop,
+    fetchGetActivePeriodsForAllDeliveries,
     fetchGetActivePeriodsForAllShops,
     fetchGetPeriodById,
     fetchGetPeriods,
@@ -86,4 +87,10 @@ export const getPeriodById = (id) =>
         queryKey: [`period-by-id-${id}`],
         enabled: isUUID(id),
         queryFn: () => fetchGetPeriodById(id),
+    });
+
+export const getActivePeriodsForAllDeliveries = () =>
+    useQuery({
+        queryKey: [`active-period-for-all-deliveries`],
+        queryFn: () => fetchGetActivePeriodsForAllDeliveries(),
     });

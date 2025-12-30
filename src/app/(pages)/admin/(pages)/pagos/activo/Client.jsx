@@ -19,6 +19,7 @@ import Spacer from "@/app/components/home/Spacer";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import {
     createPeriodPayoutShop,
+    getActivePeriodsForAllDeliveries,
     getActivePeriodsForAllShops,
     getShopsActivePeriod,
     useGetActivePeriod,
@@ -81,13 +82,15 @@ const Client = () => {
 
     const { data: activePeriodAllShops } = getActivePeriodsForAllShops();
 
+    const { data: activePeriodAllDeliveries } = getActivePeriodsForAllDeliveries();
+
     useEffect(() => {
         console.warn(activePeriod);
     }, [activePeriod]);
 
     useEffect(() => {
-        console.warn(activePeriodAllShops);
-    }, [activePeriodAllShops]);
+        console.warn(activePeriodAllDeliveries);
+    }, [activePeriodAllDeliveries]);
 
     const [makePay, setMakePay] = useState(false);
 

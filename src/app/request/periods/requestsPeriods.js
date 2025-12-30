@@ -99,3 +99,13 @@ export const fetchGetPeriodById = async (id) => {
         throw new Error("Error crear la moneda.");
     }
 };
+
+export const fetchGetActivePeriodsForAllDeliveries = async () => {
+    try {
+        const res = await api.get(`/periods/active/all-deliveries`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error crear la moneda.");
+    }
+};
