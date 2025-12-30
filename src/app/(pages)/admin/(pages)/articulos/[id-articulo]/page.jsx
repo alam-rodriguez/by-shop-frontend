@@ -235,7 +235,7 @@ const page = () => {
 
     useEffect(() => {
         if (isLoadingArticleSpecs || !articleSpecs) return;
-        console.error(articleSpecs);
+        // console.error(articleSpecs);
         // debugger;
         articleSpecs.forEach((articleSpec) => {
             append({
@@ -301,6 +301,7 @@ const page = () => {
                 // name: option.name,
                 // value: option.value,
                 // options: option.id_option,
+                id_option: option.id_option,
                 id_value: option.id_value,
                 name_option: option.option,
                 price: option.price,
@@ -462,7 +463,7 @@ const page = () => {
         const optionsImagesFile = [];
         let resOptions = true;
         console.log(data.options);
-        debugger;
+        // debugger;
         if (data.options.length > 0) {
             data.options.forEach((optionImage) => {
                 if (typeof data.image == "object" && optionImage.image)
@@ -518,9 +519,9 @@ const page = () => {
         console.log(data.images);
         const imagesFile = [];
         let resImages = true;
-        debugger;
+        // debugger;
         if (data.images.length > 0) {
-            debugger;
+            // debugger;
             data.images.forEach((image) => {
                 imagesFile.push({ imageFile: image.image, folder: "articles", fileName: data.name });
             });
@@ -535,7 +536,7 @@ const page = () => {
             console.log(imagesUrl);
             resImages = await usecreateArticleImages(data.id, imagesUrl);
             console.log(resImages);
-            debugger;
+            // debugger;
         }
 
         // const imagesUrlArray = [];
@@ -593,23 +594,23 @@ const page = () => {
         console.log(res);
         console.log("Articulo actualizado");
 
-        console.log(generalCategoriesArticle);
-        console.log(data.general_categories);
+        // console.log(generalCategoriesArticle);
+        // console.log(data.general_categories);
 
-        const { dataAgregar: dataAgregarGeneralCategories, dataBorrar: dataBorrarGeneralCategories } = getDataSelectMultiForAddAndDelete2(
-            generalCategoriesArticle,
-            data.general_categories,
-            "id",
-            "value"
-        );
+        // const { dataAgregar: dataAgregarGeneralCategories, dataBorrar: dataBorrarGeneralCategories } = getDataSelectMultiForAddAndDelete2(
+        //     generalCategoriesArticle,
+        //     data.general_categories,
+        //     "id",
+        //     "value"
+        // );
 
-        let resGeneralCategoriesAdd = true;
-        if (dataAgregarGeneralCategories.length > 0)
-            resGeneralCategoriesAdd = await useCreateArticleGeneralCategories(article.id, dataAgregarGeneralCategories);
-        let resGeneralCategoriesRemove = true;
-        console.log(dataBorrarGeneralCategories);
-        if (dataBorrarGeneralCategories.length > 0)
-            resGeneralCategoriesRemove = await useDeleteArticleGeneralCategory(article.id, dataBorrarGeneralCategories);
+        // let resGeneralCategoriesAdd = true;
+        // if (dataAgregarGeneralCategories.length > 0)
+        //     resGeneralCategoriesAdd = await useCreateArticleGeneralCategories(article.id, dataAgregarGeneralCategories);
+        // let resGeneralCategoriesRemove = true;
+        // console.log(dataBorrarGeneralCategories);
+        // if (dataBorrarGeneralCategories.length > 0)
+        //     resGeneralCategoriesRemove = await useDeleteArticleGeneralCategory(article.id, dataBorrarGeneralCategories);
         // console.log(dataAgregarGeneralCategories);
         // console.log(dataBorrarGeneralCategories);
 
@@ -728,6 +729,8 @@ const page = () => {
 
         const { specsAdd, specsDelete, specsUpdate } = getDataForAddDeleteAndUpdateSpecs(articleSpecs, data.specs || [], "id", "id");
 
+        // debugger;
+
         let resSpecsAdded = true;
         let resSpecsDeleted = true;
         let resSpecsUpdated = true;
@@ -754,8 +757,6 @@ const page = () => {
 
         if (
             res &&
-            resGeneralCategoriesAdd &&
-            resGeneralCategoriesRemove &&
             resBoxContentAdd &&
             resBoxContentRemove &&
             resImagesAdd &&
@@ -900,6 +901,7 @@ const page = () => {
                     type="text"
                     name="id_direct_category"
                     items={directCategories ?? []}
+                    itemSelected={watch("id_direct_category")}
                     selectClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     optionNameForShow="name"
@@ -922,6 +924,7 @@ const page = () => {
                     type="text"
                     name="id_brand"
                     items={[{ id: "all", name: "Todos" }, ...brands]}
+                    itemSelected={watch("id_brand")}
                     selectClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     optionNameForShow="name"
@@ -933,6 +936,7 @@ const page = () => {
                     type="text"
                     name="id_model"
                     items={modelsWidthFilter ?? []}
+                    itemSelected={watch("id_model")}
                     selectClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     optionNameForShow="name"
@@ -944,6 +948,7 @@ const page = () => {
                     type="text"
                     name="id_currency"
                     items={currencies ?? []}
+                    itemSelected={watch("id_currency")}
                     selectClassName="border-2 border-gray-300 rounded-md p-2"
                     errorClassName="text-red-700"
                     optionNameForShow="name"
@@ -1314,7 +1319,9 @@ const page = () => {
                             label={`Valor  ${index + 1} de la opcion ${watch("options")?.[index]?.name_option}`}
                             filter={true}
                             filterKey="id_option"
+                            // filterValue={wanCreate ? watch("options")?.[index]?.id_option : wanCreate.id_option}
                             filterValue={watch("options")?.[index]?.id_option}
+                            itemSelected={watch("options")?.[index]?.id_value}
                         />
 
                         {/* <select {...register(`options.${index}.id_value_option`)}>

@@ -28,13 +28,13 @@ export const useCreateDeliveryOrder = async (idCartBouth, price) => {
         status: 1,
     };
     const { data, status, message } = await createDeliveryOrder(deliveryOrder);
-    return status == 201;
+    return { data, status };
 };
 
 export const useGetDeliveriesOrders = () =>
     useQuery({
         queryKey: [`deliveries-orders`],
-        refetchInterval: 1000,
+        // refetchInterval: 1000,
         queryFn: () => getDeliveriesOrders(),
     });
 

@@ -121,6 +121,14 @@ const page = () => {
                     { url: "/admin/pagos", text: "Historias periodo de pagos" },
                 ]}
             />
+
+            <BtnGroup
+                txt="Pagos Deliveries"
+                options={[
+                    { url: "/admin/pagos/deliveries/activo", text: "Periodo de pago activo" },
+                    { url: "/admin/pagos/deliveries", text: "Historias periodo de pagos" },
+                ]}
+            />
         </div>
     );
 };

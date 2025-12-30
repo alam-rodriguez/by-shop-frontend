@@ -42,6 +42,9 @@ import {
     useSendPushNotificationsToDeliveriesForNewOrder,
 } from "@/app/hooks/request/web-push-notifications/webPushNotifications";
 
+import { io } from "socket.io-client";
+const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL_SOCKET);
+
 const IdPedidoClient = () => {
     const { ["id-pedido"]: idOrder } = useParams();
 
@@ -291,13 +294,17 @@ const IdPedidoClient = () => {
             });
             return;
         }
-        const res = await useCreateDeliveryOrder(order.id, 100);
+        const { data, status } = await useCreateDeliveryOrder(order.id, 100);
         const resNotifications = await useSendPushNotificationsToDeliveriesForNewOrder();
-        if (res && resNotifications)
+        if (status == 201 && resNotifications) {
+            socket.emit("sendDeliveryOrder", {
+                orderId: idOrder,
+                deliveryOrderId: data.id,
+            });
             toast.success("Delivery publicado", {
                 id: loadingToast,
             });
-        else
+        } else
             toast.error("Error al publicar el delivery", {
                 id: loadingToast,
             });

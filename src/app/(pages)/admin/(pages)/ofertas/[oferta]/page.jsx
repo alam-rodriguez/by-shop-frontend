@@ -187,28 +187,28 @@ const page = () => {
         );
         console.log(resOfferDirectsCategories);
 
-        const resOfferIndirectsCategories = await useCreateOfferCategory(
-            resData.id,
-            2,
-            resData.percent_discount,
-            resData.status,
-            data.indirects_categories
-        );
-        console.log(resOfferIndirectsCategories);
+        // const resOfferIndirectsCategories = await useCreateOfferCategory(
+        //     resData.id,
+        //     2,
+        //     resData.percent_discount,
+        //     resData.status,
+        //     data.indirects_categories
+        // );
+        // console.log(resOfferIndirectsCategories);
 
-        const resOfferGeneralCategories = await useCreateOfferCategory(
-            resData.id,
-            3,
-            resData.percent_discount,
-            resData.status,
-            data.general_categories
-        );
-        console.log(resOfferGeneralCategories);
+        // const resOfferGeneralCategories = await useCreateOfferCategory(
+        //     resData.id,
+        //     3,
+        //     resData.percent_discount,
+        //     resData.status,
+        //     data.general_categories
+        // );
+        // console.log(resOfferGeneralCategories);
 
         const resOfferArticles = await useCreateOfferArticle(resData.id, resData.percent_discount, 0, resData.status, data.articles);
         console.log(resOfferArticles);
 
-        if (resData == 201 && resOfferDirectsCategories && resOfferIndirectsCategories && resOfferGeneralCategories && resOfferArticles) {
+        if (status && resOfferDirectsCategories && resOfferArticles) {
             toast.success("Oferta creada correctamente", {
                 id: loadingToast,
             });
@@ -414,7 +414,7 @@ const page = () => {
                     isMulti={true}
                 />
 
-                <Select
+                {/* <Select
                     register={register}
                     errors={errors}
                     type="number"
@@ -426,9 +426,9 @@ const page = () => {
                     label="Categorias indirectas"
                     control={control}
                     isMulti={true}
-                />
+                /> */}
 
-                <Select
+                {/* <Select
                     register={register}
                     errors={errors}
                     type="number"
@@ -440,7 +440,7 @@ const page = () => {
                     label="Categorias generales"
                     control={control}
                     isMulti={true}
-                />
+                /> */}
 
                 {!isUUID(shopId) ? (
                     <Select

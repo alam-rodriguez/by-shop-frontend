@@ -1186,7 +1186,7 @@ const CarritoClient = () => {
         console.log(resData);
         console.log(status);
 
-        const resItem = await useCreateCartBuyItem(resData.id, data);
+        const resItem = await useCreateCartBuyItem(resData.id, data, currencySelected);
         console.log(resItem);
 
         const resCartItems = await useUpdateCartItemsStatus(data, 5);

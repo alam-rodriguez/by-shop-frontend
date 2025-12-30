@@ -15,9 +15,12 @@ import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect } from "react";
 import { toast } from "sonner";
 
+import { io } from "socket.io-client";
+const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL_SOCKET);
+
 const page = () => {
     const router = useRouter();
-    const { data, isLoading } = useGetDeliveriesOrders();
+    const { data, isLoading, refetch } = useGetDeliveriesOrders();
 
     const { id: idUser } = zusUser();
 
@@ -59,6 +62,18 @@ const page = () => {
     const handleClickDelivery = (deliveryId) => {
         router.push(`/deliveries/${deliveryId}`);
     };
+
+    useEffect(() => {
+        const handleNewDeliveryOrder = (data) => {
+            console.log("Nuevo delivery order recibido:", data);
+            refetch();
+        };
+        socket.on("newDeliveryOrder", handleNewDeliveryOrder);
+
+        return () => {
+            socket.off("newDeliveryOrder", handleNewDeliveryOrder);
+        };
+    }, []);
 
     if (isLoading) return <LoadingParagraph text="Buscando Deliveries" />;
     return (

@@ -21,8 +21,8 @@ const createOfferSchema = (isRequired) => {
         date_start: z.string().date(),
         date_end: z.string().date(),
         directs_categories: z.array(z.any().optional()),
-        indirects_categories: z.array(z.any().optional()),
-        general_categories: z.array(z.any().optional()),
+        // indirects_categories: z.array(z.any().optional()).nullable(),
+        // general_categories: z.array(z.any().optional()).nullable(),
         articles: z.array(z.any().optional()),
         status: z.number().default(1),
         // image: isRequired

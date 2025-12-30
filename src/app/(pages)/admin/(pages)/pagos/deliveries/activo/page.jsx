@@ -30,18 +30,18 @@ import { ButtonGrayDown } from "@/app/components/others/Buttons";
 import { toast } from "sonner";
 
 const Client = () => {
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
 
-    const statusOrders = searchParams.get("estado");
-    const responsabilidad = searchParams.get("responsabilidad");
+    // const statusOrders = searchParams.get("estado");
+    // const responsabilidad = searchParams.get("responsabilidad");
 
-    const isResponsible = responsabilidad == "true";
+    // const isResponsible = responsabilidad == "true";
 
-    console.log(statusOrders);
+    // console.log(statusOrders);
 
-    const status = statusOrders == "pendiente" ? "1, 2, 3" : statusOrders == "realizado" ? "3" : statusOrders == "archivado" ? "5" : "";
+    // const status = statusOrders == "pendiente" ? "1, 2, 3" : statusOrders == "realizado" ? "3" : statusOrders == "archivado" ? "5" : "";
 
-    console.log(status);
+    // console.log(status);
 
     const router = useRouter();
 
@@ -81,13 +81,13 @@ const Client = () => {
 
     const { data: activePeriodAllShops } = getActivePeriodsForAllShops();
 
-    useEffect(() => {
-        console.warn(activePeriod);
-    }, [activePeriod]);
+    // useEffect(() => {
+    //     console.warn(activePeriod);
+    // }, [activePeriod]);
 
     useEffect(() => {
-        console.warn(activePeriodAllShops);
-    }, [activePeriodAllShops]);
+        console.warn(activePeriodByShop);
+    }, [activePeriodByShop]);
 
     const [makePay, setMakePay] = useState(false);
 
@@ -200,188 +200,94 @@ const Client = () => {
                     </div>
                     <Spacer />
                     <p className="text-center mb-3 font-bold text-base">Periodo de pago actual por empresas</p>
-                    <div className="flex flex-col gap-4">
-                        {activePeriodAllShops &&
-                            activePeriodAllShops.map((activePeriodByShop) => (
-                                <div key={activePeriodByShop.shop_id} className="bg-gray-300 p-4 rounded-md">
+                    {activePeriodAllShops &&
+                        activePeriodAllShops.map((activePeriodByShop) => (
+                            <div key={activePeriodByShop.id} className="bg-gray-300 p-4 rounded-md">
+                                <div className="flex justify-between">
+                                    <p>Tienda:</p>
+                                    <p>{activePeriodByShop.shop_name}</p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Inicio:</p>
+                                    <p>{activePeriodByShop.start_date.split("T")[0]}</p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Fin:</p>
+                                    <p>{activePeriodByShop.end_date.split("T")[0]}</p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Cantidad de ordenes:</p>
+                                    <p>{activePeriodByShop.orders_count}</p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Total de articulos vendidos:</p>
+                                    <p>{activePeriodByShop.articles_total_quantity}</p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Total dinero generado:</p>
+                                    <p>
+                                        {showPriceWithCurrency(
+                                            { iso_code: activePeriodByShop.main_currency },
+                                            activePeriodByShop.total_amount,
+                                            false
+                                        )}
+                                    </p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Total dinero descuento:</p>
+                                    <p>
+                                        {showPriceWithCurrency(
+                                            { iso_code: activePeriodByShop.main_currency },
+                                            activePeriodByShop.discount_amount,
+                                            false
+                                        )}
+                                    </p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Total dinero restante:</p>
+                                    <p>
+                                        {showPriceWithCurrency(
+                                            { iso_code: activePeriodByShop.main_currency },
+                                            Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
+                                            false
+                                        )}
+                                    </p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Moneda:</p>
+                                    <p>{activePeriodByShop.main_currency}</p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p>Estado periodo:</p>
+                                    <p>{activePeriodByShop.status == 1 ? "Activo" : "Inactivo"}</p>
+                                </div>
+                                {activePeriodByShop.payout_id && (
                                     <div className="flex justify-between">
-                                        <p>Tienda:</p>
-                                        <p>{activePeriodByShop.shop_name}</p>
+                                        <p>Estado Pago periodo:</p>
+                                        <p>Pagado</p>
                                     </div>
-                                    <div className="flex justify-between">
-                                        <p>Inicio:</p>
-                                        <p>{activePeriodByShop.start_date.split("T")[0]}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Fin:</p>
-                                        <p>{activePeriodByShop.end_date.split("T")[0]}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Cantidad de ordenes:</p>
-                                        <p>{activePeriodByShop.orders_count}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Total de articulos vendidos:</p>
-                                        <p>{activePeriodByShop.articles_total_quantity}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Total dinero generado:</p>
-                                        <p>
-                                            {showPriceWithCurrency(
-                                                { iso_code: activePeriodByShop.main_currency },
-                                                activePeriodByShop.total_amount,
-                                                false
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Total dinero descuento:</p>
-                                        <p>
-                                            {showPriceWithCurrency(
-                                                { iso_code: activePeriodByShop.main_currency },
-                                                activePeriodByShop.discount_amount,
-                                                false
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Total dinero restante:</p>
-                                        <p>
-                                            {showPriceWithCurrency(
-                                                { iso_code: activePeriodByShop.main_currency },
-                                                Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
-                                                false
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Moneda:</p>
-                                        <p>{activePeriodByShop.main_currency}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Estado periodo:</p>
-                                        <p>{activePeriodByShop.status == 1 ? "Activo" : "Inactivo"}</p>
-                                    </div>
-                                    {activePeriodByShop.payout_id && (
-                                        <div className="flex justify-between">
-                                            <p>Estado Pago periodo:</p>
-                                            <p>Pagado</p>
-                                        </div>
-                                    )}
-                                    <div className="flex justify-center">
-                                        <p>Ver ordenas periodo:</p>
-                                    </div>
-                                    <Spacer />
-                                    <button
-                                        type="button"
-                                        className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition
+                                )}
+                                <div className="flex justify-center">
+                                    <p>Ver ordenas periodo:</p>
+                                </div>
+                                <Spacer />
+                                <button
+                                    type="button"
+                                    className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition
          hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2
          active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
-                                        onClick={() =>
-                                            handleCreateShopPayout(
-                                                activePeriodByShop.shop_id,
-                                                Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
-                                                0
-                                            )
-                                        }
-                                    >
-                                        Pagar tienda
-                                    </button>
-                                </div>
-                            ))}
-                    </div>
-                    <Spacer />
-                    <p className="text-center mb-3 font-bold text-base">Periodo de pago actual por deliveries</p>
-                    <div className="flex flex-col gap-4">
-                        {activePeriodAllShops &&
-                            activePeriodAllShops.map((activePeriodByShop) => (
-                                <div key={activePeriodByShop.shop_id} className="bg-gray-300 p-4 rounded-md">
-                                    <div className="flex justify-between">
-                                        <p>Tienda:</p>
-                                        <p>{activePeriodByShop.shop_name}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Inicio:</p>
-                                        <p>{activePeriodByShop.start_date.split("T")[0]}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Fin:</p>
-                                        <p>{activePeriodByShop.end_date.split("T")[0]}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Cantidad de ordenes:</p>
-                                        <p>{activePeriodByShop.orders_count}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Total de articulos vendidos:</p>
-                                        <p>{activePeriodByShop.articles_total_quantity}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Total dinero generado:</p>
-                                        <p>
-                                            {showPriceWithCurrency(
-                                                { iso_code: activePeriodByShop.main_currency },
-                                                activePeriodByShop.total_amount,
-                                                false
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Total dinero descuento:</p>
-                                        <p>
-                                            {showPriceWithCurrency(
-                                                { iso_code: activePeriodByShop.main_currency },
-                                                activePeriodByShop.discount_amount,
-                                                false
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Total dinero restante:</p>
-                                        <p>
-                                            {showPriceWithCurrency(
-                                                { iso_code: activePeriodByShop.main_currency },
-                                                Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
-                                                false
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Moneda:</p>
-                                        <p>{activePeriodByShop.main_currency}</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p>Estado periodo:</p>
-                                        <p>{activePeriodByShop.status == 1 ? "Activo" : "Inactivo"}</p>
-                                    </div>
-                                    {activePeriodByShop.payout_id && (
-                                        <div className="flex justify-between">
-                                            <p>Estado Pago periodo:</p>
-                                            <p>Pagado</p>
-                                        </div>
-                                    )}
-                                    <div className="flex justify-center">
-                                        <p>Ver ordenas periodo:</p>
-                                    </div>
-                                    <Spacer />
-                                    <button
-                                        type="button"
-                                        className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition
-         hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2
-         active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
-                                        onClick={() =>
-                                            handleCreateShopPayout(
-                                                activePeriodByShop.shop_id,
-                                                Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
-                                                0
-                                            )
-                                        }
-                                    >
-                                        Pagar tienda
-                                    </button>
-                                </div>
-                            ))}
-                    </div>
+                                    onClick={() =>
+                                        handleCreateShopPayout(
+                                            activePeriodByShop.shop_id,
+                                            Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
+                                            0
+                                        )
+                                    }
+                                >
+                                    Pagar tienda
+                                </button>
+                            </div>
+                        ))}
                 </>
             )}
             {activePeriodByShop && (

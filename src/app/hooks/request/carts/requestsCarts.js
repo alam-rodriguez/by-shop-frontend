@@ -27,6 +27,7 @@ import { useQuery } from "@tanstack/react-query";
 import { promise } from "zod";
 import { addArticleToList, articleIsInList, getArticleOffer, updateArticleInListStatus } from "@/app/request/articles/requestsArticles";
 import { useGetArticleOffer } from "../articles/requestsArticles";
+import { calcPriceCurrency, showPriceWithCurrencyUser } from "../../app/app";
 
 // CREATE TABLE carts(
 //   id char(36) NOT NULL PRIMARY KEY,
@@ -210,7 +211,7 @@ export const useCreateCartBuy = async (
 //                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 //             );
 
-export const useCreateCartBuyItem = async (id_cart, cartItems) => {
+export const useCreateCartBuyItem = async (id_cart, cartItems, currency) => {
     const promises = cartItems.map(async (cartItem) => {
         const offerArticle = await getArticleOffer(cartItem.id_article);
         console.log(offerArticle);
@@ -219,22 +220,30 @@ export const useCreateCartBuyItem = async (id_cart, cartItems) => {
         cartItemObj.id_cart_bought = id_cart;
         cartItemObj.id_cart = cartItem.id;
 
-        cartItemObj.price_item = cartItem.price;
-        cartItemObj.price_options = cartItem.price_options;
+        cartItemObj.price_item = showPriceWithCurrencyUser(cartItem.price, cartItem.currency, currency, false);
+        cartItemObj.price_options = showPriceWithCurrencyUser(cartItem.price_options, cartItem.currency, currency, false);
         cartItemObj.quantity = cartItem.quantity;
 
         const totalPrice = (cartItem.price + cartItem.price_options) * cartItem.quantity;
 
-        cartItemObj.total_price = totalPrice;
+        cartItemObj.total_price = showPriceWithCurrencyUser(totalPrice, cartItem.currency, currency, false);
 
         const percentDiscount = offerArticle.id ? offerArticle.percent_discount : 0.0;
 
         cartItemObj.id_offer = offerArticle.id ? offerArticle.id : null;
         cartItemObj.percent_discount = percentDiscount;
 
-        cartItemObj.total_price_with_discount = totalPrice * (1 - percentDiscount / 100);
+        cartItemObj.total_price_with_discount = showPriceWithCurrencyUser(
+            totalPrice * (1 - percentDiscount / 100),
+            cartItem.currency,
+            currency,
+            false
+        );
 
         cartItemObj.status = 1;
+
+        console.log(cartItemObj);
+        console.log(currency);
 
         const { data, status } = await createCartBuyItem(cartItemObj);
         return status;
