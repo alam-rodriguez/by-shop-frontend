@@ -203,7 +203,10 @@ const page = () => {
                                 Solicitar ser delivery
                             </button>
 
-                            <button className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition ml-3-">
+                            <button
+                                className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition ml-3-"
+                                onClick={() => router.push("/admin/tiendas/0")}
+                            >
                                 Solicitar registrar tienda
                             </button>
                         </div>

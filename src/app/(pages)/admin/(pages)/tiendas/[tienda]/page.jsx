@@ -141,13 +141,15 @@ const page = () => {
 
     // TODO: ARREGLAR ESTO PORQUE ESTA DANDO PROBLEMAS AL CREAR TIENDA
 
+    const isAdmin = userTypeName === "DEV" || userTypeName === "SUPPORT";
+
     const create = async (data) => {
         const loadingToast = toast.loading("Creando tienda...");
 
         let resSetUsedCode = true;
         let resUserShop = true;
 
-        if (userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP") {
+        if (!isAdmin) {
             if (!data.access_code || data.access_code.length === 0)
                 return toast.error("Debes ingresar un codio para registrar una tienda", {
                     id: loadingToast,
@@ -170,6 +172,30 @@ const page = () => {
             // useSetShopAdmin;
             // useSetShopSubAdmin;
         }
+
+        // if (userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP") {
+        //     if (!data.access_code || data.access_code.length === 0)
+        //         return toast.error("Debes ingresar un codio para registrar una tienda", {
+        //             id: loadingToast,
+        //         });
+
+        //     console.log(data.access_code);
+        //     const { exists, data: shopCodeData, status, message } = await useGetShopCodeData(data.access_code);
+        //     if (!exists)
+        //         return toast.error("Este codigo no es valido", {
+        //             id: loadingToast,
+        //         });
+        //     data.plan_id = shopCodeData.id;
+        //     resSetUsedCode = await useSetUsedShopCode(shopCodeData.shop_code_id, data.id);
+        //     // useSetUserShop;
+        //     resUserShop = useSetUserShop(userId, data.id);
+        //     // else useSetShopSubAdmin();
+        //     // if (userTypeName == "ADMIN-SHOP") useSetShopAdmin(userId, userEmail, data.id);
+        //     // else useSetShopSubAdmin();
+        //     // TODO: ESTABLECER EL ADMINISTRADR DE TIENDA
+        //     // useSetShopAdmin;
+        //     // useSetShopSubAdmin;
+        // }
 
         console.log(data);
 
@@ -293,7 +319,8 @@ const page = () => {
                 optionNameForShow="name"
                 label="Estado"
             />
-            {(userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP") && idShop == 0 ? (
+            {/* if (!userTypeName == "DEV" || userTypeName == "SUPPORT") {  */}
+            {!isAdmin ? (
                 <>
                     <Spacer />
                     <p className="text-center font-bold text-lg">Codigo de acceso</p>
