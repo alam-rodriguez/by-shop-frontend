@@ -3,6 +3,7 @@ import React from "react";
 // Components
 import Skeleton from "./Skeleton";
 import Spacer from "../home/Spacer";
+import ButtonForAdmins from "../home/ButtonForAdmins";
 
 const Home = () => {
     return (
@@ -30,8 +31,10 @@ const Home = () => {
                     <Skeleton className="w-full h-64 rounded-2xl" />
                 </div>
             </div>
+
             {/* <Skeleton className="w-full h-44 rounded-2xl" /> */}
             {/* <Skeleton className="w-full h-44 rounded-2xl" /> */}
+            <ButtonForAdmins />
         </div>
     );
 };

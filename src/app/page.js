@@ -35,6 +35,7 @@ import HomeAdvertisements from "./components/advertisements/HomeAdvertisements";
 import { useGetHomeCategoriesForApp } from "./hooks/request/categories/requestsHomeCategories";
 import Skeleton from "./components/skeleton/Skeleton";
 import Home from "./components/skeleton/Home";
+import ButtonForAdmins from "./components/home/ButtonForAdmins";
 
 const page = () => {
     const router = useRouter();
@@ -373,8 +374,7 @@ const page = () => {
                         Configuracion tienda
                     </button>
                 )} */}
-
-                {(type == 4 || type == 5) && (
+                {/* {(type == 4 || type == 5) && (
                     <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/support")}>
                         admin support
                     </button>
@@ -384,24 +384,13 @@ const page = () => {
                     <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/dev")}>
                         admin dev
                     </button>
-                )}
+                )} */}
                 {/* {(userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP") && !isUUID(id_shop) && (
                     <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/tiendas/0")}>
                         Registrar tienda
                     </button>
                 )} */}
-                {userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP" ? (
-                    isUUID(shopId) ? (
-                        <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin")}>
-                            Configuracion tienda
-                        </button>
-                    ) : (
-                        <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/tiendas/0")}>
-                            Registrar tienda
-                        </button>
-                    )
-                ) : null}
-
+                <ButtonForAdmins />
                 {/* <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl">admin</button> */}
                 {/* <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl">admin</button> */}
             </div>
