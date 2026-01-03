@@ -30,7 +30,7 @@ const Footer = () => {
         else if (pathname.startsWith("/carrito")) setPageActive("carrito");
         // else if (pathname.startsWith("/menu")) setPageActive("menu");
         else if (pathname.startsWith("/tiendas")) setPageActive("tiendas");
-        else if (pathname.startsWith("/delivery")) setPageActive("delivery");
+        else if (pathname.startsWith("/deliveries/periodos")) setPageActive("deliveriesPeriods");
         else if (pathname.startsWith("/deliveries")) setPageActive("deliveries");
         else setPageActive("inicio");
     }, [pathname]);
@@ -44,7 +44,8 @@ const Footer = () => {
         pathname == "/usuario/sesion" ||
         pathname == "/carrito/comprar" ||
         pathname.endsWith("/mi-opinion") ||
-        pathname.startsWith("/usuario/chats")
+        pathname.startsWith("/usuario/chats") ||
+        pathname.startsWith("/deliveries/solicitudes")
     )
         return null;
 
@@ -120,11 +121,11 @@ const Footer = () => {
                         <p>Historial</p>
                     </Link> */}
                     <FooterItem
-                        text="Historial"
-                        icon="material-symbols-light:history-rounded"
-                        link="/delivery"
+                        text="Periodos"
+                        icon="ant-design:field-time-outlined"
+                        link="/deliveries/periodos"
                         pageActive={pageActive}
-                        pageName="delivery"
+                        pageName="deliveriesPeriods"
                     />
                     {/* <Link
                         className={`flex-1 flex justify-center items-center flex-col ${pageActive === "deliveries" && "text-red-700"}`}
@@ -133,7 +134,7 @@ const Footer = () => {
                         <Icon icon="ph:motorcycle-thin" width="24" height="24" />
                         <p>Deliveries</p>
                     </Link> */}
-                    <FooterItem text="Deliveris" icon="ph:motorcycle-thin" link="deliveries" pageActive={pageActive} pageName="deliveries" />
+                    <FooterItem text="Deliveris" icon="ph:motorcycle-thin" link="/deliveries" pageActive={pageActive} pageName="deliveries" />
                 </>
             )}
         </div>

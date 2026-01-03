@@ -29,6 +29,7 @@ import { ButtonGrayDown } from "@/app/components/others/Buttons";
 // import ResponsibleOrders from "./[id-periodo]/ResponsibleOrders";
 
 import { toast } from "sonner";
+import { createPeriodPayoutDelivery } from "@/app/hooks/request/periods/requestsDeliveriesPeriods";
 
 const Client = () => {
     const searchParams = useSearchParams();
@@ -120,6 +121,46 @@ const Client = () => {
             });
         else if (resStatus === 200)
             toast.success("La tienda ya tiene un pago registrado en este periodo", {
+                id: loadingToast,
+            });
+        else
+            toast.error("Error al registrar el pago", {
+                id: loadingToast,
+            });
+    };
+
+    const handleCreateDeliveryPayout = async (deliveryId, ordersCount, grossAmount, commission) => {
+        const loadingToast = toast.loading("Realizando pago a tienda...");
+
+        const dateEndPeriod = new Date(activePeriod.end_date);
+        const dateNow = new Date();
+
+        // if (dateEndPeriod > dateNow) {
+        //     toast.error("Para realizar el pago de este periodo debes esperar a que culmine", {
+        //         id: loadingToast,
+        //     });
+        //     return;
+        // }
+
+        const resStatus = await createPeriodPayoutDelivery(
+            activePeriod.id,
+            deliveryId,
+            ordersCount,
+            grossAmount,
+            grossAmount * 0.25,
+            grossAmount - grossAmount * 0.25,
+            "paid",
+            activePeriod.currency_id,
+            new Date().toISOString().slice(0, 19).replace("T", " ")
+        );
+
+        console.log(resStatus);
+        if (resStatus === 201)
+            toast.success("Pago registrado correctameente", {
+                id: loadingToast,
+            });
+        else if (resStatus === 200)
+            toast.success("El delivery ya tiene un pago registrado en este periodo", {
                 id: loadingToast,
             });
         else
@@ -296,40 +337,40 @@ const Client = () => {
                     <Spacer />
                     <p className="text-center mb-3 font-bold text-base">Periodo de pago actual por deliveries</p>
                     <div className="flex flex-col gap-4">
-                        {activePeriodAllShops &&
-                            activePeriodAllShops.map((activePeriodByShop) => (
-                                <div key={activePeriodByShop.shop_id} className="bg-gray-300 p-4 rounded-md">
+                        {activePeriodAllDeliveries &&
+                            activePeriodAllDeliveries.map((activePeriodByDelivery) => (
+                                <div key={activePeriodByDelivery.user_id} className="bg-gray-300 p-4 rounded-md">
                                     <div className="flex justify-between">
-                                        <p>Tienda:</p>
-                                        <p>{activePeriodByShop.shop_name}</p>
+                                        <p>Delivery:</p>
+                                        <p>{activePeriodByDelivery.user_name}</p>
                                     </div>
                                     <div className="flex justify-between">
                                         <p>Inicio:</p>
-                                        <p>{activePeriodByShop.start_date.split("T")[0]}</p>
+                                        <p>{activePeriodByDelivery.start_date.split("T")[0]}</p>
                                     </div>
                                     <div className="flex justify-between">
                                         <p>Fin:</p>
-                                        <p>{activePeriodByShop.end_date.split("T")[0]}</p>
+                                        <p>{activePeriodByDelivery.end_date.split("T")[0]}</p>
                                     </div>
                                     <div className="flex justify-between">
-                                        <p>Cantidad de ordenes:</p>
-                                        <p>{activePeriodByShop.orders_count}</p>
+                                        <p>Cantidad de deliveries:</p>
+                                        <p>{activePeriodByDelivery.orders_count}</p>
                                     </div>
-                                    <div className="flex justify-between">
+                                    {/* <div className="flex justify-between">
                                         <p>Total de articulos vendidos:</p>
                                         <p>{activePeriodByShop.articles_total_quantity}</p>
-                                    </div>
+                                    </div> */}
                                     <div className="flex justify-between">
-                                        <p>Total dinero generado:</p>
+                                        <p>Total dinero deliveries:</p>
                                         <p>
                                             {showPriceWithCurrency(
-                                                { iso_code: activePeriodByShop.main_currency },
-                                                activePeriodByShop.total_amount,
+                                                { iso_code: activePeriodByDelivery.main_currency },
+                                                activePeriodByDelivery.delivery_total_price,
                                                 false
                                             )}
                                         </p>
                                     </div>
-                                    <div className="flex justify-between">
+                                    {/* <div className="flex justify-between">
                                         <p>Total dinero descuento:</p>
                                         <p>
                                             {showPriceWithCurrency(
@@ -338,8 +379,8 @@ const Client = () => {
                                                 false
                                             )}
                                         </p>
-                                    </div>
-                                    <div className="flex justify-between">
+                                    </div> */}
+                                    {/* <div className="flex justify-between">
                                         <p>Total dinero restante:</p>
                                         <p>
                                             {showPriceWithCurrency(
@@ -348,23 +389,23 @@ const Client = () => {
                                                 false
                                             )}
                                         </p>
-                                    </div>
+                                    </div> */}
                                     <div className="flex justify-between">
                                         <p>Moneda:</p>
-                                        <p>{activePeriodByShop.main_currency}</p>
+                                        <p>{activePeriodByDelivery.main_currency}</p>
                                     </div>
                                     <div className="flex justify-between">
                                         <p>Estado periodo:</p>
-                                        <p>{activePeriodByShop.status == 1 ? "Activo" : "Inactivo"}</p>
+                                        <p>{activePeriodByDelivery.status == 1 ? "Activo" : "Inactivo"}</p>
                                     </div>
-                                    {activePeriodByShop.payout_id && (
+                                    {activePeriodByDelivery.payout_id && (
                                         <div className="flex justify-between">
                                             <p>Estado Pago periodo:</p>
                                             <p>Pagado</p>
                                         </div>
                                     )}
                                     <div className="flex justify-center">
-                                        <p>Ver ordenas periodo:</p>
+                                        <p>Ver deliveries periodo:</p>
                                     </div>
                                     <Spacer />
                                     <button
@@ -373,14 +414,14 @@ const Client = () => {
          hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2
          active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                                         onClick={() =>
-                                            handleCreateShopPayout(
-                                                activePeriodByShop.shop_id,
-                                                Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
-                                                0
+                                            handleCreateDeliveryPayout(
+                                                activePeriodByDelivery.user_id,
+                                                activePeriodByDelivery.orders_count,
+                                                activePeriodByDelivery.delivery_total_price
                                             )
                                         }
                                     >
-                                        Pagar tienda
+                                        Pagar Delivery
                                     </button>
                                 </div>
                             ))}

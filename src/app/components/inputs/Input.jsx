@@ -10,7 +10,8 @@ const Input = ({
     labelClassName = "",
     divClassName = "flex gap-2 mt-5 flex-col",
     width = "100%",
-    checked = false,
+    checked = undefined,
+    // checked = false
 }) => {
     if (type !== "textarea" && type !== "checkbox" && type !== "radio")
         return (

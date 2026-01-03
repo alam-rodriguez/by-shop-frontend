@@ -9,6 +9,7 @@ import {
     createDeliveryOrder,
     createDeliveryOrderPreference,
     deliveryCanGetOrder,
+    fetchGetDeliveriesOrdersHistoryByDeliveryUserIdAndPeriodId,
     getDeliveriesOrders,
     getDeliveriesOrdersHistoryByDeliveryUserId,
     getDeliveryOrderById,
@@ -18,6 +19,7 @@ import {
     updateDeliveryOrderPreference,
     updateDeliveryOrderStatus,
 } from "@/app/request/deliveries/requestsDeliveries";
+import { isUUID } from "../../app/app";
 
 export const useCreateDeliveryOrder = async (idCartBouth, price) => {
     const deliveryOrder = {
@@ -90,3 +92,10 @@ export const useUpdateDeliveryOrderStatus = async (deliveryOrderId, status) => {
     const { data, status: resStatus, message } = await updateDeliveryOrderStatus(deliveryOrderId, status);
     return resStatus == 200;
 };
+
+export const getDeliveriesOrdersHistoryByDeliveryUserIdAndPeriodId = (deliveryUserId, periodId) =>
+    useQuery({
+        queryKey: [`deliveries-orders-history-by-delivery-user-id-${deliveryUserId}-and-period-id-${periodId}`],
+        enabled: isUUID(deliveryUserId) && isUUID(periodId),
+        queryFn: () => fetchGetDeliveriesOrdersHistoryByDeliveryUserIdAndPeriodId(deliveryUserId, periodId),
+    });

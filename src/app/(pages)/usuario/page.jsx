@@ -191,6 +191,25 @@ const page = () => {
                     }
                 />
                 <Spacer space={25} />
+                <UserOption
+                    icon="ph:handshake-light"
+                    text="Quiero formar parte de byshop"
+                    hiddenContent={
+                        <div className="m-4 flex flex-col gap-4">
+                            <button
+                                className="px-4 py-2 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+                                onClick={() => router.push("/deliveries/solicitudes/0")}
+                            >
+                                Solicitar ser delivery
+                            </button>
+
+                            <button className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition ml-3-">
+                                Solicitar registrar tienda
+                            </button>
+                        </div>
+                    }
+                />
+                <Spacer space={25} />
                 {/* <UserOption icon="ic:baseline-language" text="Lenguaje" /> */}
                 {/* <Spacer space={40} /> */}
                 {/* <UserOption icon="ic:baseline-language" text="Lenguaje" /> */}
@@ -605,18 +624,17 @@ const UserOption = ({ icon, text, isButton = false, onClick = () => {}, link = "
 
     return (
         <>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center" onClick={handleClick}>
                 <div className="flex items-center gap-2">
                     <Icon icon={icon} className="size-5 text-gray-700" />
                     <p className="text-base text-gray-700">{text}</p>
                 </div>
                 {isButton ? (
-                    <Icon icon="icon-park-outline:right" className="size-5 text-gray-700" onClick={handleClick} />
+                    <Icon icon="icon-park-outline:right" className="size-5 text-gray-700" />
                 ) : (
                     <Icon
                         icon="icon-park-outline:down"
                         className={`size-5 text-gray-700 transition-transform duration-300 ${show ? "rotate-180" : "rotate-0"}`}
-                        onClick={handleClick}
                     />
                 )}
             </div>

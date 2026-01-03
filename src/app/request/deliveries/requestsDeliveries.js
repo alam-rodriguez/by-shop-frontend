@@ -124,3 +124,13 @@ export const updateDeliveryOrderStatus = async (deliveryOrderId, status) => {
         throw new Error("Error al obtener la monedas.");
     }
 };
+
+export const fetchGetDeliveriesOrdersHistoryByDeliveryUserIdAndPeriodId = async (deliveryUserId, periodId) => {
+    try {
+        const res = await api.get(`/deliveries/history-by-delivery-user-and-period-id/${deliveryUserId}/${periodId}`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener la monedas.");
+    }
+};

@@ -319,3 +319,5 @@ export function timeAgo(dateString) {
 
     return "justo ahora";
 }
+
+export const toBool = (v) => (v === true || v === 1 ? 1 : 0);

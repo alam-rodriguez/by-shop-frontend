@@ -17,7 +17,7 @@ import {
     getRequestsReviewsByShop,
     getReviewArticleUser,
     updateArticleReview,
-    deleteArticleReview,
+    // deleteArticleReview,
     deleteArticleReviewImages,
 } from "@/app/request/articles/requestsArticlesReviews";
 import { getLasCartItemUserOfArticle } from "@/app/request/carts/requestsCarts";
@@ -45,8 +45,9 @@ export const useUpdateArticleReview = async (articleReview) => {
 };
 
 export const useDeleteArticleReview = async (ids) => {
-    const { status, data } = await deleteArticleReview(ids);
-    return status === 200;
+    // const { status, data } = await deleteArticleReview(ids);
+    // return status === 200;
+    return false;
 };
 
 // CREATE TABLE articles_reviews_images(
