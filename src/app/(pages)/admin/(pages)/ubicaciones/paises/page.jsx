@@ -42,7 +42,7 @@ const page = () => {
                             { key: "Longitude", value: country.longitude },
                             { key: "Estado", value: country.status == 1 ? "Activa" : "Inactiva" },
                         ]}
-                        onClick={() => handleClickCountry(currency.id)}
+                        onClick={() => handleClickCountry(country.id)}
                     />
                 ))}
             </div>
