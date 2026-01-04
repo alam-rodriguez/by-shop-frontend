@@ -40,7 +40,8 @@ import useCoords from "@/app/hooks/app/useCoords";
 import { useGetShopsPlans } from "@/app/hooks/request/shops/requestsShopsPlans";
 import { useGetShopCodeData, useSetUsedShopCode } from "@/app/hooks/request/shops/requestsShopsCodes";
 import { useRouter } from "next/navigation";
-import { useSetShopAdmin, useSetShopSubAdmin, useSetUserShop } from "@/app/hooks/request/users/requestsUsers";
+import { useChangeUserTypeId, useSetShopAdmin, useSetShopSubAdmin, useSetUserShop } from "@/app/hooks/request/users/requestsUsers";
+import { getUserTypeByName } from "@/app/hooks/request/users/requestsUsersTypes";
 
 const page = () => {
     const { tienda: idShop } = useParams();
@@ -149,6 +150,7 @@ const page = () => {
         // let resSetUsedCode = true;
         let resSetUsedCode = true;
         let resUserShop = true;
+        let resChangeUserType = true;
 
         if (!isAdmin) {
             if (!data.access_code || data.access_code.length === 0)
@@ -171,7 +173,11 @@ const page = () => {
             // else useSetShopSubAdmin();
             // TODO: ESTABLECER EL ADMINISTRADR DE TIENDA
             // useSetShopAdmin;
-            // useSetShopSubAdmin;
+            // useSetShopSubAzdmin;
+            const userTypeAdminShop = await getUserTypeByName("ADMIN-SHOP");
+            console.log(userTypeAdminShop);
+
+            resChangeUserType = useChangeUserTypeId(userId, userTypeAdminShop.id);
         }
 
         // if (userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP") {
@@ -205,7 +211,7 @@ const page = () => {
 
         const res = await useCreateShop(data);
 
-        if (res && resSetUsedCode && resUserShop) {
+        if (res && resSetUsedCode && resUserShop && resChangeUserType) {
             toast.success("Tienda creado correctamente", {
                 id: loadingToast,
             });

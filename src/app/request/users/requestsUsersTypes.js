@@ -20,3 +20,13 @@ export const createUserType = async (userType) => {
         throw new Error("Error al obtener las categorías.");
     }
 };
+
+export const fetchGetUserTypeByName = async (name) => {
+    try {
+        const res = await api.get(`/users/types/by-name/${name}`);
+        return { message: res.data.message, status: res.status, data: res.data.data };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener las categorías.");
+    }
+};
