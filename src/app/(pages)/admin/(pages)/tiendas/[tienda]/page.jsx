@@ -146,8 +146,10 @@ const page = () => {
     const create = async (data) => {
         const loadingToast = toast.loading("Creando tienda...");
 
+        // let resSetUsedCode = true;
         let resSetUsedCode = true;
         let resUserShop = true;
+        let gola;
 
         if (!isAdmin) {
             if (!data.access_code || data.access_code.length === 0)
