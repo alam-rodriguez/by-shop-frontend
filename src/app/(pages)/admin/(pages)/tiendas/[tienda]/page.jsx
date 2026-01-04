@@ -149,7 +149,6 @@ const page = () => {
         // let resSetUsedCode = true;
         let resSetUsedCode = true;
         let resUserShop = true;
-        let gola;
 
         if (!isAdmin) {
             if (!data.access_code || data.access_code.length === 0)
