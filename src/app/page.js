@@ -67,7 +67,7 @@ const page = () => {
 
     const handleClickSeAllHomeCategory = (homeCatergoryId) => router.push(`/articulos?categoria-inicio=${homeCatergoryId}`);
 
-    return <Home />;
+    // return <Home />;
 
     if (
         isLoadingDirects ||

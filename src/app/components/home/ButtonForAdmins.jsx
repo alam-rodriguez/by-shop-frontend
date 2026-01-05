@@ -18,24 +18,27 @@ const ButtonForAdmins = () => {
         <>
             {userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP" ? (
                 isUUID(shopId) ? (
-                    <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin")}>
+                    <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl w-full" onClick={() => router.push("/admin")}>
                         Configuracion tienda
                     </button>
                 ) : (
-                    <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/tiendas/0")}>
+                    <button
+                        className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl w-full"
+                        onClick={() => router.push("/admin/tiendas/0")}
+                    >
                         Registrar tienda
                     </button>
                 )
             ) : null}
 
             {userTypeName == "DEV" && (
-                <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/dev")}>
-                    admin dev
+                <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl w-full" onClick={() => router.push("/admin/dev")}>
+                    ADMIN DEV
                 </button>
             )}
 
             {userTypeName == "SUPPORT" && (
-                <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl" onClick={() => router.push("/admin/support")}>
+                <button className="bg-red-700 text-white py-3 px-5 text-xl text rounded-xl w-full" onClick={() => router.push("/admin/support")}>
                     admin support
                 </button>
             )}
