@@ -56,6 +56,10 @@ const withPWA = nextPWA({
             /\/_next\/static\/chunks\/.+\.js$/, // 🔹 evita precachear chunks con hash
         ],
     },
+    webpack: (config) => {
+        return config;
+    },
+    turbopack: false,
 });
 
 const nextConfig = {
