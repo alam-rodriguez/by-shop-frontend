@@ -48,18 +48,14 @@ const withPWA = nextPWA({
     buildExcludes: [
         /app-build-manifest\.json$/, // <--- SOLUCIÓN DEL ERROR
         /sw-custom\.js$/, // <--- ya lo tenías para importar tu SW
-        /_next\/static\/.*/,
+        // /_next\/static\/.*/,
     ],
-    workboxOpts: {
-        exclude: [
-            /^\/_next\/static\//,
-            /\/_next\/static\/chunks\/.+\.js$/, // 🔹 evita precachear chunks con hash
-        ],
-    },
-    webpack: (config) => {
-        return config;
-    },
-    turbopack: false,
+    // workboxOpts: {
+    //     exclude: [
+    //         /^\/_next\/static\//,
+    //         /\/_next\/static\/chunks\/.+\.js$/, // 🔹 evita precachear chunks con hash
+    //     ],
+    // },
 });
 
 const nextConfig = {
