@@ -91,7 +91,7 @@ export const getDepartmentsArticles = async () => {
 export const createDepartment = async (data) => {
     try {
         const response = await axios.post(`${url}/categories/departments`, data);
-        return { status: res.status, data: response.data.data, message: response.data.message };
+        return { status: response.status, data: response.data.data, message: response.data.message };
     } catch (error) {
         console.log(error);
         throw new Error("Error al crear el departamento.");
