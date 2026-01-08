@@ -123,12 +123,20 @@ const page = () => {
             />
 
             <BtnGroup
+                txt="Deliveries"
+                options={[
+                    { url: "/admin/deliveries/solicitudes", text: "Solicitudes de deliveries" },
+                    { url: "/admin/deliveries", text: "Lista de deliveries" },
+                ]}
+            />
+
+            {/* <BtnGroup
                 txt="Pagos Deliveries"
                 options={[
                     { url: "/admin/pagos/deliveries/activo", text: "Periodo de pago activo" },
                     { url: "/admin/pagos/deliveries", text: "Historias periodo de pagos" },
                 ]}
-            />
+            /> */}
         </div>
     );
 };

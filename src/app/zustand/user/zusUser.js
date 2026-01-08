@@ -14,6 +14,7 @@ import { create } from "zustand";
 // canBuy 3: No puede comprar porque es un vendedor
 
 export const zusUser = create((set) => ({
+    wasSearched: false,
     id: "",
     firstName: "",
     lastName: "",
@@ -35,6 +36,7 @@ export const zusUser = create((set) => ({
     setCurrencySelected: (currency) => set(() => ({ currencySelected: currency })),
     setUserInfo: (user) =>
         set({
+            wasSearched: true,
             hasData: true,
             id: user.id,
             firstName: user.first_name,
@@ -54,9 +56,11 @@ export const zusUser = create((set) => ({
             id_shop: user.shop_id,
             shop_id: user.shop_id,
         }),
+
     changeUserWantUseAddress: (wantUseAddress) => set({ wantUseAddress }),
     shop_id: null,
     id_shop: "",
     name_shop: "",
     setUserShop: (shop) => set({ id_shop: shop.id_shop, name_shop: shop.name_shop }),
+    setTrueWasSearched: () => set(() => ({ wasSearched: true })),
 }));

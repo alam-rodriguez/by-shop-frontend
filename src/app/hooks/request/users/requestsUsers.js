@@ -99,7 +99,7 @@ export const useCreateCodeVerificationEmail = async (email) => {
 };
 
 export const useRequestsUsers = () => {
-    const { setUserInfo, setCurrencySelected } = zusUser();
+    const { setUserInfo, setCurrencySelected, setTrueWasSearched } = zusUser();
     const { setServiceWorker } = useSetServiceWorker();
 
     const useGetUserInformation = async () => {
@@ -125,6 +125,7 @@ export const useRequestsUsers = () => {
                 shop_id: null,
                 id_shop: null,
             });
+        setTrueWasSearched();
     };
 
     const useGetUserCurrencyOrMainCurrency = async () => {

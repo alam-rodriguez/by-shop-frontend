@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 // Requests
 import {
     fetchCreateDeliveryApplication,
+    fetchGetAllDeliveriesApplication,
     fetchGetDeliveryApplication,
     fetchGetDeliveryApplicationByApplicationId,
 } from "@/app/request/applications/requestsDeliveriesApplications";
@@ -28,4 +29,10 @@ export const getDeliveryApplicationByApplicationId = (id) =>
         queryKey: [`delivery-application-${id}`],
         enabled: isUUID(id),
         queryFn: () => fetchGetDeliveryApplicationByApplicationId(id),
+    });
+
+export const getAllDeliveriesApplication = (id) =>
+    useQuery({
+        queryKey: [`deliveries-applications`],
+        queryFn: () => fetchGetAllDeliveriesApplication(),
     });
