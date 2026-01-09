@@ -31,7 +31,7 @@ export const getDeliveryApplicationByApplicationId = (id) =>
         queryFn: () => fetchGetDeliveryApplicationByApplicationId(id),
     });
 
-export const getAllDeliveriesApplication = (id) =>
+export const getAllDeliveriesApplication = () =>
     useQuery({
         queryKey: [`deliveries-applications`],
         queryFn: () => fetchGetAllDeliveriesApplication(),

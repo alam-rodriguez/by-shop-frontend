@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }) {
         if (!wasSearched) return;
         if (!isUUID(id)) {
             toast.error("Debes iniciar sesión para acceder a esta sección.");
-            router.replace("/");
+            router.replace("/usuario/sesion");
             return;
         }
         if (pathname == "/admin/tiendas/0") {

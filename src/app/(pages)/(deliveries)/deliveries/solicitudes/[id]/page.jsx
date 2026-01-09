@@ -649,7 +649,28 @@ const page = () => {
                 </div>
             )} */}
             {/* {error && <p className="text-red-500">{error}</p>} */}
-            <ButtonGrayDown>{wantCreate ? "Realizar" : "Relanzar"} Solicitud</ButtonGrayDown>
+
+            {(userTypeName == "DEV" || userTypeName == "SUPPORT") && (
+                <div className="flex justify-between mt-0">
+                    <button
+                        // onClick={onAccept}
+                        className="px-4 py-2 rounded-md bg-green-600 text-white font-medium 
+                   hover:bg-green-700 transition-colors duration-200"
+                    >
+                        Aceptar
+                    </button>
+
+                    <button
+                        // onClick={onReject}
+                        className="px-4 py-2 rounded-md bg-red-600 text-white font-medium 
+                   hover:bg-red-700 transition-colors duration-200"
+                    >
+                        Rechazar
+                    </button>
+                </div>
+            )}
+
+            {userTypeName != "DEV" && userTypeName != "SUPPORT" && <ButtonGrayDown>{wantCreate ? "Realizar" : "Relanzar"} Solicitud</ButtonGrayDown>}
         </form>
     );
 };
