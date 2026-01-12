@@ -40,3 +40,13 @@ export const fetchGetAllDeliveriesApplication = async () => {
         throw new Error("Error al obtener la monedas.");
     }
 };
+
+export const fetchUpdateDeliveryStatusApplication = async (applicationId, status) => {
+    try {
+        const res = await api.patch(`/applications/deliveries/${applicationId}/status`, { status });
+        return { status: res.status, data: res.data.data, message: res.data.message };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener la monedas.");
+    }
+};

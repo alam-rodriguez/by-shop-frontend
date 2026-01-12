@@ -7,6 +7,7 @@ import {
     fetchGetAllDeliveriesApplication,
     fetchGetDeliveryApplication,
     fetchGetDeliveryApplicationByApplicationId,
+    fetchUpdateDeliveryStatusApplication,
 } from "@/app/request/applications/requestsDeliveriesApplications";
 
 // Hooks
@@ -36,3 +37,8 @@ export const getAllDeliveriesApplication = () =>
         queryKey: [`deliveries-applications`],
         queryFn: () => fetchGetAllDeliveriesApplication(),
     });
+
+export const updateDeliveryStatusApplication = async (applicationId, status) => {
+    const { data, status: resStatus, message } = await fetchUpdateDeliveryStatusApplication(applicationId, status);
+    return resStatus == 200;
+};

@@ -40,9 +40,14 @@ import useCoords from "@/app/hooks/app/useCoords";
 import { useGetShopsPlans } from "@/app/hooks/request/shops/requestsShopsPlans";
 import { useGetShopCodeData, useSetUsedShopCode } from "@/app/hooks/request/shops/requestsShopsCodes";
 import { useRouter } from "next/navigation";
-import { useSetShopAdmin, useSetShopSubAdmin, useSetUserShop } from "@/app/hooks/request/users/requestsUsers";
+import { useChangeUserTypeId, useSetShopAdmin, useSetShopSubAdmin, useSetUserShop } from "@/app/hooks/request/users/requestsUsers";
 import deliveryApplicationSchema from "@/app/schemas/deliveryApplication.schema";
-import { createDeliveryApplication, getDeliveryApplicationByApplicationId } from "@/app/hooks/request/applications/requestsDeliveriesApplications";
+import {
+    createDeliveryApplication,
+    getDeliveryApplicationByApplicationId,
+    updateDeliveryStatusApplication,
+} from "@/app/hooks/request/applications/requestsDeliveriesApplications";
+import { getUserTypeByName } from "@/app/hooks/request/users/requestsUsersTypes";
 
 const page = () => {
     const { id: applicationId } = useParams();
@@ -222,6 +227,42 @@ const page = () => {
     useEffect(() => {
         console.warn(errors);
     }, [errors]);
+
+    const handleClickreject = async () => {
+        const loadingToast = toast.loading("Rechazando solicitud...");
+
+        const res = await updateDeliveryStatusApplication(application.id, "rejected");
+
+        if (res)
+            toast.success("Solicitud rechazada correctamente", {
+                id: loadingToast,
+            });
+        else
+            toast.error("Error al rechazar solicitud", {
+                id: loadingToast,
+            });
+    };
+
+    // TODO: Al acceptar una solicitud, crear el delivery y asignarle el userType de delivery
+
+    const handleClickapprove = async () => {
+        const loadingToast = toast.loading("Aprobando solicitud...");
+
+        const userTypeDelivery = await getUserTypeByName("DELIVERY");
+
+        const resChangeUserType = useChangeUserTypeId(application.user_id, userTypeDelivery.id);
+
+        const res = await updateDeliveryStatusApplication(application.id, "approved");
+
+        if (res && resChangeUserType)
+            toast.success("Solicitud aprobada correctamente", {
+                id: loadingToast,
+            });
+        else
+            toast.error("Error al aprobar solicitud", {
+                id: loadingToast,
+            });
+    };
 
     if (isLoading) return <LoadingParagraph />;
 
@@ -651,9 +692,9 @@ const page = () => {
             {/* {error && <p className="text-red-500">{error}</p>} */}
 
             {(userTypeName == "DEV" || userTypeName == "SUPPORT") && (
-                <div className="flex justify-between mt-0">
+                <div className="flex justify-between mt-6">
                     <button
-                        // onClick={onAccept}
+                        onClick={handleClickapprove}
                         className="px-4 py-2 rounded-md bg-green-600 text-white font-medium 
                    hover:bg-green-700 transition-colors duration-200"
                     >
@@ -661,7 +702,7 @@ const page = () => {
                     </button>
 
                     <button
-                        // onClick={onReject}
+                        onClick={handleClickreject}
                         className="px-4 py-2 rounded-md bg-red-600 text-white font-medium 
                    hover:bg-red-700 transition-colors duration-200"
                     >
