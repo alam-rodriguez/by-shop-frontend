@@ -88,6 +88,14 @@ const page = () => {
                 ]}
             />
 
+            <BtnGroup
+                txt="Usuarios"
+                options={[
+                    { url: `/admin/usuarios`, text: "Usuarios" },
+                    // { url: "/admin/pagos", text: "Historias periodo de pagos" },
+                ]}
+            />
+
             {/* <BtnGroup txt="Usuarios" options={[{ url: "/admin/usuarios/usuarios", text: "ADMINISTRAR USUARIOS" }]} /> */}
         </div>
     );

@@ -277,3 +277,23 @@ export const changeUserTypeId = async (idUser, userTypeId) => {
         throw new Error("Error.");
     }
 };
+
+export const fetchGetUsersShop = async (shopId) => {
+    try {
+        const res = await api.get(`/users/shops/${shopId}`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener las categorías.");
+    }
+};
+
+export const fetchGetUserByEmail = async (email) => {
+    try {
+        const res = await api.get(`/users/email/${email}`);
+        return { message: res.data.message, status: res.status, data: res.data.data };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener las categorías.");
+    }
+};

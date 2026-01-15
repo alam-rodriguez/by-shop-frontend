@@ -31,9 +31,10 @@ import { useGetShops } from "@/app/hooks/request/shops/requestsShops";
 // Components
 import Spacer from "@/app/components/home/Spacer";
 import Select from "@/app/components/inputs/Select";
-import { useGetUsersTypes } from "@/app/hooks/request/users/requestsUsersTypes";
+import { getUserTypeByName, useGetUsersTypes } from "@/app/hooks/request/users/requestsUsersTypes";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import { useRouter } from "next/navigation";
+import { zusUser } from "@/app/zustand/user/zusUser";
 
 const page = () => {
     const {
@@ -48,6 +49,8 @@ const page = () => {
     // const shopRef = useRef();
     // const adminShopsRef = useRef();
     // const subadminShopsRef = useRef();
+
+    const { userTypeName, shop_id: shopId } = zusUser();
 
     const { ["id-usuario"]: idUser } = useParams();
 
@@ -227,6 +230,26 @@ const page = () => {
         router.push(`/usuario/chats/${user.id}`);
     };
 
+    const setUserTypeSubAdminShop = async () => {
+        const idUser = user.id;
+        const loadingToast = toast.loading("Cambiando Tipo de usuario...");
+
+        const userTypeSubAdminShop = await getUserTypeByName("SUB-ADMIN-SHOP");
+
+        const res = await useChangeUserTypeId(idUser, userTypeSubAdminShop.id);
+        const resUserShop = await useSetUserShop(idUser, shopId);
+
+        if (res && resUserShop) {
+            toast.success("Tipo de usuario cambiado correctamente", {
+                id: loadingToast,
+            });
+            refetch();
+        } else
+            toast.error("Error al cambiar el tipo de usuario", {
+                id: loadingToast,
+            });
+    };
+
     if (isLoading || isLoadingUsersTypes) return <LoadingParagraph />;
     return (
         <div className="m-4">
@@ -265,29 +288,44 @@ const page = () => {
                 </div>
             </div>
 
+            {userTypeName == "DEV" && (
+                <>
+                    <Spacer space={25} />
+                    <div className="flex gap-4 flex-col_justify-end flex-wrap">
+                        {usersType.map((userType) => (
+                            <button key={userType.id} className="px-4 py-2 rounded bg-gray-200 self-end" onClick={() => setUserType(userType.id)}>
+                                Marcar como usuario tipo <span className="font-bold">{userType.name}</span>
+                            </button>
+                        ))}
+                    </div>
+                </>
+            )}
+
             <Spacer space={25} />
             <div className="flex gap-4 flex-col_justify-end flex-wrap">
-                {usersType.map((userType) => (
-                    <button key={userType.id} className="px-4 py-2 rounded bg-gray-200 self-end" onClick={() => setUserType(userType.id)}>
-                        Marcar como usuario tipo <span className="font-bold">{userType.name}</span>
-                    </button>
-                ))}
-            </div>
-            <Spacer space={25} />
-            <div className="flex gap-4 flex-col_justify-end flex-wrap">
-                <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={velidateEmail}>
-                    Verificar email
-                </button>
-                <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeCantBuy}>
-                    Marcar no puede comprar
-                </button>
-                <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={setUserShop}>
-                    Asignar tienda a usuario
-                </button>
+                {userTypeName == "DEV" && (
+                    <>
+                        <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={velidateEmail}>
+                            Verificar email
+                        </button>
+                        <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeCantBuy}>
+                            Marcar no puede comprar
+                        </button>
+                        <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={setUserShop}>
+                            Asignar tienda a usuario
+                        </button>
+                    </>
+                )}
 
                 <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={openChat}>
                     Abrir Chat
                 </button>
+
+                {shopId != user.shop_id && (
+                    <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={setUserTypeSubAdminShop}>
+                        Marcar como usuario tipo <span className="font-bold">SUB-ADMIN-SHOP</span>
+                    </button>
+                )}
 
                 {/* <button className="px-4 py-2 rounded bg-gray-200 self-end" onClick={makeShopAdmin}>
                     Marcar como Administrador de tienda

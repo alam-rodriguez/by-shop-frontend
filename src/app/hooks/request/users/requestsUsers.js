@@ -14,6 +14,8 @@ import {
     changeUserWantUseAddress,
     createAddress,
     createCodeVerificationEmail,
+    fetchGetUserByEmail,
+    fetchGetUsersShop,
     getCodeValidation,
     getUserById,
     getUserCurrencyOrMainCurrency,
@@ -35,6 +37,7 @@ import {
 import { zusUser } from "@/app/zustand/user/zusUser";
 import { useQuery } from "@tanstack/react-query";
 import useSetServiceWorker from "../../app/useSetServiceWorker";
+import { isUUID } from "../../app/app";
 
 export const useUserExist = async (email) => {
     return await userExist(email);
@@ -256,4 +259,16 @@ export const useChangeIdCurrencyUser = async (idUser, idCurrency) => {
 export const useChangeUserTypeId = async (idUser, userTypeId) => {
     const { message, status } = await changeUserTypeId(idUser, userTypeId);
     return status == 200;
+};
+
+export const getUsersShop = (shopId) =>
+    useQuery({
+        queryKey: [`users-shops-${shopId}`],
+        enabled: isUUID(shopId),
+        queryFn: () => fetchGetUsersShop(shopId),
+    });
+
+export const getUserByEmail = async (email) => {
+    const { data } = await fetchGetUserByEmail(email);
+    return data;
 };

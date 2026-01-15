@@ -96,7 +96,7 @@ const page = () => {
             <BtnGroup
                 txt="Usuarios"
                 options={[
-                    { url: "/admin/usuarios/usuarios", text: "ADMINISTRAR USUARIOS" },
+                    { url: "/admin/usuarios", text: "ADMINISTRAR USUARIOS" },
                     { url: "/admin/usuarios/tipos", text: "TIPOS DE USUARIO" },
                 ]}
             />

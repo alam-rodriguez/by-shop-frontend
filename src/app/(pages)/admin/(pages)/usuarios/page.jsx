@@ -13,6 +13,7 @@ import { getUsersShop, useGetUsers } from "@/app/hooks/request/users/requestsUse
 import Spacer from "@/app/components/home/Spacer";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import { zusUser } from "@/app/zustand/user/zusUser";
+import { ButtonGrayDown } from "@/app/components/others/Buttons";
 
 const page = () => {
     const { shop_id: shopId, userTypeName } = zusUser();
@@ -111,6 +112,7 @@ const page = () => {
                         </div>
                     ))}
             </div>
+            <ButtonGrayDown fn={() => router.push("/admin/usuarios/buscar")}>Agregar nuevo usuario</ButtonGrayDown>
         </div>
     );
 };
