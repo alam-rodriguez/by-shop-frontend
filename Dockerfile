@@ -54,25 +54,66 @@
 # # Usa el modo desarrollo
 # CMD ["npm", "run", "dev"]
 
+# FROM node:20-alpine AS deps
+# WORKDIR /app
+# COPY package*.json ./
+# RUN npm ci --legacy-peer-deps
+
+# FROM node:20-alpine AS builder
+# WORKDIR /app
+# COPY --from=deps /app/node_modules ./node_modules
+# COPY . .
+# RUN rm -rf .next
+# RUN npm run build
+
+# FROM node:20-alpine AS runner
+# WORKDIR /app
+# ENV NODE_ENV=production
+# COPY --from=builder /app/.next ./.next
+# COPY --from=builder /app/public ./public
+# COPY --from=builder /app/package*.json ./
+# COPY --from=deps /app/node_modules ./node_modules
+# EXPOSE 3000
+# CMD ["npx", "next", "start", "-p", "3000", "-H", "0.0.0.0"]
+
+  # 1️⃣ Dependencias
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
+# 2️⃣ Build
 FROM node:20-alpine AS builder
 WORKDIR /app
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Definir los ARG para pasarlas desde GitHub Actions
+ARG NEXT_PUBLIC_BACKEND_BASE_URL
+ARG UPLOADTHING_TOKEN
+ARG NODE_ENV
+
+# Convertir ARG en ENV para que Next.js los use en build
+ENV NEXT_PUBLIC_BACKEND_BASE_URL=$NEXT_PUBLIC_BACKEND_BASE_URL
+ENV UPLOADTHING_TOKEN=$UPLOADTHING_TOKEN
+ENV NODE_ENV=$NODE_ENV
+
 RUN rm -rf .next
 RUN npm run build
 
+# 3️⃣ Runner
 FROM node:20-alpine AS runner
 WORKDIR /app
+
 ENV NODE_ENV=production
+
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package*.json ./
 COPY --from=deps /app/node_modules ./node_modules
+
 EXPOSE 3000
 CMD ["npx", "next", "start", "-p", "3000", "-H", "0.0.0.0"]
+
 
