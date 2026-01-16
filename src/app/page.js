@@ -39,7 +39,7 @@ import ButtonForAdmins from "./components/home/ButtonForAdmins";
 
 const page = () => {
     useEffect(() => {
-        console.log("NEXT_PUBLIC_BACKEND_BASE_URL:", process.env.NEXT_PUBLIC_BACKEND_BASE_URL);
+        console.log("NEXT_PUBLIC_BACKEND_BASE_URL:-", process.env.NEXT_PUBLIC_BACKEND_BASE_URL);
     }, []);
 
     const router = useRouter();
