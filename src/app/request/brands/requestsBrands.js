@@ -35,7 +35,6 @@ export const updateBrand = async (brand) => {
 
 export const getBrandById = async (id) => {
     try {
-        console.log("");
         const response = await api.get(`/brands/${id}`);
         return response.data.data;
     } catch (error) {

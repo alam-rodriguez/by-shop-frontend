@@ -38,6 +38,10 @@ import Home from "./components/skeleton/Home";
 import ButtonForAdmins from "./components/home/ButtonForAdmins";
 
 const page = () => {
+    useEffect(() => {
+        console.log("NEXT_PUBLIC_BACKEND_BASE_URL:", process.env.NEXT_PUBLIC_BACKEND_BASE_URL);
+    }, []);
+
     const router = useRouter();
 
     const { type, currencySelected: currencyUser, userTypeName, shop_id: shopId } = zusUser();
