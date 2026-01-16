@@ -40,4 +40,4 @@ jobs:
             docker login ghcr.io -u alam-rodriguez -p ${{ secrets.GHCR_PAT }}
             cd /root/byshop
             docker pull ghcr.io/alam-rodriguez/tu-app:latest
-            docker compose up -d
+            docker compose --env-file .env up -d
