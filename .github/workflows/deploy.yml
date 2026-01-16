@@ -38,6 +38,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             docker login ghcr.io -u alam-rodriguez -p ${{ secrets.GHCR_PAT }}
-            cd /var/www/tu-app
+            cd /var/www/byshop
             docker pull ghcr.io/alam-rodriguez/tu-app:latest
             docker compose up -d
