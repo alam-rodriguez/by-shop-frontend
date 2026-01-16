@@ -29,6 +29,10 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/alam-rodriguez/tu-app:latest
+          build-args: |
+            NEXT_PUBLIC_BACKEND_BASE_URL=${{ secrets.NEXT_PUBLIC_BACKEND_BASE_URL }}
+            UPLOADTHING_TOKEN=${{ secrets.UPLOADTHING_TOKEN }}
+            NODE_ENV=${{ secrets.NODE_ENV }}
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
