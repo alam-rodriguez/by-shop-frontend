@@ -99,9 +99,9 @@ const nextConfig = {
             },
         ],
     },
-    images: {
-        unoptimized: true,
-    },
+    // images: {
+    // unoptimized: true,
+    // },
     eslint: {
         ignoreDuringBuilds: true, // <--- esto permite que la build se complete aunque haya errores de ESLint
     },

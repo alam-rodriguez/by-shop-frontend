@@ -76,7 +76,7 @@
 # EXPOSE 3000
 # CMD ["npx", "next", "start", "-p", "3000", "-H", "0.0.0.0"]
 
-  # 1️⃣ Dependencias
+# 1️⃣ Dependencias
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY package*.json ./

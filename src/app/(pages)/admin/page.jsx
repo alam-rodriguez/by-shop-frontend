@@ -11,7 +11,7 @@ import Link from "next/link";
 import { zusUser } from "@/app/zustand/user/zusUser";
 
 const page = () => {
-    const { id_shop, name_shop, shop_id: shopId } = zusUser();
+    const { id_shop, name_shop, shop_id: shopId, userTypeName } = zusUser();
 
     const { shops, shopsStatus } = zusAdminShops();
 
@@ -41,7 +41,6 @@ const page = () => {
                     { url: "/admin/articulos/solicitudes-comentarios", text: "Comentarios" },
                 ]}
             />
-
             {/* <div>
                 <p className="text-center">Articulos</p>
                 <div className="flex justify-between flex-wrap gap-y-4">
@@ -75,26 +74,30 @@ const page = () => {
                     { url: "/admin/pedidos?estado=pendiente", text: "PEDIDOS PENDIENTES" },
                     { url: "/admin/pedidos?estado=realizado", text: "PEDIDOS REALIZADOS" },
                     { url: "/admin/pedidos?estado=archivado", text: "PEDIDOS ARCHIVADOS" },
-                    { url: "/admin/pedidos?estado=pendiente&responsabilidad=true", text: "PEDIDOS BAJO RESPONSABILIDAD" },
+                    // { url: "/admin/pedidos?estado=pendiente&responsabilidad=true", text: "PEDIDOS BAJO RESPONSABILIDAD" },
                     // { url: "/admin/articulos/solicitudes-comentarios", text: "SOLICITUDES DE COMENTARIOS" },
                 ]}
             />
 
-            <BtnGroup
-                txt="Pagos"
-                options={[
-                    { url: "/admin/pagos/activo", text: "Periodo de pago activo" },
-                    { url: "/admin/pagos", text: "Historias periodo de pagos" },
-                ]}
-            />
+            {userTypeName == "ADMIN-SHOP" && (
+                <BtnGroup
+                    txt="Pagos"
+                    options={[
+                        { url: "/admin/pagos/activo", text: "Periodo de pago activo" },
+                        { url: "/admin/pagos", text: "Historias periodo de pagos" },
+                    ]}
+                />
+            )}
 
-            <BtnGroup
-                txt="Usuarios"
-                options={[
-                    { url: `/admin/usuarios`, text: "Usuarios" },
-                    // { url: "/admin/pagos", text: "Historias periodo de pagos" },
-                ]}
-            />
+            {userTypeName == "ADMIN-SHOP" && (
+                <BtnGroup
+                    txt="Usuarios"
+                    options={[
+                        { url: `/admin/usuarios`, text: "Usuarios" },
+                        // { url: "/admin/pagos", text: "Historias periodo de pagos" },
+                    ]}
+                />
+            )}
 
             {/* <BtnGroup txt="Usuarios" options={[{ url: "/admin/usuarios/usuarios", text: "ADMINISTRAR USUARIOS" }]} /> */}
         </div>

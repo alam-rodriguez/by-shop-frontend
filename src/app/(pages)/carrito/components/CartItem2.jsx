@@ -32,6 +32,7 @@ const CartItem2 = ({
     exchangeRate,
     isoCode,
     refetch,
+    isAvality = true,
 }) => {
     // const [hasOffer, setHasOffer] = useState(false);
     // const [finalPrice, setFinalPrice] = useState(articlePrice);
@@ -87,7 +88,9 @@ const CartItem2 = ({
     if (!currencySelected || !currencySelected.id) return null;
 
     return (
-        <div className="flex bg-white rounded-lg p-4 gap-4 shadow">
+        <div className="flex bg-white rounded-lg p-4 gap-4 shadow relative">
+            {!isAvality && <div className="w-full h-full bg-slate-200/50 absolute top-0 left-0 rounded-lg"></div>}
+
             <div className="grid place-items-center p-1 w-1/4 bg-gray-200 rounded-md">
                 <ImageA className="w-full h-full object-contain" src={image} />
             </div>
@@ -117,7 +120,7 @@ const CartItem2 = ({
                                 {showPriceWithCurrencyUser(
                                     articlePrice * quantity,
                                     { exchange_rate: exchangeRate, iso_code: isoCode },
-                                    currencySelected
+                                    currencySelected,
                                 )}
                             </p>
                         )}

@@ -310,6 +310,7 @@ const page = () => {
                                     exchangeRate={articleCart.exchange_rate}
                                     isoCode={articleCart.iso_code}
                                     refetch={refetchArticlesCartCannotBuy}
+                                    isAvality={false}
                                 />
                             ))}
                         </div>
