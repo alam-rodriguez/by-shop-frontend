@@ -15,6 +15,7 @@ export const useGetUserAddresses = (idUser) =>
         queryKey: [`users-addresses-${idUser}`],
         enabled: idUser !== "",
         queryFn: () => getUserAddresses(idUser),
+        refetchOnWindowFocus: true,
     });
 
 export const useGetAddressById = (id) =>

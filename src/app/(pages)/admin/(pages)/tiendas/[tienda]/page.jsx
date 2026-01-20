@@ -376,6 +376,7 @@ const page = () => {
                 type="text"
                 name="province_id"
                 items={provincesByCountry ?? []}
+                itemSelected={watch("province_id")}
                 selectClassName="border-2 border-gray-300 rounded-md p-2"
                 errorClassName="text-red-700"
                 optionNameForShow="name"
@@ -387,6 +388,7 @@ const page = () => {
                 type="text"
                 name="municipality_id"
                 items={municipalitiesByProvince ?? []}
+                itemSelected={watch("municipality_id")}
                 selectClassName="border-2 border-gray-300 rounded-md p-2"
                 errorClassName="text-red-700"
                 optionNameForShow="name"
@@ -398,6 +400,7 @@ const page = () => {
                 type="text"
                 name="neighborhood_id"
                 items={neighborhoodsByMunicipality ?? []}
+                itemSelected={watch("neighborhood_id")}
                 selectClassName="border-2 border-gray-300 rounded-md p-2"
                 errorClassName="text-red-700"
                 optionNameForShow="name"

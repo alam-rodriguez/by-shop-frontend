@@ -30,7 +30,7 @@ export const zusCart = create((set) => ({
     setShopSelectedForAddress: (shop) => set(() => ({ shopSelectedForAddress: shop })),
     userAddressSelected: null,
     setUserAddressSelected: (address) => set(() => ({ userAddressSelected: address })),
-    deliveryPreferenceSelected: null,
+    deliveryPreferenceSelected: 1,
     setDeliveryPreferenceSelected: (preference) => set(() => ({ deliveryPreferenceSelected: preference })),
     showCurrencies: false,
     setShowCurrencies: (show) => set((state) => ({ showCurrencies: typeof show === "boolean" ? show : !state.showCurrencies })),

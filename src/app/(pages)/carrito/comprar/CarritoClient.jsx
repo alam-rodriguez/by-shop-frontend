@@ -118,10 +118,15 @@ const CarritoClient = () => {
 
             console.log(getDeliveryPrice(shopsCart[0], userAddresses[0]));
 
-            const deliveryCost =
-                infoUser.want_use_address == 1
-                    ? convertDOP(getDeliveryPrice(shopsCart[0], userAddresses[0]).price, userCurrency.iso_code, userCurrency.exchange_rate)
-                    : 0;
+            // const deliveryCost =
+            //     infoUser.want_use_address == 1
+            //         ? convertDOP(getDeliveryPrice(shopsCart[0], userAddresses[0]).price, userCurrency.iso_code, userCurrency.exchange_rate)
+            //         : 0;
+            const deliveryCost = convertDOP(
+                getDeliveryPrice(shopsCart[0], userAddresses[0]).price,
+                userCurrency.iso_code,
+                userCurrency.exchange_rate,
+            );
             console.log(deliveryCost);
             const deliveryDistance = infoUser.want_use_address == 1 ? getDeliveryPrice(shopsCart[0], userAddresses[0]).distance : 0;
 
@@ -136,7 +141,7 @@ const CarritoClient = () => {
                 infoUser.want_use_address == null ? 0 : infoUser.want_use_address,
                 // infoUser.id_address_for_cart ?? userAddresses[0]?.id,
                 userAddresSelectedForCart,
-                infoUser.id_shop_for_cart ?? shopsCart[0]?.id
+                infoUser.id_shop_for_cart ?? shopsCart[0]?.id,
             );
 
             // const currencyUser = {
@@ -218,6 +223,7 @@ const CarritoClient = () => {
                     iso_code: cartItem.iso_code,
                     exchange_rate: cartItem.exchange_rate,
                 };
+
                 const priceInUserCurrency = showPriceWithCurrencyUser(basePrice, currencyArticle, userCurrency, false);
 
                 subtotal += basePrice; // Precio en moneda original del artículo
@@ -258,10 +264,10 @@ const CarritoClient = () => {
                 infoUser.want_use_address == null ? 0 : infoUser.want_use_address,
                 // infoUser.id_address_for_cart ?? userAddresses[0]?.id,
                 userAddresSelectedForCart,
-                infoUser.id_shop_for_cart ?? shopsCart[0]?.id
+                infoUser.id_shop_for_cart ?? shopsCart[0]?.id,
             );
 
-            const resItem = await useCreateCartBuyItem(resData.id, cartUser);
+            const resItem = await useCreateCartBuyItem(resData.id, cartUser, userCurrency);
 
             const resCartItems = await useUpdateCartItemsStatus(cartUser, 5);
 
@@ -379,13 +385,18 @@ const CarritoClient = () => {
     const { data: shopsForUserCart, isLoading: isLoadingShopsForUserCart } = useGetShopsForUserCart(id);
 
     useEffect(() => {
-        if ((isLoadingShopsForUserCart && !shopsForUserCart) || shopsForUserCart == undefined || !dataUser) return;
+        if ((isLoadingShopsForUserCart && !shopsForUserCart) || shopsForUserCart == undefined || !dataUser || !shopsForUserCart) return;
 
-        if (isUUID(dataUser.id_shop_for_cart)) {
-            const shopSelected = shopsForUserCart.find((shop) => shop.id == dataUser.id_shop_for_cart);
-            if (shopSelected.id) setShopSelectedForAddress(shopSelected);
-            else setShopSelectedForAddress(shopsForUserCart[0]);
-        } else setShopSelectedForAddress(shopsForUserCart[0]);
+        const shopSelected = shopsForUserCart.sort((a, b) => Number(a.shop_total_price) - Number(b.shop_total_price));
+        setShopSelectedForAddress(shopSelected[0]);
+
+        // console.error(shopsForUserCart);
+
+        // if (isUUID(dataUser.id_shop_for_cart)) {
+        //     const shopSelected = shopsForUserCart.find((shop) => shop.id == dataUser.id_shop_for_cart);
+        //     if (shopSelected.id) setShopSelectedForAddress(shopSelected);
+        //     else setShopSelectedForAddress(shopsForUserCart[0]);
+        // } else setShopSelectedForAddress(shopsForUserCart[0]);
     }, [shopsForUserCart]);
 
     const { data: paymentMethods, isLoading: isLoadingPaymentMethods } = useGetPaymentMethods();
@@ -423,8 +434,17 @@ const CarritoClient = () => {
     const { data: userAddresses, isLoading: userAddressesIsLoading, refetch: userAddresRefetch } = useGetUserAddresses(id);
 
     useEffect(() => {
-        if ((userAddresses && !userAddresses) || userAddresses == undefined) return;
-        setUserAddressSelected(userAddresses[0]);
+        // console.error(userAddresses);
+        // return;
+        // if ((userAddresses && !userAddresses) || userAddresses == undefined) return;
+        if (userAddressesIsLoading || !userAddresses) return;
+        if (!userAddressesIsLoading && userAddresses.length === 0) {
+            toast.info("Debes registrar una Direccion para realizar la compra");
+            router.replace("/usuario/direcciones/0");
+            return;
+        } else {
+            setUserAddressSelected(userAddresses[0]);
+        }
     }, [userAddresses]);
 
     // useEffect(() => {
@@ -564,8 +584,10 @@ const CarritoClient = () => {
         }
 
         const distance = calculateDistance(from, to);
-        const basePrice = 50; // precio base (ajustable)
-        const pricePerKm = 15; // costo por km (ajustable)
+        // const basePrice = 50; // precio base (ajustable)
+        // const pricePerKm = 15; // costo por km (ajustable)
+        const basePrice = 200; // precio base (ajustable)
+        const pricePerKm = 20; // costo por km (ajustable)
 
         const total = basePrice + distance * pricePerKm;
 
@@ -597,6 +619,7 @@ const CarritoClient = () => {
             let originalPrice = parseFloat(article.price) + parseFloat(article.price_options);
             const percentDiscount = article.offer ? article.offer.percent_discount : 0;
             originalPrice = originalPrice * (1 - percentDiscount / 100);
+
             originalPrice = showPriceWithCurrencyUser(originalPrice, currencyArticle, currencySelected, false).toFixed(2);
 
             // const proportion = originalPrice / subtotal;
@@ -1043,11 +1066,12 @@ const CarritoClient = () => {
 
         // return;
 
-        const deliveryCost =
-            deliveryPreferenceSelected.value == 1
-                ? convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code)
-                : 0;
-        // console.log(deliveryCost);
+        // const deliveryCost =
+        //     deliveryPreferenceSelected.value == 1
+        //         ? convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code)
+        //         : 0;
+        const deliveryCost = convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code);
+        // console.warn(deliveryCost);
         const deliveryDistance = deliveryPreferenceSelected.value == 1 ? getDeliveryPrice(shopSelectedForAddress, userAddressSelected).distance : 0;
         // console.log(deliveryDistance);
 
@@ -1159,7 +1183,7 @@ const CarritoClient = () => {
             imageUrl,
             currencySelected,
             wantUseAddress,
-            userAddressSelected ? userAddressSelected.id : null
+            userAddressSelected ? userAddressSelected.id : null,
             // userAddressSelected.id,
             // shopSelectedForAddress.id
         );
@@ -1181,7 +1205,7 @@ const CarritoClient = () => {
             wantUseAddress,
             userAddressSelected ? userAddressSelected.id : null,
             // userAddressSelected?.id userAddressSelected,
-            shopSelectedForAddress.id
+            shopSelectedForAddress.id,
         );
         console.log(resData);
         console.log(status);
@@ -1270,18 +1294,20 @@ const CarritoClient = () => {
                 value: 1,
                 name: "Envio a domicilio",
                 description: "Recibir mi pedido en la direccion",
-                isSelected: wantUseAddress,
+                isSelected: true,
+                // isSelected: wantUseAddress,
             },
             {
                 value: 0,
                 name: "Recoger en tienda",
                 description: "Recoger mi pedido en la tienda",
-                isSelected: wantUseAddress == null || !wantUseAddress,
+                isSelected: false,
+                // isSelected: wantUseAddress == null || !wantUseAddress,
             },
         ];
         setPreferenciasEntrega(preferencias);
         const seleccionada = preferencias.find((prefence) => prefence.isSelected);
-        setDeliveryPreferenceSelected(seleccionada);
+        // setDeliveryPreferenceSelected(seleccionada);
     }, [hasData]);
 
     const setPreferenciaEntrega = async (preferenSelected, changeInDb = true) => {
@@ -1311,18 +1337,23 @@ const CarritoClient = () => {
         const currentPrice = parseFloat(
             Object.values(priceArticles)
                 .reduce((acc, curr) => acc + parseFloat(curr.priceWithoutDiscount.toFixed(2)), 0)
-                .toFixed(2)
+                .toFixed(2),
         );
         const currenrDiscount = parseFloat(
             Object.values(priceArticles)
                 .reduce((acc, curr) => acc + parseFloat(curr.totalDiscount.toFixed(2)), 0.0)
-                .toFixed(2)
+                .toFixed(2),
         );
 
-        const currentDeliveryPrice =
-            deliveryPreferenceSelected.value == 1
-                ? parseFloat(convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code).toFixed(2))
-                : 0;
+        // const currentDeliveryPrice =
+        //     deliveryPreferenceSelected.value == 1
+        //         ? parseFloat(convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code).toFixed(2))
+        //         : 0;
+        const currentDeliveryPrice = parseFloat(
+            convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code).toFixed(2),
+        );
+
+        console.warn(getDeliveryPrice(shopSelectedForAddress, userAddressSelected));
 
         const subtotal = currentPrice - currenrDiscount + currentDeliveryPrice;
 
@@ -1350,7 +1381,7 @@ const CarritoClient = () => {
                 <Icon icon="solar:arrow-left-outline" width="24" height="24" />
                 <p className="text-2xl font-bold text-center">Finalizar compra</p>
             </div> */}
-            <Divider h={"0.5px"} />
+            {/* <Divider h={"0.5px"} />
             <Spacer />
             <div>
                 <p className="text-lg font-bold">Preferencia de entrega</p>
@@ -1361,47 +1392,6 @@ const CarritoClient = () => {
                     description={deliveryPreferenceSelected?.description}
                     onClick={() => setOpenPreference(!openPreference)}
                 />
-
-                {/* <div className="bg-white p-4 rounded-3xl">
-                    <div className="flex items-center">
-                        <div className="size-1/6">
-                            <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
-                                <div className="bg-black grid place-items-center rounded-full size-full">
-                                    <Icon className="text-white size-5" icon="mingcute:location-fill" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="size-4/6">
-                            <p className="text-lg font-bold">{deliveryPreferenceSelected?.name}</p>
-                            <p>{deliveryPreferenceSelected?.description}</p>
-                        </div>
-                        <div className="size-1/6 grid place-items-center" onClick={() => setOpenPreference(!openPreference)}>
-                            <Icon icon="iconamoon:edit-fill" width="24" height="24" />
-                        </div>
-                    </div>
-                </div> */}
-                {/* {preferenciasEntrega
-                    .filter((preference) => preference.isSelected)
-                    .map((preference) => (
-                        <div key={preference.value} className="bg-white p-4 rounded-3xl">
-                            <div className="flex items-center">
-                                <div className="size-1/6">
-                                    <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
-                                        <div className="bg-black grid place-items-center rounded-full size-full">
-                                            <Icon className="text-white size-5" icon="mingcute:location-fill" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="size-4/6">
-                                    <p className="text-lg font-bold">{preference.name}</p>
-                                    <p>{preference.description}</p>
-                                </div>
-                                <div className="size-1/6 grid place-items-center" onClick={() => setOpenPreference(!openPreference)}>
-                                    <Icon icon="iconamoon:edit-fill" width="24" height="24" />
-                                </div>
-                            </div>
-                        </div>
-                    ))} */}
                 <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{
@@ -1421,29 +1411,11 @@ const CarritoClient = () => {
                                 onClick={() => setPreferenciaEntrega(preference)}
                                 isSelectedItem={false}
                             />
-                            // <div key={preference.value} className="bg-white p-4 rounded-3xl" onClick={() => setPreferenciaEntrega(preference)}>
-                            //     <div className="flex items-center">
-                            //         <div className="size-1/6">
-                            //             <div className="bg-gray-400 rounded-full size-12" style={{ padding: "6px" }}>
-                            //                 <div className="bg-black grid place-items-center rounded-full size-full">
-                            //                     <Icon className="text-white size-5" icon="mingcute:location-fill" />
-                            //                 </div>
-                            //             </div>
-                            //         </div>
-                            //         <div className="size-4/6">
-                            //             <p className="text-lg font-bold">{preference.name}</p>
-                            //             <p>{preference.description}</p>
-                            //         </div>
-                            //         <div className="size-1/6 grid place-items-center">
-                            //             <Icon icon="ep:select" width="24" height="24" />
-                            //         </div>
-                            //     </div>
-                            // </div>
                         ))}
                 </motion.div>
-            </div>
+            </div> */}
             <Divider h={"0.5px"} />
-            {wantUseAddress == 1 ? (
+            {wantUseAddress == 1 || true ? (
                 <div>
                     <p className="text-lg font-bold">Dirreccion de entrega</p>
                     <Spacer />

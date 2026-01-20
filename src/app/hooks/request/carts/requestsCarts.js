@@ -169,7 +169,7 @@ export const useCreateCartBuy = async (
     id_currency,
     wantUseAddress,
     idAddressUser,
-    idShopForAddress
+    idShopForAddress,
 ) => {
     const cart = {
         id: uuidv4(),
@@ -220,7 +220,10 @@ export const useCreateCartBuyItem = async (id_cart, cartItems, currency) => {
         cartItemObj.id_cart_bought = id_cart;
         cartItemObj.id_cart = cartItem.id;
 
+        cartItem.price = Number(cartItem.price);
+
         cartItemObj.price_item = showPriceWithCurrencyUser(cartItem.price, cartItem.currency, currency, false);
+
         cartItemObj.price_options = showPriceWithCurrencyUser(cartItem.price_options, cartItem.currency, currency, false);
         cartItemObj.quantity = cartItem.quantity;
 
@@ -237,7 +240,7 @@ export const useCreateCartBuyItem = async (id_cart, cartItems, currency) => {
             totalPrice * (1 - percentDiscount / 100),
             cartItem.currency,
             currency,
-            false
+            false,
         );
 
         cartItemObj.status = 1;

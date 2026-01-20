@@ -22,6 +22,7 @@ import { zusUser } from "@/app/zustand/user/zusUser";
 import { useCreateAddress, useRequestsUsers } from "@/app/hooks/request/users/requestsUsers";
 import {
     useGetAddressById,
+    useGetUserAddresses,
     useSetUserAddressPreferred,
     useUpdateAddress,
     useUserAddressCanBePreferred,
@@ -73,13 +74,19 @@ const page = () => {
         resolver: zodResolver(userAddressSchema),
     });
 
-    const { data: provincesByCountry } = useGetLocationProvincesByCountry(watch("country_id"));
+    const { data: provincesByCountry, refetch: provincesByCountryRefetch } = useGetLocationProvincesByCountry(watch("country_id"));
     const { data: municipalitiesByProvince } = useGetLocationMunicipalitiesByprovince(watch("province_id"));
     const { data: neighborhoodsByMunicipality } = useGetLocationNeighborhoodsByMunicipality(watch("municipality_id"));
+
+    const { refetch: userAddresRefetch } = useGetUserAddresses(id);
 
     useEffect(() => {
         if (id != "") setValue("id_user", id);
     }, [id]);
+
+    // useEffect(() => {
+    //     provincesByCountryRefetch();
+    // }, [watch("country_id")]);
 
     const { coords, error, loading, accuracy, handleGetLocation } = useCoords();
 
@@ -122,6 +129,7 @@ const page = () => {
                 id: loadingToast,
             });
             useGetUserInformation();
+            userAddresRefetch();
             router.back();
         } else {
             toast.error("Error al guardar la direccion", {
@@ -170,6 +178,7 @@ const page = () => {
                 type="text"
                 name="country_id"
                 items={countries ?? []}
+                // optionByDefaultValue={watch("country_id")}
                 selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
                 errorClassName="text-red-700"
                 optionNameForShow="name"
@@ -181,6 +190,8 @@ const page = () => {
                 type="text"
                 name="province_id"
                 items={provincesByCountry ?? []}
+                itemSelected={watch("province_id")}
+                // optionByDefaultValue={watch("province_id")}
                 selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
                 errorClassName="text-red-700"
                 optionNameForShow="name"
@@ -192,6 +203,7 @@ const page = () => {
                 type="text"
                 name="municipality_id"
                 items={municipalitiesByProvince ?? []}
+                itemSelected={watch("municipality_id")}
                 selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
                 errorClassName="text-red-700"
                 optionNameForShow="name"
@@ -203,6 +215,7 @@ const page = () => {
                 type="text"
                 name="neighborhood_id"
                 items={neighborhoodsByMunicipality ?? []}
+                itemSelected={watch("neighborhood_id")}
                 selectClassName="border-2 border-gray-300 rounded-md p-2 h-full_ h-11"
                 errorClassName="text-red-700"
                 optionNameForShow="name"
