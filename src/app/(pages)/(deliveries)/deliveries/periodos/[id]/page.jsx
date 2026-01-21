@@ -34,7 +34,7 @@ const page = () => {
 
     const { data: deliveryOrdersHistory, isLoading: isLoadingDeliveryOrdersHistory } = getDeliveriesOrdersHistoryByDeliveryUserIdAndPeriodId(
         idUser,
-        periodId
+        periodId,
     );
 
     useEffect(() => {
@@ -101,7 +101,7 @@ const page = () => {
                     <React.Fragment key={delivery.id}>
                         <ItemDiv
                             data={[
-                                { key: "Precio", value: delivery.delivery_cost },
+                                { key: "Precio", value: delivery.price },
                                 { key: "Nombre de cliente", value: delivery.nombre_cliente },
                                 { key: "Tienda de recoleccion", value: delivery.shop_name },
                                 { key: "Tiempo de pedido", value: timeAgo(delivery.created_at) },
@@ -120,12 +120,12 @@ const page = () => {
                                         delivery.delivery_order_preference_status == null
                                             ? "En espera"
                                             : delivery.delivery_order_preference_status == 0
-                                            ? "Rechazada"
-                                            : delivery.delivery_order_preference_status == 1
-                                            ? "Aceptada"
-                                            : delivery.delivery_order_preference_status == 2
-                                            ? "Realizado"
-                                            : "",
+                                              ? "Rechazada"
+                                              : delivery.delivery_order_preference_status == 1
+                                                ? "Aceptada"
+                                                : delivery.delivery_order_preference_status == 2
+                                                  ? "Realizado"
+                                                  : "",
                                 },
                             ].filter(Boolean)}
                             onClick={() => handleClickDelivery(delivery.id)}
@@ -170,12 +170,12 @@ const page = () => {
                                     delivery.delivery_order_preference_status == null
                                         ? "En espera"
                                         : delivery.delivery_order_preference_status == 0
-                                        ? "Rechazada"
-                                        : delivery.delivery_order_preference_status == 1
-                                        ? "Aceptada"
-                                        : delivery.delivery_order_preference_status == 2
-                                        ? "Realizado"
-                                        : "",
+                                          ? "Rechazada"
+                                          : delivery.delivery_order_preference_status == 1
+                                            ? "Aceptada"
+                                            : delivery.delivery_order_preference_status == 2
+                                              ? "Realizado"
+                                              : "",
                             },
                         ].filter(Boolean)}
                         onClick={() => handleClickDelivery(delivery.id)}

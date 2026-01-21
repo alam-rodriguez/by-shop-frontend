@@ -2,7 +2,7 @@
 
 import ItemDiv from "@/app/components/others/ItemDiv";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
-import { showPriceWithCurrency, timeAgo } from "@/app/hooks/app/app";
+import { showPriceWithCurrency, showPriceWithCurrencyUser, timeAgo } from "@/app/hooks/app/app";
 import {
     useCreateDeliveryOrderPreference,
     useDeliveryCanGetOrder,
@@ -22,7 +22,7 @@ const page = () => {
     const router = useRouter();
     const { data, isLoading, refetch } = useGetDeliveriesOrders();
 
-    const { id: idUser } = zusUser();
+    const { id: idUser, currencySelected } = zusUser();
 
     useEffect(() => {
         console.log(data);
@@ -83,7 +83,10 @@ const page = () => {
                 <React.Fragment key={delivery.id}>
                     <ItemDiv
                         data={[
-                            { key: "Precio", value: delivery.delivery_cost },
+                            {
+                                key: "Precio Delivery",
+                                value: showPriceWithCurrencyUser(delivery.price, delivery.currency, currencySelected, true),
+                            },
                             { key: "Nombre de cliente", value: delivery.nombre_cliente },
                             { key: "Tienda de recoleccion", value: delivery.shop_name },
                             { key: "Tiempo de pedido", value: timeAgo(delivery.created_at) },
@@ -92,7 +95,8 @@ const page = () => {
                             delivery.must_pay == 1
                                 ? {
                                       key: "El cliente debe de pagar",
-                                      value: showPriceWithCurrency(delivery.currency, parseFloat(delivery.total_price), false),
+                                      // value: showPriceWithCurrency(delivery.currency, parseFloat(delivery.total_price), false),
+                                      value: showPriceWithCurrencyUser(delivery.total_price, delivery.currency, currencySelected, true),
                                   }
                                 : null,
                             { key: "Distancia", value: delivery.delivery_distance + " KM" },
@@ -102,12 +106,12 @@ const page = () => {
                                     delivery.delivery_order_preference_status == null
                                         ? "En espera"
                                         : delivery.delivery_order_preference_status == 0
-                                        ? "Rechazada"
-                                        : delivery.delivery_order_preference_status == 1
-                                        ? "Aceptada"
-                                        : delivery.delivery_order_preference_status == 2
-                                        ? "Realizado"
-                                        : "",
+                                          ? "Rechazada"
+                                          : delivery.delivery_order_preference_status == 1
+                                            ? "Aceptada"
+                                            : delivery.delivery_order_preference_status == 2
+                                              ? "Realizado"
+                                              : "",
                             },
                         ].filter(Boolean)}
                         onClick={() => handleClickDelivery(delivery.id)}

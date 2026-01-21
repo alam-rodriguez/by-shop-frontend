@@ -221,14 +221,14 @@ const IdPedidoClient = () => {
                 status == 0
                     ? "Su pedidos ha sido cancelado"
                     : status == 2
-                    ? "Su pedido esta en preparacion"
-                    : status == 3 && wantUseAddress
-                    ? "Su pedido esta siendo enviado"
-                    : status == 3 && !wantUseAddress
-                    ? "Su pedido esta listo para retirar"
-                    : status == 4 && wantUseAddress
-                    ? "Su pedido ha sido entregado"
-                    : status == 4 && !wantUseAddress == "Su pedido ha sido retirado",
+                      ? "Su pedido esta en preparacion"
+                      : status == 3 && wantUseAddress
+                        ? "Su pedido esta siendo enviado"
+                        : status == 3 && !wantUseAddress
+                          ? "Su pedido esta listo para retirar"
+                          : status == 4 && wantUseAddress
+                            ? "Su pedido ha sido entregado"
+                            : status == 4 && !wantUseAddress == "Su pedido ha sido retirado",
             url: `/usuario/pedidos/${order.articles[0].cart_id}/detalles`,
         };
         console.log(order);
@@ -294,7 +294,10 @@ const IdPedidoClient = () => {
             });
             return;
         }
-        const { data, status } = await useCreateDeliveryOrder(order.id, 100);
+
+        const deliveryPriceForDevelivery = Number(order.delivery_cost) - Number(order.delivery_cost) * 0.2;
+
+        const { data, status } = await useCreateDeliveryOrder(order.id, deliveryPriceForDevelivery);
         const resNotifications = await useSendPushNotificationsToDeliveriesForNewOrder();
         if (status == 201 && resNotifications) {
             socket.emit("sendDeliveryOrder", {
