@@ -11,6 +11,7 @@ import {
     useCreateCartBuyItem,
     useGetCartUser,
     useGetCartUserReadyToBuy,
+    useGetCartUserReadyToBuyGroupByShop,
     useUpdateCartItemsStatus,
 } from "@/app/hooks/request/carts/requestsCarts";
 import { zusUser } from "@/app/zustand/user/zusUser";
@@ -363,6 +364,18 @@ const CarritoClient = () => {
     }, []);
 
     const { data, isLoading, refetch } = useGetCartUserReadyToBuy(id);
+
+    // useEffect(() => {
+    //     console.log(data);
+    //     debugger;
+    // }, [data]);
+
+    const { data: cartsReadyToByGroupByShop, isLoading: isLoadingCartsReadyToByGroupByShop } = useGetCartUserReadyToBuyGroupByShop(id);
+
+    // useEffect(() => {
+    //     console.log(cartsReadyToByGroupByShop);
+    //     // debugger;
+    // }, [cartsReadyToByGroupByShop]);
 
     const setTotalCart = (articlePrice) => setPriceArticles((prev) => ({ ...prev, [articlePrice.idCart]: { ...articlePrice } }));
 
@@ -1163,64 +1176,100 @@ const CarritoClient = () => {
         }
 
         const image = watch("image");
-        let imageUrl = null;
+        console.log(image);
 
-        if (payMethodSelected.require_image && !image) {
+        const vouchers = watch("vouchers");
+        console.log(vouchers);
+
+        // return;
+
+        const hasNull = Object.values(vouchers).some((v) => v === null);
+
+        // if (hasNull) {
+        //   console.log("Faltan imágenes")
+        // }
+
+        if (payMethodSelected.require_image && hasNull) {
             toast.info("Es obligatorio subir una imagen", { id: loadingToast });
             setBlockUI(false);
             return;
         }
 
-        if (payMethodSelected.require_image) {
-            const resImage = await uploadImage(image, "folder", "nombre.png");
-            imageUrl = resImage[0].ufsUrl;
-        }
-
         console.log(currencySelected);
 
-        console.log(
-            id,
-            payMethodSelected.id,
-            imageUrl,
-            currencySelected,
-            wantUseAddress,
-            userAddressSelected ? userAddressSelected.id : null,
-            // userAddressSelected.id,
-            // shopSelectedForAddress.id
-        );
+        // console.log(
+        //     id,
+        //     payMethodSelected.id,
+        //     imageUrl,
+        //     currencySelected,
+        //     wantUseAddress,
+        //     userAddressSelected ? userAddressSelected.id : null,
+        //     // userAddressSelected.id,
+        //     // shopSelectedForAddress.id
+        // );
         // return;
 
         // TODO: TOTAL Y TOTAL DISCOUNT
 
-        const { data: resData, status } = await useCreateCartBuy(
-            id,
-            payMethodSelected.id,
-            Object.values(priceArticles).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0),
-            Object.values(priceArticles).reduce((acc, curr) => acc + curr.totalDiscount, 0.0),
-            null,
-            null,
-            deliveryCost,
-            deliveryDistance,
-            imageUrl,
-            currencySelected.id,
-            // wantUseAddress,
-            1,
-            userAddressSelected ? userAddressSelected.id : null,
-            // userAddressSelected?.id userAddressSelected,
-            shopSelectedForAddress.id,
-        );
-        console.log(resData);
-        console.log(status);
+        let status = true;
+        let resItem = true;
+        let resCartItems = true;
+        let resArticlesChangeQuantity = true;
+        let resPushNotifications = true;
 
-        const resItem = await useCreateCartBuyItem(resData.id, data, currencySelected);
-        console.log(resItem);
+        cartsReadyToByGroupByShop.map(async (cartByShop) => {
+            // const totalPrice = cartByShop.items.reduce((acc, curr) => acc + (curr.price * curr.price.price_options), 0.0);
+            // const priceArticlesShop = priceArticles.filter((article) => article.idCart == cartByShop.shop_id);
 
-        const resCartItems = await useUpdateCartItemsStatus(data, 5);
-        console.log(resCartItems);
+            const totalPriceArticlesShop = {};
 
-        const resArticlesChangeQuantity = await useChangeArticleQuantity(data, "subtract");
-        console.log(resArticlesChangeQuantity);
-        const resPushNotifications = await useSendPushNotificationsForNewsOrders(resData.id);
+            let imageUrl = null;
+
+            cartByShop.items.map((item) => {
+                totalPriceArticlesShop[item.id] = priceArticles[item.cart_id];
+            });
+
+            const voucherShop = payMethodSelected.require_image == 1 ? vouchers[cartByShop.shop_id] : null;
+
+            if (payMethodSelected.require_image) {
+                const resImage = await uploadImage(voucherShop, "folder", "nombre.png");
+                imageUrl = resImage[0].ufsUrl;
+            }
+
+            // console.log(Object.values(totalPriceArticlesShop).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0));
+            // console.log(Object.values(totalPriceArticlesShop).reduce((acc, curr) => acc + curr.totalDiscount, 0.0));
+
+            const { data: resData, status } = await useCreateCartBuy(
+                id,
+                payMethodSelected.id,
+                Object.values(totalPriceArticlesShop).reduce((acc, curr) => acc + curr.priceWithDiscount, 0.0),
+                Object.values(totalPriceArticlesShop).reduce((acc, curr) => acc + curr.totalDiscount, 0.0),
+                null,
+                null,
+                deliveryCost,
+                deliveryDistance,
+                imageUrl,
+                currencySelected.id,
+                // wantUseAddress,
+                1,
+                userAddressSelected ? userAddressSelected.id : null,
+                // userAddressSelected?.id userAddressSelected,
+                shopSelectedForAddress.id,
+            );
+            console.log(resData);
+            console.log(status);
+
+            resItem = await useCreateCartBuyItem(resData.id, cartByShop.items, currencySelected);
+            console.log(resItem);
+
+            resCartItems = await useUpdateCartItemsStatus(cartByShop.items, 5);
+            console.log(resCartItems);
+
+            resArticlesChangeQuantity = await useChangeArticleQuantity(cartByShop.items, "subtract");
+            console.log(resArticlesChangeQuantity);
+            resPushNotifications = await useSendPushNotificationsForNewsOrders(resData.id);
+        });
+
         refetch();
         setPriceArticles({});
 
@@ -1352,7 +1401,10 @@ const CarritoClient = () => {
         //         ? parseFloat(convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code).toFixed(2))
         //         : 0;
         const currentDeliveryPrice = parseFloat(
-            convertDOP(getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price, currencySelected.iso_code).toFixed(2),
+            convertDOP(
+                getDeliveryPrice(shopSelectedForAddress, userAddressSelected).price * cartsReadyToByGroupByShop.length,
+                currencySelected.iso_code,
+            ).toFixed(2),
         );
 
         console.warn(getDeliveryPrice(shopSelectedForAddress, userAddressSelected));
@@ -1370,7 +1422,16 @@ const CarritoClient = () => {
         setTotalPrice(currentTotalPrice);
     }, [priceArticles, shopSelectedForAddress, userAddressSelected, currencySelected, payMethodSelected, deliveryPreferenceSelected]);
 
-    if (isLoading || !hasData || isLoadingShopsForUserCart || isLoadingPaymentMethods || !currencySelected || isLoading || dataUserIsLoadinf)
+    if (
+        isLoading ||
+        !hasData ||
+        isLoadingShopsForUserCart ||
+        isLoadingPaymentMethods ||
+        !currencySelected ||
+        isLoading ||
+        dataUserIsLoadinf ||
+        isLoadingCartsReadyToByGroupByShop
+    )
         return <BuyCart />;
 
     // if (isLoading || dataUserIsLoadinf) return <LoadingParagraph />;
@@ -1720,6 +1781,42 @@ const CarritoClient = () => {
                 <p className="text-lg font-bold">Lista de articulos</p>
                 <Spacer />
                 <div className="flex flex-col gap-4 p-4- rounded-3xl">
+                    {cartsReadyToByGroupByShop.map((shopCart) => (
+                        <div key={shopCart.shop_id}>
+                            <p className="text-base font-bold mb-2">
+                                {shopCart.shop_name} ({shopCart.items.length})
+                            </p>
+
+                            <div className="flex flex-col gap-4 rounded-3xl">
+                                {shopCart.items.map((order) => (
+                                    <CartItemForBuy2
+                                        key={order.cart_id}
+                                        idCart={order.cart_id}
+                                        idArticle={order.id_article}
+                                        image={order.article_image}
+                                        name={order.article_name}
+                                        description={order.description}
+                                        options={order.options}
+                                        values={order.values}
+                                        price={order.price + order.price_options}
+                                        // isoCode={order.iso_code}
+                                        // exchangeRate={order.exchange_rate}
+                                        isoCode={order.currency.iso_code}
+                                        exchangeRate={order.currency.exchange_rate}
+                                        quantity={order.quantity}
+                                        priceArticles={priceArticles}
+                                        setTotalCart={setTotalCart}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {/* <div>
+                <p className="text-lg font-bold">Lista de articulos</p>
+                <Spacer />
+                <div className="flex flex-col gap-4 p-4- rounded-3xl">
                     {data.map((order) => (
                         <CartItemForBuy2
                             key={order.id}
@@ -1762,7 +1859,7 @@ const CarritoClient = () => {
                         //     </div>
                         // </div>
                     ))}
-                    {/* <div className="h-40 flex items-end- gap-2 bg-white p-4 rounded-2xl">
+                    <div className="h-40 flex items-end- gap-2 bg-white p-4 rounded-2xl">
                         <div className="w-2/5 h-full">
                             <ImageA
                                 className="w-full h-full  object-cover rounded-3xl"
@@ -1779,9 +1876,9 @@ const CarritoClient = () => {
                                 <span>1</span>
                             </div>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
-            </div>
+            </div> */}
             <Divider h={"0.5px"} />
             {/* {paymentMethods.map((payMethod) => {
                 return (
@@ -1929,7 +2026,43 @@ const CarritoClient = () => {
                         ))}
                 </motion.div>
 
-                {payMethodSelected.require_image == 1 && (
+                {cartsReadyToByGroupByShop.map((shop) => (
+                    <div key={shop.shop_id}>
+                        {payMethodSelected.require_image == 1 && (
+                            <>
+                                <InputFile
+                                    imgLink=""
+                                    control={control}
+                                    errors={errors}
+                                    name={`vouchers.${shop.shop_id}`}
+                                    inputClassName="border-2 border-gray-300 rounded-md p-2"
+                                    errorClassName="text-red-700"
+                                    placeholder=""
+                                    label={
+                                        <p>
+                                            Imagen del comprobante <span className="font-semibold">{shop.shop_name}</span>
+                                        </p>
+                                    }
+                                />
+                                <Spacer />
+                            </>
+                        )}
+                        {payMethodSelected.type == 2 && (
+                            <>
+                                <div className="flex justify-between font-bold">
+                                    <p>Banco:</p>
+                                    <p>{payMethodSelected.bank_name}</p>
+                                </div>
+                                <div className="flex justify-between font-bold">
+                                    <p>Cuenta Bancaria</p>
+                                    <p>{payMethodSelected.bank_account}</p>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
+
+                {/* {payMethodSelected.require_image == 1 && (
                     <>
                         <InputFile
                             imgLink=""
@@ -1955,7 +2088,7 @@ const CarritoClient = () => {
                             <p>{payMethodSelected.bank_account}</p>
                         </div>
                     </>
-                )}
+                )} */}
 
                 {/* <p className="mt-3">{payMethodSelected.description}</p> */}
             </div>

@@ -20,7 +20,7 @@ import useMyUploadThing from "@/app/hooks/upload-thing/useUploadThing.js";
 import { UploadButton } from "@/utils/uploadthing";
 import { useParams } from "next/navigation";
 import { isUUID, toBool } from "@/app/hooks/app/app";
-import { useGetShopById } from "@/app/hooks/request/shops/requestsShops";
+import { useGetShopById, useGetShops } from "@/app/hooks/request/shops/requestsShops";
 import LoadingParagraph from "@/app/components/others/LoadingParagraph";
 import { toast } from "sonner";
 import {
@@ -48,6 +48,7 @@ import {
     updateDeliveryStatusApplication,
 } from "@/app/hooks/request/applications/requestsDeliveriesApplications";
 import { getUserTypeByName } from "@/app/hooks/request/users/requestsUsersTypes";
+import { setUserShop } from "@/app/request/users/requestsUsers";
 
 const page = () => {
     const { id: applicationId } = useParams();
@@ -97,6 +98,7 @@ const page = () => {
     const { data: municipalitiesByProvince } = useGetLocationMunicipalitiesByprovince(watch("province_id"));
     const { data: neighborhoodsByMunicipality } = useGetLocationNeighborhoodsByMunicipality(watch("municipality_id"));
     const { data: shopsPlans } = useGetShopsPlans();
+    const { data: shops } = useGetShops();
 
     useEffect(() => {
         console.log(provincesByCountry);
@@ -252,9 +254,11 @@ const page = () => {
 
         const resChangeUserType = useChangeUserTypeId(application.user_id, userTypeDelivery.id);
 
+        const resChangeUserShop = await setUserShop(application.user_id, application.shop_id);
+
         const res = await updateDeliveryStatusApplication(application.id, "approved");
 
-        if (res && resChangeUserType)
+        if (res && resChangeUserType && resChangeUserShop)
             toast.success("Solicitud aprobada correctamente", {
                 id: loadingToast,
             });
@@ -299,7 +303,6 @@ const page = () => {
                 placeholder=""
                 label="Numero de telefono o celular"
             />
-
             <Select
                 register={register}
                 errors={errors}
@@ -345,9 +348,19 @@ const page = () => {
                 placeholder=""
                 label="Placa del vehiculo"
             />
-
+            <Select
+                register={register}
+                errors={errors}
+                type="text"
+                name="shop_id"
+                items={shops ?? []}
+                selectClassName="border-2 border-gray-300 rounded-md p-2"
+                errorClassName="text-red-700"
+                optionNameForShow="name"
+                label="Lista de tiendas"
+            />
             <Spacer />
-            <p className="text-center font-bold text-lg">Direccion Tienda</p>
+            <p className="text-center font-bold text-lg">Direccion</p>
             <Select
                 register={register}
                 errors={errors}
@@ -403,7 +416,6 @@ const page = () => {
                 placeholder=""
                 label="Detalles direccion"
             />
-
             <InputFile
                 imgLink={application?.image_from_dni}
                 control={control}
@@ -424,7 +436,6 @@ const page = () => {
                 placeholder=""
                 label="Imagen del reverso de la cedula"
             />
-
             <InputFile
                 imgLink={application?.image_plate}
                 control={control}
@@ -435,7 +446,6 @@ const page = () => {
                 placeholder=""
                 label="Imagen de la placa del vehiculo"
             />
-
             <Spacer />
             <Input
                 register={register}
@@ -449,7 +459,6 @@ const page = () => {
                 placeholder=""
                 label="Posee licencia de conducir"
             />
-
             <Spacer />
             <Input
                 register={register}
@@ -463,7 +472,6 @@ const page = () => {
                 placeholder=""
                 label="Posee seguro de vehiculo"
             />
-
             {/* <Input
                 register={register}
                 errors={errors}
@@ -690,7 +698,6 @@ const page = () => {
                 </div>
             )} */}
             {/* {error && <p className="text-red-500">{error}</p>} */}
-
             {(userTypeName == "DEV" || userTypeName == "SUPPORT") && (
                 <div className="flex justify-between mt-6">
                     <button
@@ -710,7 +717,6 @@ const page = () => {
                     </button>
                 </div>
             )}
-
             {userTypeName != "DEV" && userTypeName != "SUPPORT" && <ButtonGrayDown>{wantCreate ? "Realizar" : "Relanzar"} Solicitud</ButtonGrayDown>}
         </form>
     );

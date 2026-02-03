@@ -76,6 +76,7 @@ const deliveryApplicationSchema = z.object({
     full_name: z.string().min(4).max(100),
     dni_number: z.string().min(4).max(20),
     phone_number: z.string().min(7).max(15),
+    shop_id: z.string().uuid(),
     // email: z.string().email(),
 
     vehicle_type: z.enum(["motorcycle", "car", "bicycle"]),

@@ -83,6 +83,10 @@ const Client = () => {
 
     const { data: activePeriodAllShops } = getActivePeriodsForAllShops();
 
+    useEffect(() => {
+        console.log(activePeriodAllShops);
+    }, [activePeriodAllShops]);
+
     const { data: activePeriodAllDeliveries } = getActivePeriodsForAllDeliveries();
 
     useEffect(() => {
@@ -151,7 +155,7 @@ const Client = () => {
             grossAmount - grossAmount * 0.25,
             "paid",
             activePeriod.currency_id,
-            new Date().toISOString().slice(0, 19).replace("T", " ")
+            new Date().toISOString().slice(0, 19).replace("T", " "),
         );
 
         console.log(resStatus);
@@ -226,7 +230,7 @@ const Client = () => {
                                         Number(activePeriod.delivery_amount) -
                                         Number(activePeriod.discount_amount) -
                                         Number(activePeriod.paypal_fee_amount),
-                                    false
+                                    false,
                                 )}
                             </p>
                         </div>
@@ -274,7 +278,7 @@ const Client = () => {
                                             {showPriceWithCurrency(
                                                 { iso_code: activePeriodByShop.main_currency },
                                                 activePeriodByShop.total_amount,
-                                                false
+                                                false,
                                             )}
                                         </p>
                                     </div>
@@ -284,7 +288,7 @@ const Client = () => {
                                             {showPriceWithCurrency(
                                                 { iso_code: activePeriodByShop.main_currency },
                                                 activePeriodByShop.discount_amount,
-                                                false
+                                                false,
                                             )}
                                         </p>
                                     </div>
@@ -294,7 +298,7 @@ const Client = () => {
                                             {showPriceWithCurrency(
                                                 { iso_code: activePeriodByShop.main_currency },
                                                 Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
-                                                false
+                                                false,
                                             )}
                                         </p>
                                     </div>
@@ -325,7 +329,7 @@ const Client = () => {
                                             handleCreateShopPayout(
                                                 activePeriodByShop.shop_id,
                                                 Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
-                                                0
+                                                0,
                                             )
                                         }
                                     >
@@ -366,7 +370,7 @@ const Client = () => {
                                             {showPriceWithCurrency(
                                                 { iso_code: activePeriodByDelivery.main_currency },
                                                 activePeriodByDelivery.delivery_total_price,
-                                                false
+                                                false,
                                             )}
                                         </p>
                                     </div>
@@ -417,7 +421,7 @@ const Client = () => {
                                             handleCreateDeliveryPayout(
                                                 activePeriodByDelivery.user_id,
                                                 activePeriodByDelivery.orders_count,
-                                                activePeriodByDelivery.delivery_total_price
+                                                activePeriodByDelivery.delivery_total_price,
                                             )
                                         }
                                     >
@@ -460,7 +464,7 @@ const Client = () => {
                             {showPriceWithCurrency(
                                 { iso_code: activePeriodByShop.main_currency },
                                 Number(activePeriodByShop.total_amount) - Number(activePeriodByShop.discount_amount),
-                                false
+                                false,
                             )}
                         </p>
                     </div>

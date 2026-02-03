@@ -101,6 +101,16 @@ export const getCartUserReadyToBuy = async (id) => {
     }
 };
 
+export const getCartUserReadyToBuyGroupByShop = async (id) => {
+    try {
+        const res = await axios.get(`${url}/carts/ready-to-buy/${id}/group-by-shop`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener las categorías.");
+    }
+};
+
 export const createCartBuy = async (article) => {
     try {
         const res = await axios.post(`${url}/carts/buy`, article);

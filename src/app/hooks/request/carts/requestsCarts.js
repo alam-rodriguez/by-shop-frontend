@@ -9,6 +9,7 @@ import {
     getCartUserBought,
     getCartUserCannotBuy,
     getCartUserReadyToBuy,
+    getCartUserReadyToBuyGroupByShop,
     getCartUserSavedForLater,
     getOrderById,
     getOrderByIdCart,
@@ -27,7 +28,7 @@ import { useQuery } from "@tanstack/react-query";
 import { promise } from "zod";
 import { addArticleToList, articleIsInList, getArticleOffer, updateArticleInListStatus } from "@/app/request/articles/requestsArticles";
 import { useGetArticleOffer } from "../articles/requestsArticles";
-import { calcPriceCurrency, showPriceWithCurrencyUser } from "../../app/app";
+import { calcPriceCurrency, isUUID, showPriceWithCurrencyUser } from "../../app/app";
 
 // CREATE TABLE carts(
 //   id char(36) NOT NULL PRIMARY KEY,
@@ -147,6 +148,14 @@ export const useGetCartUserReadyToBuy = (id) =>
         queryKey: [`cart-user-ready-to-buy-${id}`],
         // staleTime: Infinity,
         queryFn: () => getCartUserReadyToBuy(id),
+    });
+
+export const useGetCartUserReadyToBuyGroupByShop = (id) =>
+    useQuery({
+        queryKey: [`cart-user-ready-to-buy-group-by-shop-${id}`],
+        // staleTime: Infinity,
+        enabled: isUUID(id),
+        queryFn: () => getCartUserReadyToBuyGroupByShop(id),
     });
 
 // CREATE TABLE carts_bought(
