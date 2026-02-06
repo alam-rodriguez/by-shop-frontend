@@ -21,6 +21,16 @@ export const getDeliveriesOrders = async () => {
     }
 };
 
+export const getDeliveriesOrdersByShopId = async (shopId) => {
+    try {
+        const res = await api.get(`/deliveries/by-shop/${shopId}`);
+        return res.data.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error al obtener la monedas.");
+    }
+};
+
 export const getDeliveriesOrdersHistoryByDeliveryUserId = async (deliveryUserId) => {
     try {
         const res = await api.get(`/deliveries/history-by-delivery-user/${deliveryUserId}`);

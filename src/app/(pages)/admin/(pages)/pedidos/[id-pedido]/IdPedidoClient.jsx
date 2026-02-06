@@ -40,6 +40,7 @@ import { useCreateDeliveryOrder, useGetDeliveryOrderExists } from "@/app/hooks/r
 import {
     useSendPushNotificationsToClientForOrderUpdate,
     useSendPushNotificationsToDeliveriesForNewOrder,
+    useSendPushNotificationsToShopDeliveriesForNewOrder,
 } from "@/app/hooks/request/web-push-notifications/webPushNotifications";
 
 import { io } from "socket.io-client";
@@ -55,7 +56,7 @@ const IdPedidoClient = () => {
 
     const router = useRouter();
 
-    const { id_shop, name_shop, type } = zusUser();
+    const { id_shop, name_shop, type, userTypeName } = zusUser();
 
     const { confirmAlertCustom } = useAlert();
 
@@ -149,7 +150,8 @@ const IdPedidoClient = () => {
     };
 
     const changeImageCartBoughtStatus = async (status) => {
-        const canDoAction = type == 4 || type == 5;
+        // const canDoAction = type == 4 || type == 5;
+        const canDoAction = userTypeName == "DEV" || userTypeName == "SUPPORT" || userTypeName == "ADMIN-SHOP" || userTypeName == "SUB-ADMIN-SHOP";
 
         if (!canDoAction) {
             toast.info("No puedes cambiar el estado de confirmacion pedido, comunicate con alguien de soporte");
@@ -297,8 +299,14 @@ const IdPedidoClient = () => {
 
         const deliveryPriceForDevelivery = Number(order.delivery_cost) - Number(order.delivery_cost) * 0.2;
 
-        const { data, status } = await useCreateDeliveryOrder(order.id, deliveryPriceForDevelivery);
-        const resNotifications = await useSendPushNotificationsToDeliveriesForNewOrder();
+        const shopId = order.articles.length > 0 ? order.articles[0].article_id_shop : null;
+
+        const { data, status } = await useCreateDeliveryOrder(order.id, deliveryPriceForDevelivery, shopId);
+
+        // const resNotifications = await useSendPushNotificationsToDeliveriesForNewOrder();
+
+        const resNotifications = await useSendPushNotificationsToShopDeliveriesForNewOrder(shopId);
+
         if (status == 201 && resNotifications) {
             socket.emit("sendDeliveryOrder", {
                 orderId: idOrder,
@@ -619,6 +627,103 @@ const IdPedidoClient = () => {
                 {/* <button className="bg-green-700 text-white w-full rounded-3xl py-3" onClick={() => handleClickOffer()}>
                 Crear Oferta
             </button> */}
+
+                <Spacer space={25} />
+
+                {order.image && order.image != "" && (
+                    <>
+                        <p className="text-center mb-3 font-bold text-xl">Imagen del pago</p>
+                        <Image
+                            src={order.image}
+                            alt="imagen"
+                            className="w-full h-auto"
+                            width={1920} // se requiere para cálculo interno
+                            height={1080}
+                        />
+                        <Spacer space={25} />
+
+                        <div className="flex justify-between gap-2">
+                            <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeImageCartBoughtStatus(0)}>
+                                Rechazar imagen
+                            </button>
+                            <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeImageCartBoughtStatus(1)}>
+                                Confirmar imagen
+                            </button>
+                        </div>
+                    </>
+                )}
+
+                <Spacer space={25} />
+
+                {/* // useEffect(() => {
+                    //     if (status == 1) setStatusMessage("Comprando...");
+                    //     else if (status == 2 && wantUseAddress) setStatusMessage("Enviando...");
+                    //     else if (status == 2 && !wantUseAddress) setStatusMessage("Listo para retirar");
+                    //     else if (status == 3 && wantUseAddress) setStatusMessage("Recibido");
+                    //     else if (status == 3 && !wantUseAddress) setStatusMessage("Retirado");
+                    //     else if (status == 3) setStatusMessage("Cancelado");
+                    // }, []); */}
+
+                <div className="flex flex-wrap justify-between gap-2">
+                    {(type == 4 || type == 5) && (
+                        <ButtonGray
+                            fn={() => changeCartBoughtStatus(0)}
+                            disabled={order.status == 1 || order.status == 5 || (order.status == 0) | (order.status == 2) ? false : true}
+                        >
+                            Cancelar Pedido
+                        </ButtonGray>
+                    )}
+
+                    {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(0)} disabled>
+                        Cancelar Pedido
+                    </button> */}
+                    <ButtonGray
+                        fn={() => changeCartBoughtStatus(2)}
+                        disabled={order.status == 1 || order.status == 3 || order.status == 0 || order.status == 2 ? false : true}
+                    >
+                        Recibido
+                    </ButtonGray>
+
+                    {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(2)} disabled>
+                        Recivido
+                    </button> */}
+                    <ButtonGray
+                        fn={() => changeCartBoughtStatus(3)}
+                        disabled={order.status == 2 || order.status == 3 || order.status == 4 ? false : true}
+                    >
+                        {order.want_use_address == 1 ? "Enviar" : "Listo para retirar"}
+                    </ButtonGray>
+                    {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(3)} disabled>
+                        Enviar
+                    </button> */}
+                    <ButtonGray fn={() => changeCartBoughtStatus(4)} disabled={order.status == 3 || order.status == 4 ? false : true}>
+                        Pedido Entregado
+                    </ButtonGray>
+                    {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(4)} disabled>
+                        Pedido Entregado
+                    </button> */}
+                    {(type == 4 || type == 5) && (
+                        <ButtonGray fn={() => changeCartBoughtStatus(5)} disabled={order.status == 4 ? false : true}>
+                            Archivar pedido
+                        </ButtonGray>
+                    )}
+
+                    {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => changeCartBoughtStatus(5)} disabled>
+                        Archivar pedido
+                    </button> */}
+                </div>
+                {/* <button className="px-4 py-2 rounded bg-gray-200 self-end mx-auto w-full" onClick={() => {}}>
+                    Archivar pedido
+                </button> */}
+                {order.want_use_address == 1 && (
+                    <>
+                        <Spacer />
+                        <ButtonGray fn={publishOrderForDelivery} disabled={order.status == 2 ? false : true}>
+                            Publicar para delivery
+                        </ButtonGray>
+                        <p className="text-xs">Al publicar este pedido para un delivery cualquier delivery registrado en el sistema podra tomarlo</p>
+                    </>
+                )}
             </div>
         );
     }

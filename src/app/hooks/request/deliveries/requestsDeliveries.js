@@ -11,6 +11,7 @@ import {
     deliveryCanGetOrder,
     fetchGetDeliveriesOrdersHistoryByDeliveryUserIdAndPeriodId,
     getDeliveriesOrders,
+    getDeliveriesOrdersByShopId,
     getDeliveriesOrdersHistoryByDeliveryUserId,
     getDeliveryOrderById,
     getDeliveryOrderExists,
@@ -21,12 +22,13 @@ import {
 } from "@/app/request/deliveries/requestsDeliveries";
 import { isUUID } from "../../app/app";
 
-export const useCreateDeliveryOrder = async (idCartBouth, price) => {
+export const useCreateDeliveryOrder = async (idCartBouth, price, shopId) => {
     const deliveryOrder = {
         id: uuid(),
         id_delivery: null,
         id_cart_bouth: idCartBouth,
         price: price,
+        shop_id: shopId,
         status: 1,
     };
     const { data, status, message } = await createDeliveryOrder(deliveryOrder);
@@ -38,6 +40,13 @@ export const useGetDeliveriesOrders = () =>
         queryKey: [`deliveries-orders`],
         // refetchInterval: 1000,
         queryFn: () => getDeliveriesOrders(),
+    });
+
+export const useGetDeliveriesOrdersByShopId = (shopId) =>
+    useQuery({
+        queryKey: [`deliveries-orders-${shopId}`],
+        // refetchInterval: 1000,
+        queryFn: () => getDeliveriesOrdersByShopId(shopId),
     });
 
 export const useGetDeliveriesOrdersHistoryByDeliveryUserId = (deliveryUserId) =>

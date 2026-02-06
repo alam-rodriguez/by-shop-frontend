@@ -1183,7 +1183,7 @@ const CarritoClient = () => {
 
         // return;
 
-        const hasNull = Object.values(vouchers).some((v) => v === null);
+        const hasNull = payMethodSelected.require_image ? Object.values(vouchers).some((v) => v === null) : null;
 
         // if (hasNull) {
         //   console.log("Faltan imágenes")

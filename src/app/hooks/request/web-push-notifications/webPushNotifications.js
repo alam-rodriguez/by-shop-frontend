@@ -2,6 +2,7 @@ import {
     sendPushNotificationsForNewsOrders,
     sendPushNotificationsToClientForOrderUpdate,
     sendPushNotificationsToDeliveriesForNewOrder,
+    sendPushNotificationsToShopDeliveriesForNewOrder,
 } from "@/app/request/web-push-notifications/webPushNotifications";
 
 export const useSendPushNotificationsForNewsOrders = async (orderId) => {
@@ -16,5 +17,10 @@ export const useSendPushNotificationsToClientForOrderUpdate = async (userId, pay
 
 export const useSendPushNotificationsToDeliveriesForNewOrder = async () => {
     const { message, status } = await sendPushNotificationsToDeliveriesForNewOrder();
+    return status == 201;
+};
+
+export const useSendPushNotificationsToShopDeliveriesForNewOrder = async (shopId) => {
+    const { message, status } = await sendPushNotificationsToShopDeliveriesForNewOrder(shopId);
     return status == 201;
 };

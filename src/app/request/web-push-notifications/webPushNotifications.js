@@ -29,3 +29,13 @@ export const sendPushNotificationsToDeliveriesForNewOrder = async (payload) => {
         throw new Error("Error.");
     }
 };
+
+export const sendPushNotificationsToShopDeliveriesForNewOrder = async (shopId) => {
+    try {
+        const res = await api.post(`/web-push-notification/send-notification-for-new-order-to-shop-deliveries/${shopId}`);
+        return { message: res.data.message, status: res.status };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error.");
+    }
+};

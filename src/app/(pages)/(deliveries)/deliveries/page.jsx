@@ -7,6 +7,7 @@ import {
     useCreateDeliveryOrderPreference,
     useDeliveryCanGetOrder,
     useGetDeliveriesOrders,
+    useGetDeliveriesOrdersByShopId,
     useGetDeliveryOrderPreference,
     useUpdateDeliveryOrderPreference,
 } from "@/app/hooks/request/deliveries/requestsDeliveries";
@@ -20,9 +21,11 @@ const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL_SOCKET);
 
 const page = () => {
     const router = useRouter();
-    const { data, isLoading, refetch } = useGetDeliveriesOrders();
 
-    const { id: idUser, currencySelected } = zusUser();
+    const { id: idUser, currencySelected, shop_id: shopId } = zusUser();
+
+    // const { data, isLoading, refetch } = useGetDeliveriesOrders();
+    const { data, isLoading, refetch } = useGetDeliveriesOrdersByShopId(shopId);
 
     useEffect(() => {
         console.log(data);
